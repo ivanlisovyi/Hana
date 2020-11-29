@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,6 +12,7 @@
 		CCC380652574125B00AF4D96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCC380642574125B00AF4D96 /* Assets.xcassets */; };
 		CCC380682574125B00AF4D96 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCC380672574125B00AF4D96 /* Preview Assets.xcassets */; };
 		CCC380732574125B00AF4D96 /* HanaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC380722574125B00AF4D96 /* HanaTests.swift */; };
+		CCD9EEAB25742C7A009634B9 /* Kaori in Frameworks */ = {isa = PBXBuildFile; productRef = CCD9EEAA25742C7A009634B9 /* Kaori */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCD9EEAB25742C7A009634B9 /* Kaori in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +65,7 @@
 				CCC380712574125B00AF4D96 /* HanaTests */,
 				CCC3807C2574125B00AF4D96 /* HanaUITests */,
 				CCC3805E2574125A00AF4D96 /* Products */,
+				CCD9EEA925742C7A009634B9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -113,6 +116,13 @@
 			path = HanaUITests;
 			sourceTree = "<group>";
 		};
+		CCD9EEA925742C7A009634B9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -129,6 +139,9 @@
 			dependencies = (
 			);
 			name = Hana;
+			packageProductDependencies = (
+				CCD9EEAA25742C7A009634B9 /* Kaori */,
+			);
 			productName = Hana;
 			productReference = CCC3805D2574125A00AF4D96 /* Hana.app */;
 			productType = "com.apple.product-type.application";
@@ -467,6 +480,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CCD9EEAA25742C7A009634B9 /* Kaori */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Kaori;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CCC380552574125A00AF4D96 /* Project object */;
 }
