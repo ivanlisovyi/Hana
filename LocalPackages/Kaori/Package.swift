@@ -13,13 +13,13 @@ let package = Package(
       targets: ["Kaori"]),
   ],
   dependencies: [
-    .package(path: "../Networking")
+    .package(url: "git@github.com:ivanlisovyi/Ning.git", .branch("master"))
   ],
   targets: [
     .target(
       name: "Kaori",
       dependencies: [
-        "Networking"
+        "Ning"
       ]
     ),
     .testTarget(
