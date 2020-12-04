@@ -1,15 +1,17 @@
 import XCTest
+import NingTestingSupport
+
 @testable import Kaori
 
 final class KaoriTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(Kaori().text, "Hello, World!")
-    }
+  func testsPosts() throws {
+    // Given
+    let sut = Kaori(environment: .development)
 
-    static var allTests = [
-        ("testExample", testExample),
-    ]
+    // When
+    let posts = try awaitCompletion(of: sut.posts())
+
+    // The
+    XCTAssertTrue(posts.count > 0)
+  }
 }

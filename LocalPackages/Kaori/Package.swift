@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
   name: "Kaori",
   platforms: [
-    .iOS(.v14)
+    .iOS(.v14),
+    .macOS(.v10_15)
   ],
   products: [
     .library(
@@ -24,6 +25,10 @@ let package = Package(
     ),
     .testTarget(
       name: "KaoriTests",
-      dependencies: ["Kaori"]),
+      dependencies: [
+        "Kaori",
+        .product(name: "NingTestingSupport", package: "Ning")
+      ]
+    ),
   ]
 )
