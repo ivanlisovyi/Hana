@@ -6,7 +6,7 @@ import NingTestingSupport
 final class KaoriTests: XCTestCase {
   func testsPosts() throws {
     // Given
-    let sut = Kaori(environment: .development)
+    let sut = Kaori.live
 
     // When
     let posts = try awaitCompletion(of: sut.posts())

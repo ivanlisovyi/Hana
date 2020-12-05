@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		CCC380612574125A00AF4D96 /* HanaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC380602574125A00AF4D96 /* HanaApp.swift */; };
-		CCC380632574125A00AF4D96 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC380622574125A00AF4D96 /* ContentView.swift */; };
+		CCC380632574125A00AF4D96 /* PostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC380622574125A00AF4D96 /* PostsView.swift */; };
 		CCC380652574125B00AF4D96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCC380642574125B00AF4D96 /* Assets.xcassets */; };
 		CCC380682574125B00AF4D96 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCC380672574125B00AF4D96 /* Preview Assets.xcassets */; };
 		CCC380732574125B00AF4D96 /* HanaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC380722574125B00AF4D96 /* HanaTests.swift */; };
 		CCD9EEAB25742C7A009634B9 /* Kaori in Frameworks */ = {isa = PBXBuildFile; productRef = CCD9EEAA25742C7A009634B9 /* Kaori */; };
+		CCEF65A2257BED8F00D38E11 /* PostsEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEF65A1257BED8F00D38E11 /* PostsEnvironment.swift */; };
+		CCEF65B4257C043F00D38E11 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = CCEF65B3257C043F00D38E11 /* SDWebImageSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,7 +30,7 @@
 /* Begin PBXFileReference section */
 		CCC3805D2574125A00AF4D96 /* Hana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hana.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCC380602574125A00AF4D96 /* HanaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaApp.swift; sourceTree = "<group>"; };
-		CCC380622574125A00AF4D96 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		CCC380622574125A00AF4D96 /* PostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsView.swift; sourceTree = "<group>"; };
 		CCC380642574125B00AF4D96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CCC380672574125B00AF4D96 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CCC380692574125B00AF4D96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -37,6 +39,7 @@
 		CCC380742574125B00AF4D96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CCC3807D2574125B00AF4D96 /* HanaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaUITests.swift; sourceTree = "<group>"; };
 		CCC3807F2574125B00AF4D96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CCEF65A1257BED8F00D38E11 /* PostsEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsEnvironment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCEF65B4257C043F00D38E11 /* SDWebImageSwiftUI in Frameworks */,
 				CCD9EEAB25742C7A009634B9 /* Kaori in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,7 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				CCC380602574125A00AF4D96 /* HanaApp.swift */,
-				CCC380622574125A00AF4D96 /* ContentView.swift */,
+				CCEF65A7257BEE5700D38E11 /* Core */,
+				CCEF6599257BED0F00D38E11 /* Features */,
 				CCC380642574125B00AF4D96 /* Assets.xcassets */,
 				CCC380692574125B00AF4D96 /* Info.plist */,
 				CCC380662574125B00AF4D96 /* Preview Content */,
@@ -123,6 +128,30 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CCEF6599257BED0F00D38E11 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				CCEF659C257BED1400D38E11 /* Posts */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		CCEF659C257BED1400D38E11 /* Posts */ = {
+			isa = PBXGroup;
+			children = (
+				CCC380622574125A00AF4D96 /* PostsView.swift */,
+				CCEF65A1257BED8F00D38E11 /* PostsEnvironment.swift */,
+			);
+			path = Posts;
+			sourceTree = "<group>";
+		};
+		CCEF65A7257BEE5700D38E11 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -141,6 +170,7 @@
 			name = Hana;
 			packageProductDependencies = (
 				CCD9EEAA25742C7A009634B9 /* Kaori */,
+				CCEF65B3257C043F00D38E11 /* SDWebImageSwiftUI */,
 			);
 			productName = Hana;
 			productReference = CCC3805D2574125A00AF4D96 /* Hana.app */;
@@ -191,6 +221,9 @@
 				Base,
 			);
 			mainGroup = CCC380542574125A00AF4D96;
+			packageReferences = (
+				CCEF65B2257C043F00D38E11 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+			);
 			productRefGroup = CCC3805E2574125A00AF4D96 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -225,7 +258,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CCC380632574125A00AF4D96 /* ContentView.swift in Sources */,
+				CCC380632574125A00AF4D96 /* PostsView.swift in Sources */,
+				CCEF65A2257BED8F00D38E11 /* PostsEnvironment.swift in Sources */,
 				CCC380612574125A00AF4D96 /* HanaApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -481,10 +515,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		CCEF65B2257C043F00D38E11 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		CCD9EEAA25742C7A009634B9 /* Kaori */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Kaori;
+		};
+		CCEF65B3257C043F00D38E11 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CCEF65B2257C043F00D38E11 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

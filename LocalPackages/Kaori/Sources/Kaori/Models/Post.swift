@@ -7,50 +7,50 @@
 
 import Foundation
 
-public struct Post: Decodable {
-  let id: Int
-  let pixivId: Int?
+public struct Post: Decodable, Identifiable, Equatable {
+  public let id: Int
+  public let pixivId: Int?
 
-  let createdAt: Date
-  let updatedAt: Date
+  public let createdAt: Date
+  public let updatedAt: Date
 
-  let imageWidth: Int
-  let imageHeight: Int
+  public let imageWidth: Int
+  public let imageHeight: Int
 
-  let rating: String
+  public let rating: String
 
-  let score: Int
-  let upScore: Int
-  let downScore: Int
+  public let score: Int
+  public let upScore: Int
+  public let downScore: Int
 
-  let favCount: Int
-  let isFavorited: Bool
+  public let favCount: Int
+  public let isFavorited: Bool
 
-  let source: String
+  public let source: String
 
-  let fileSize: Int
-  let fileExt: String
-  let md5: String
+  public let fileSize: Int
+  public let fileExt: String
+  public let md5: String
 
-  let tagString: String
-  let tagStringGeneral: String
-  let tagStringCharacter: String
-  let tagStringCopyright: String
-  let tagStringArtist: String
-  let tagStringMeta: String
+  public let tagString: String
+  public let tagStringGeneral: String
+  public let tagStringCharacter: String
+  public let tagStringCopyright: String
+  public let tagStringArtist: String
+  public let tagStringMeta: String
 
-  let isRatingLocked: Bool
-  let isNoteLocked: Bool
-  let isStatusLocked: Bool
-  let isPending: Bool
-  let isFlagged: Bool
-  let isDeleted: Bool
-  let isBanned: Bool
+  public let isRatingLocked: Bool
+  public let isNoteLocked: Bool
+  public let isStatusLocked: Bool
+  public let isPending: Bool
+  public let isFlagged: Bool
+  public let isDeleted: Bool
+  public let isBanned: Bool
 
-  let fileUrl: URL
-  let largeFileUrl: URL
-  let previewFileUrl: URL
+  public let fileUrl: URL
+  public let largeFileUrl: URL
+  public let previewFileUrl: URL
 
-  let hasChildren: Bool
-  let hasActiveChildren: Bool
+  public let hasChildren: Bool
+  public let hasActiveChildren: Bool
 }
