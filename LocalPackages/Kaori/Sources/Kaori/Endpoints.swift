@@ -9,14 +9,8 @@ import Foundation
 import Ning
 
 extension Endpoint {
-  static func authenticate(username: String, apiKey: String) -> Self {
-    Endpoint(
-      path: "profile.json",
-      parameters: [
-        "login": username,
-        "api_key": apiKey
-      ]
-    )
+  static func profile() -> Self {
+    Endpoint(path: "/profile.json")
   }
 
   static func posts() -> Self {

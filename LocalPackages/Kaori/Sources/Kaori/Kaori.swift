@@ -27,7 +27,7 @@ open class Kaori {
 
   private lazy var decoder: JSONDecoder = {
     let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+    dateFormatter.locale = .autoupdatingCurrent
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
     let decoder = JSONDecoder()
@@ -37,16 +37,34 @@ open class Kaori {
   }()
 
   public convenience init(environment: Environment = .production) {
-    let session = Session(baseURL: environment.baseURL)
-    self.init(session: session)
+    self.init(session: Session(baseURL: environment.baseURL))
   }
 
   init(session: SessionProtocol) {
     self.session = session
   }
 
-  open func authenticate(username: String, apiKey: String) -> AnyPublisher<Void, Error> {
-    session.request(.authenticate(username: username, apiKey: apiKey))
+  /// Authenticates user with **Danbooru** backend and fetches user profile.
+  ///
+  /// - Note: The authentication is valid for the lifetime of the session.
+  ///
+  /// - Parameter username: The username of the user to be authenticated.
+  /// - Parameter apiKey: The api key used for the authentication.
+  ///
+  /// - Returns: A publisher with either users `Profile` or `SessionError`.
+  open func authenticate(username: String, apiKey: String) -> AnyPublisher<Profile, Error> {
+    session.register(AuthenticationAdapter(username: username, apiKey: apiKey))
+
+    return profile()
+  }
+
+  /// Requests current authenticated user profile.
+  ///
+  /// - Note: If `authenticate` has not been called before this method will fail with `SessionError.network` error.
+  ///
+  /// - Returns: A publisher with either users `Profile` or `SessionError`.
+  open func profile() -> AnyPublisher<Profile, Error> {
+    session.request(.profile(), decoder: decoder)
   }
 
   open func posts() -> AnyPublisher<[Post], Error> {
