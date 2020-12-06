@@ -10,10 +10,14 @@ import ComposableArchitecture
 
 import SDWebImageSwiftUI
 
-struct PostsView: View {
+public struct PostsView: View {
   let store: Store<PostsState, PostsAction>
 
-  var body: some View {
+  public init(store: Store<PostsState, PostsAction>) {
+    self.store = store
+  }
+
+  public var body: some View {
     WithViewStore(self.store) { viewStore in
       ScrollView {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 30), count: 2), spacing: 30) {

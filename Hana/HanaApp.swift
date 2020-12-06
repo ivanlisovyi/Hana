@@ -7,7 +7,9 @@
 
 import SwiftUI
 import ComposableArchitecture
+
 import KaoriLive
+import Posts
 
 @main
 struct HanaApp: App {
@@ -15,10 +17,10 @@ struct HanaApp: App {
     WindowGroup {
       PostsView(
         store: Store(
-          initialState: PostsState(posts: [], page: 1, isFetching: false),
+          initialState: PostsState(),
           reducer: postsReducer.debug(),
           environment: PostsEnvironment(
-            danbooruClient: .live(),
+            apiClient: .live(),
             mainQueue: DispatchQueue.main.eraseToAnyScheduler()
           )
         )

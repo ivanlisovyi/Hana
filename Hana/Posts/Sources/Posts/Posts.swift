@@ -8,24 +8,42 @@
 import ComposableArchitecture
 import Kaori
 
-struct PostsEnvironment {
-  var danbooruClient: Kaori
-  var mainQueue: AnySchedulerOf<DispatchQueue>
+public struct PostsEnvironment {
+  public var apiClient: Kaori
+  public var mainQueue: AnySchedulerOf<DispatchQueue>
+
+  public init(
+    apiClient: Kaori,
+    mainQueue: AnySchedulerOf<DispatchQueue>
+  ) {
+    self.apiClient = apiClient
+    self.mainQueue = mainQueue
+  }
 }
 
-struct PostsState: Equatable {
-  var posts: [Post]
-  var page: Int
+public struct PostsState: Equatable {
+  public var posts: [Post]
+  public var page: Int
 
-  var isFetching: Bool
+  public var isFetching: Bool
+
+  public init(
+    posts: [Post] = [],
+    page: Int = 0,
+    isFetching: Bool = false
+  ) {
+    self.posts = posts
+    self.page = page
+    self.isFetching = isFetching
+  }
 }
 
-enum PostsAction: Equatable {
+public enum PostsAction: Equatable {
   case fetch(after: Post? = nil)
   case fetchResponse([Post])
 }
 
-let postsReducer = Reducer<PostsState, PostsAction, PostsEnvironment> {
+public let postsReducer = Reducer<PostsState, PostsAction, PostsEnvironment> {
   state, action, environment in
   switch action {
   case let .fetch(post):
@@ -36,7 +54,7 @@ let postsReducer = Reducer<PostsState, PostsAction, PostsEnvironment> {
     if let post = post, let index = state.posts.firstIndex(of: post), index > state.posts.count - 10 {
       state.isFetching = true
 
-      return environment.danbooruClient
+      return environment.apiClient
         .posts(state.page + 1)
         .receive(on: environment.mainQueue)
         .replaceError(with: [])
@@ -45,7 +63,7 @@ let postsReducer = Reducer<PostsState, PostsAction, PostsEnvironment> {
     } else if post == nil {
       state.isFetching = true
 
-      return environment.danbooruClient
+      return environment.apiClient
         .posts(state.page + 1)
         .receive(on: environment.mainQueue)
         .replaceError(with: [])
