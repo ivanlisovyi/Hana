@@ -8,7 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 
-import SDWebImageSwiftUI
+import WebImage
 
 public struct PostsView: View {
   let store: Store<PostsState, PostsAction>
@@ -24,13 +24,6 @@ public struct PostsView: View {
           ForEach(viewStore.posts, id: \.md5) { post in
             VStack {
               WebImage(url: post.previewFileUrl)
-                .resizable()
-                .placeholder {
-                  Rectangle().foregroundColor(.gray)
-                }
-                .indicator(.activity)
-                .transition(.fade(duration: 0.5))
-                .scaledToFit()
             }
             .onAppear {
               viewStore.send(.fetch(after: post))

@@ -36,6 +36,7 @@
 		CCC380742574125B00AF4D96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CCC3807D2574125B00AF4D96 /* HanaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaUITests.swift; sourceTree = "<group>"; };
 		CCC3807F2574125B00AF4D96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CCEA9266257D5A5D00D0572E /* WebImage */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WebImage; sourceTree = "<group>"; };
 		CCEF65B9257D4A2A00D38E11 /* Kaori */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Kaori; path = /Users/ilisovyi/Developer/Hana/Hana/Kaori; sourceTree = "<absolute>"; };
 		CCEF65C0257D4C4D00D38E11 /* Posts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Posts; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				CCEF65C0257D4C4D00D38E11 /* Posts */,
+				CCEA9266257D5A5D00D0572E /* WebImage */,
 				CCEF65B9257D4A2A00D38E11 /* Kaori */,
 				CCC380602574125A00AF4D96 /* HanaApp.swift */,
 				CCC380642574125B00AF4D96 /* Assets.xcassets */,
