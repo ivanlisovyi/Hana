@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Post: Decodable, Identifiable, Equatable {
+public struct Post: Codable, Identifiable, Equatable {
   public let id: Int
   public let pixivId: Int?
 

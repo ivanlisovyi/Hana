@@ -6,25 +6,31 @@ let package = Package(
   name: "Kaori",
   platforms: [
     .iOS(.v14),
+    .tvOS(.v14),
+    .watchOS(.v5),
     .macOS(.v10_15)
   ],
   products: [
     .library(
       name: "Kaori",
-      targets: ["Kaori"]),
+      targets: ["Kaori"]
+    ),
+    .library(
+      name: "KaoriLive",
+      targets: ["KaoriLive"]
+    )
   ],
   dependencies: [
     .package(url: "git@github.com:ivanlisovyi/Ning.git", .branch("master")),
-    .package(url: "git@github.com:ivanlisovyi/Coil.git", .upToNextMajor(from: "1.0.0")),
-    .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .upToNextMajor(from: "0.9.0"))
   ],
   targets: [
     .target(
-      name: "Kaori",
+      name: "Kaori"
+    ),
+    .target(
+      name: "KaoriLive",
       dependencies: [
-        "Ning",
-        "Coil",
-        .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+        "Ning"
       ]
     ),
     .testTarget(

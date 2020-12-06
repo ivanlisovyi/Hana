@@ -16,10 +16,10 @@ struct PostsView: View {
   var body: some View {
     WithViewStore(self.store) { viewStore in
       ScrollView {
-        LazyVStack {
-          ForEach(viewStore.posts, id: \.id) { post in
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 30), count: 2), spacing: 30) {
+          ForEach(viewStore.posts, id: \.md5) { post in
             VStack {
-              WebImage(url: post.fileUrl, options: .scaleDownLargeImages)
+              WebImage(url: post.previewFileUrl)
                 .resizable()
                 .placeholder {
                   Rectangle().foregroundColor(.gray)
@@ -27,13 +27,15 @@ struct PostsView: View {
                 .indicator(.activity)
                 .transition(.fade(duration: 0.5))
                 .scaledToFit()
-                .frame(width: 300, height: 300, alignment: .center)
+            }
+            .onAppear {
+              viewStore.send(.fetch(after: post))
             }
           }
         }
       }
       .onAppear {
-        viewStore.send(.fetch)
+        viewStore.send(.fetch())
       }
     }
   }

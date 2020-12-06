@@ -5,18 +5,17 @@
 //  Created by Ivan Lisovyi on 05.12.20.
 //
 
-import ComposableArchitecture
-import Ning
+import Combine
 
 public extension Kaori {
   static func mock(
-    authenticate: @escaping (AuthenticationRequest) -> Effect<Profile, Error> = { request in
+    authenticate: @escaping (Authentication) -> AnyPublisher<Profile, Error> = { _ in
       _unimplemented("authenticate")
     },
-    profile: @escaping () -> Effect<Profile, Error> = {
+    profile: @escaping () -> AnyPublisher<Profile, Error> = {
       _unimplemented("profile")
     },
-    posts: @escaping () -> Effect<[Post], Error> = {
+    posts: @escaping (Int) -> AnyPublisher<[Post], Error> = { _ in
       _unimplemented("posts")
     }
   ) -> Self {

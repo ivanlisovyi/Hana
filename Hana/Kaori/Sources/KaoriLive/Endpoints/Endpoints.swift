@@ -8,12 +8,17 @@
 import Foundation
 import Ning
 
-extension Endpoint {
+public extension Endpoint {
   static func profile() -> Self {
     Endpoint(path: "/profile.json")
   }
 
-  static func posts() -> Self {
-    Endpoint(path: "/posts.json")
+  static func posts(page: Int = 1) -> Self {
+    Endpoint(
+      path: "/posts.json",
+      parameters: [
+        "page": page
+      ]
+    )
   }
 }
