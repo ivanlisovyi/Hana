@@ -13,6 +13,10 @@ import WebImage
 public struct PostsView: View {
   let store: Store<PostsState, PostsAction>
 
+  var columns = [
+    GridItem(.adaptive(minimum: 80), spacing: 10)
+  ]
+
   public init(store: Store<PostsState, PostsAction>) {
     self.store = store
   }
@@ -20,14 +24,16 @@ public struct PostsView: View {
   public var body: some View {
     WithViewStore(self.store) { viewStore in
       ScrollView {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 30), count: 2), spacing: 30) {
-          ForEach(viewStore.posts, id: \.md5) { post in
-            VStack {
-              WebImage(url: post.previewFileUrl)
-            }
-            .onAppear {
-              viewStore.send(.fetch(after: post))
-            }
+        LazyVGrid(columns: columns) {
+          ForEach(viewStore.posts) { post in
+            WebImage(url: post.image.previewURL)
+              .frame(minWidth: 80)
+              .frame(height: 160)
+              .clipped()
+              .id(UUID())
+              .onAppear {
+                viewStore.send(.fetch(after: post))
+              }
           }
         }
       }

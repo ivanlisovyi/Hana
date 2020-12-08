@@ -7,6 +7,8 @@
 
 import Foundation
 import Kaori
+
+import Amber
 import Ning
 
 public enum Environment {
@@ -37,7 +39,9 @@ public extension Kaori {
         session.request(.profile(), decoder: decoder)
       },
       posts: {
-        session.request(.posts(page: $0), decoder: decoder)
+        session.request(.posts(page: $0), decoder: decoder, of: CompactDecodableArray<Post>.self)
+          .map(\.elements)
+          .eraseToAnyPublisher()
       }
     )
   }

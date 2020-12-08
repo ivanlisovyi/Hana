@@ -6,51 +6,120 @@
 //
 
 import Foundation
+import Amber
 
-public struct Post: Codable, Identifiable, Equatable {
+public struct Post: Decodable, Identifiable, Equatable {
+  public enum Rating: String, Decodable, Equatable {
+    case safe = "s"
+    case explicit = "e"
+    case questionable = "q"
+  }
+
+  public struct Image: Decodable, Equatable {
+    public let width: Int
+    public let height: Int
+
+    public let url: URL
+    public let previewURL: URL
+  }
+
+  public struct File: Decodable, Equatable {
+    public let url: URL
+    public let size: Int
+    public let `extension`: String
+    public let md5: String?
+  }
+
+  public struct Tags: Decodable, Equatable {
+    public var all: [String]
+    public var meta: [String]
+    public var artist: [String]
+    public var general: [String]
+    public var character: [String]
+    public var copyright: [String]
+  }
+
+  public struct Flags: Decodable, Equatable {
+    public let isRatingLocked: Bool
+    public let isNoteLocked: Bool
+    public let isStatusLocked: Bool
+    public let isPending: Bool
+    public let isFlagged: Bool
+    public let isDeleted: Bool
+    public let isBanned: Bool
+  }
+
+  public struct Score: Decodable, Equatable {
+    public let total: Int
+    public let up: Int
+    public let down: Int
+  }
+
   public let id: Int
   public let pixivId: Int?
 
   public let createdAt: Date
   public let updatedAt: Date
 
-  public let imageWidth: Int
-  public let imageHeight: Int
-
-  public let rating: String
-
-  public let score: Int
-  public let upScore: Int
-  public let downScore: Int
-
-  public let favCount: Int
+  public let rating: Rating
+  public let favoritesCount: Int
   public let isFavorited: Bool
 
   public let source: String
 
-  public let fileSize: Int
-  public let fileExt: String
-  public let md5: String
+  public let score: Score
 
-  public let tagString: String
-  public let tagStringGeneral: String
-  public let tagStringCharacter: String
-  public let tagStringCopyright: String
-  public let tagStringArtist: String
-  public let tagStringMeta: String
+  public let image: Image
+  public let file: File
 
-  public let isRatingLocked: Bool
-  public let isNoteLocked: Bool
-  public let isStatusLocked: Bool
-  public let isPending: Bool
-  public let isFlagged: Bool
-  public let isDeleted: Bool
-  public let isBanned: Bool
+  public let tags: Tags
+  public let flags: Flags
+}
 
-  public let fileUrl: URL
-  public let largeFileUrl: URL
-  public let previewFileUrl: URL
+extension Post {
+  public init(from decoder: Decoder) throws {
+    id = try decoder.decode("id")
+    pixivId = try decoder.decodeIfPresent("pixivId")
 
-  public let hasChildren: Bool
-  public let hasActiveChildren: Bool
+    createdAt = try decoder.decode("createdAt")
+    updatedAt = try decoder.decode("updatedAt")
+
+    rating = try decoder.decode("rating")
+    favoritesCount = try decoder.decode("favCount")
+    isFavorited = try decoder.decode("isFavorited")
+
+    source = try decoder.decode("source")
+
+    score = Score(
+      total: try decoder.decode("score"),
+      up: try decoder.decode("upScore"),
+      down: try decoder.decode("downScore")
+    )
+
+    image = Image(
+      width: try decoder.decode("imageWidth"),
+      height: try decoder.decode("imageHeight"),
+      url: try decoder.decode("largeFileUrl"),
+      previewURL: try decoder.decode("previewFileUrl")
+    )
+
+    file = File(
+      url: try decoder.decode("fileUrl"),
+      size: try decoder.decode("fileSize"),
+      extension: try decoder.decode("fileExt"),
+      md5: try decoder.decode("md5")
+    )
+
+    let tagsTransformer = TagsTransformer()
+
+    tags = Tags(
+      all: try decoder.decode("tagString", using: tagsTransformer.transform),
+      meta: try decoder.decode("tagStringMeta", using: tagsTransformer.transform),
+      artist: try decoder.decode("tagStringArtist", using: tagsTransformer.transform),
+      general: try decoder.decode("tagStringGeneral", using: tagsTransformer.transform),
+      character: try decoder.decode("tagStringCharacter", using: tagsTransformer.transform),
+      copyright: try decoder.decode("tagStringCopyright", using: tagsTransformer.transform)
+    )
+    flags = try Flags(from: decoder)
+  }
 }

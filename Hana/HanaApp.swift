@@ -17,8 +17,8 @@ struct HanaApp: App {
     WindowGroup {
       PostsView(
         store: Store(
-          initialState: PostsState(),
-          reducer: postsReducer.debug(),
+          initialState: PostsState(page: 10),
+          reducer: postsReducer,
           environment: PostsEnvironment(
             apiClient: .live(),
             mainQueue: DispatchQueue.main.eraseToAnyScheduler()

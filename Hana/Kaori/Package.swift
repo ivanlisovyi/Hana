@@ -22,15 +22,19 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "git@github.com:ivanlisovyi/Ning.git", .branch("master")),
+    .package(url: "git@github.com:ivanlisovyi/Amber.git", .branch("master"))
   ],
   targets: [
     .target(
-      name: "Kaori"
+      name: "Kaori",
+      dependencies: [
+        "Amber"
+      ]
     ),
     .target(
       name: "KaoriLive",
       dependencies: [
-        "Ning"
+        "Ning",
       ]
     ),
     .testTarget(
