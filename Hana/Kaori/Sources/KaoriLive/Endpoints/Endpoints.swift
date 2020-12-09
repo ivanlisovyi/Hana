@@ -13,11 +13,12 @@ public extension Endpoint {
     Endpoint(path: "/profile.json")
   }
 
-  static func posts(page: Int = 1) -> Self {
+  static func posts(page: Int = 1, limit: Int = 20) -> Self {
     Endpoint(
       path: "/posts.json",
       parameters: [
-        "page": page
+        "page": page,
+        "limit": limit
       ]
     )
   }

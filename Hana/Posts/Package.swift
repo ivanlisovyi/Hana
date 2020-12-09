@@ -17,7 +17,9 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .upToNextMajor(from: "0.9.0")),
     .package(path: "../Kaori"),
-    .package(path: "../WebImage")
+    .package(path: "../WebImage"),
+    .package(path: "../UI"),
+    .package(path: "../Basics")
   ],
   targets: [
     .target(
@@ -25,6 +27,9 @@ let package = Package(
       dependencies: [
         "Kaori",
         "WebImage",
+        "Basics",
+        .product(name: "ViewModifiers", package: "UI"),
+        .product(name: "Extensions", package: "UI"),
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ]
     ),

@@ -34,13 +34,18 @@ public extension Kaori {
         session.register(AuthenticationAdapter(username: request.username, apiKey: request.apiKey))
 
         return session.request(.profile(), decoder: decoder)
+          .mapError(KaoriError.init(error:))
+          .eraseToAnyPublisher()
       },
       profile: {
         session.request(.profile(), decoder: decoder)
+          .mapError(KaoriError.init(error:))
+          .eraseToAnyPublisher()
       },
       posts: {
         session.request(.posts(page: $0), decoder: decoder, of: CompactDecodableArray<Post>.self)
           .map(\.elements)
+          .mapError(KaoriError.init(error:))
           .eraseToAnyPublisher()
       }
     )
@@ -56,4 +61,16 @@ public extension Kaori {
     decoder.keyDecodingStrategy = .convertFromSnakeCase
     return decoder
   }()
+}
+
+extension Kaori.KaoriError {
+  init(error: Error) {
+    if error is SessionError {
+      self = .network
+    } else if error is DecodingError {
+      self = .decoding
+    } else {
+      self = .unknown
+    }
+  }
 }

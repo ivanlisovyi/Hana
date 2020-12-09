@@ -15,9 +15,27 @@ import Posts
 struct HanaApp: App {
   var body: some Scene {
     WindowGroup {
+      TabView {
+        posts
+          .tabItem {
+            Image(systemName: "square.stack")
+            Text("Posts")
+          }
+
+        settings
+          .tabItem {
+            Image(systemName: "gear")
+            Text("Settings")
+          }
+      }
+    }
+  }
+
+  @ViewBuilder private var posts: some View {
+    NavigationView {
       PostsView(
         store: Store(
-          initialState: PostsState(page: 10),
+          initialState: PostsState(page: 0),
           reducer: postsReducer,
           environment: PostsEnvironment(
             apiClient: .live(),
@@ -25,6 +43,12 @@ struct HanaApp: App {
           )
         )
       )
+      .navigationBarHidden(true)
     }
+  }
+
+  @ViewBuilder private var settings: some View {
+    Color.primary
+      .colorInvert()
   }
 }

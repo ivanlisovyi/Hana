@@ -8,14 +8,14 @@
 import Foundation
 import Amber
 
-public struct Post: Decodable, Identifiable, Equatable {
-  public enum Rating: String, Decodable, Equatable {
+public struct Post: Decodable, Identifiable, Equatable, Hashable {
+  public enum Rating: String, Decodable, Equatable, Hashable {
     case safe = "s"
     case explicit = "e"
     case questionable = "q"
   }
 
-  public struct Image: Decodable, Equatable {
+  public struct Image: Decodable, Equatable, Hashable {
     public let width: Int
     public let height: Int
 
@@ -23,14 +23,14 @@ public struct Post: Decodable, Identifiable, Equatable {
     public let previewURL: URL
   }
 
-  public struct File: Decodable, Equatable {
+  public struct File: Decodable, Equatable, Hashable {
     public let url: URL
     public let size: Int
     public let `extension`: String
     public let md5: String?
   }
 
-  public struct Tags: Decodable, Equatable {
+  public struct Tags: Decodable, Equatable, Hashable {
     public var all: [String]
     public var meta: [String]
     public var artist: [String]
@@ -39,7 +39,7 @@ public struct Post: Decodable, Identifiable, Equatable {
     public var copyright: [String]
   }
 
-  public struct Flags: Decodable, Equatable {
+  public struct Flags: Decodable, Equatable, Hashable {
     public let isRatingLocked: Bool
     public let isNoteLocked: Bool
     public let isStatusLocked: Bool
@@ -49,7 +49,7 @@ public struct Post: Decodable, Identifiable, Equatable {
     public let isBanned: Bool
   }
 
-  public struct Score: Decodable, Equatable {
+  public struct Score: Decodable, Equatable, Hashable {
     public let total: Int
     public let up: Int
     public let down: Int
@@ -74,6 +74,16 @@ public struct Post: Decodable, Identifiable, Equatable {
 
   public let tags: Tags
   public let flags: Flags
+}
+
+public extension Post {
+  var isNSFW: Bool {
+    rating != .safe
+  }
+
+  var isLandscape: Bool {
+    image.width > image.height
+  }
 }
 
 extension Post {
