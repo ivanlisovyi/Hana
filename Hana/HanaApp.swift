@@ -15,19 +15,7 @@ import Posts
 struct HanaApp: App {
   var body: some Scene {
     WindowGroup {
-      TabView {
-        posts
-          .tabItem {
-            Image(systemName: "square.stack")
-            Text("Posts")
-          }
-
-        settings
-          .tabItem {
-            Image(systemName: "gear")
-            Text("Settings")
-          }
-      }
+      posts
     }
   }
 
@@ -44,6 +32,7 @@ struct HanaApp: App {
         )
       )
       .navigationBarHidden(true)
+      .navigationViewStyle(StackNavigationViewStyle())
     }
   }
 

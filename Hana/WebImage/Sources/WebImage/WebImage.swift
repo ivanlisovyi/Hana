@@ -26,7 +26,7 @@ public struct WebImage: View {
       Rectangle().fill(Color.gray)
       image.view?
         .resizable()
-        .aspectRatio(contentMode: .fit)
+        .scaledToFill()
     }
     .animation(.default)
     .onAppear(perform: image.fetch)

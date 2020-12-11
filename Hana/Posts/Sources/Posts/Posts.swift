@@ -34,7 +34,6 @@ public struct PostsState: Equatable {
   public var nextPage: Int {
     page + 1
   }
-  
 
   public init(
     posts: [Post] = [],

@@ -29,7 +29,8 @@ let package = Package(
       name: "Kaori",
       dependencies: [
         "Amber"
-      ]
+      ],
+      resources: [.copy("Assets")]
     ),
     .target(
       name: "KaoriLive",

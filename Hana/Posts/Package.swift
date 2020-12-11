@@ -31,6 +31,9 @@ let package = Package(
         .product(name: "ViewModifiers", package: "UI"),
         .product(name: "Extensions", package: "UI"),
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+      ],
+      resources: [
+        .process("JsonMocks")
       ]
     ),
     .testTarget(
