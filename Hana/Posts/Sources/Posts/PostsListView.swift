@@ -50,10 +50,11 @@ public struct PostsView: View {
       ScrollView {
         LazyVGrid(columns: columns, spacing: 10) {
           ForEach(store.posts, id: \.id) { post in
-            item(for: post)
+            PostView(image: post.image)
               .onAppear {
                 store.send(.fetchNext(after: post))
               }
+
           }
         }
         .padding([.leading, .trailing], 10)
@@ -62,14 +63,6 @@ public struct PostsView: View {
         store.send(.fetch)
       }
     }
-  }
-
-  private func item(for post: Post) -> some View {
-    WebImage(url: post.image.url)
-      .resized(width: 300)
-      .frame(minHeight: (CGFloat(300) / CGFloat(post.image.width)) * CGFloat(post.image.height))
-      .clipped()
-      .clipShape(RoundedRectangle.init(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))
   }
 }
 
