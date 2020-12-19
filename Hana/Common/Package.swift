@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-  name: "Basics",
+  name: "Common",
   platforms: [
     .iOS(.v13),
     .tvOS(.v13),
@@ -12,18 +12,18 @@ let package = Package(
   ],
   products: [
     .library(
-      name: "Basics",
-      targets: ["Basics"]
+      name: "Common",
+      targets: ["Common"]
     ),
   ],
   targets: [
     .target(
-      name: "Basics",
+      name: "Common",
       dependencies: []
     ),
     .testTarget(
-      name: "BasicsTests",
-      dependencies: ["Basics"]
+      name: "CommonTests",
+      dependencies: ["Common"]
     ),
   ]
 )

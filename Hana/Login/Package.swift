@@ -4,32 +4,27 @@
 import PackageDescription
 
 let package = Package(
-  name: "Posts",
+  name: "Login",
   platforms: [
-    .iOS(.v14),
+    .iOS(.v14)
   ],
   products: [
     .library(
-      name: "Posts",
-      targets: ["Posts"]
+      name: "Login",
+      targets: ["Login"]
     ),
   ],
   dependencies: [
     .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .upToNextMajor(from: "0.9.0")),
     .package(path: "../Kaori"),
-    .package(path: "../WebImage"),
-    .package(path: "../UI"),
-    .package(path: "../Common")
+    .package(path: "../UI")
   ],
   targets: [
     .target(
-      name: "Posts",
+      name: "Login",
       dependencies: [
         "Kaori",
-        "WebImage",
-        "Common",
-        .product(name: "ViewModifiers", package: "UI"),
-        .product(name: "Extensions", package: "UI"),
+        .product(name: "Components", package: "UI"),
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ],
       resources: [
@@ -37,8 +32,8 @@ let package = Package(
       ]
     ),
     .testTarget(
-      name: "PostsTests",
-      dependencies: ["Posts"]
+      name: "LoginTests",
+      dependencies: ["Login"]
     ),
   ]
 )

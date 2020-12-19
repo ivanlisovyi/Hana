@@ -15,6 +15,10 @@ let package = Package(
     .library(
       name: "Extensions",
       targets: ["Extensions"]
+    ),
+    .library(
+      name: "Components",
+      targets: ["Components"]
     )
   ],
   targets: [
@@ -23,6 +27,9 @@ let package = Package(
     ),
     .target(
       name: "Extensions"
+    ),
+    .target(
+      name: "Components"
     )
   ]
 )

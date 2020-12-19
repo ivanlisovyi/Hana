@@ -56,6 +56,5 @@ public extension Profile {
       favorite: try decoder.decode("favoriteTags", using: transformer.transform),
       blacklisted: try decoder.decode("blacklistedTags", using: transformer.transform)
     )
-
   }
 }

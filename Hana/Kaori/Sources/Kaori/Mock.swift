@@ -10,13 +10,34 @@ import Combine
 public extension Kaori {
   static func mock(
     authenticate: @escaping (Authentication) -> AnyPublisher<Profile, KaoriError> = { _ in
-      _unimplemented("authenticate")
+      fatalError(
+        """
+        authenticate was called but is not implemented. Be sure to provide an implementation for
+        this endpoint when creating the mock.
+        """,
+        file: #file,
+        line: #line
+      )
     },
     profile: @escaping () -> AnyPublisher<Profile, KaoriError> = {
-      _unimplemented("profile")
+      fatalError(
+        """
+        profile was called but is not implemented. Be sure to provide an implementation for
+        this endpoint when creating the mock.
+        """,
+        file: #file,
+        line: #line
+      )
     },
     posts: @escaping (Int) -> AnyPublisher<[Post], KaoriError> = { _ in
-      _unimplemented("posts")
+      fatalError(
+        """
+        posts was called but is not implemented. Be sure to provide an implementation for
+        this endpoint when creating the mock.
+        """,
+        file: #file,
+        line: #line
+      )
     }
   ) -> Self {
     Self(
@@ -26,4 +47,3 @@ public extension Kaori {
     )
   }
 }
-

@@ -10,4 +10,12 @@ import Foundation
 public struct Authentication: Codable, Equatable {
   public let username: String
   public let apiKey: String
+
+  public init(
+    username: String,
+    apiKey: String
+  ) {
+    self.username = username
+    self.apiKey = apiKey
+  }
 }
