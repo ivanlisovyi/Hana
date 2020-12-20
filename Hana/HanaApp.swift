@@ -8,26 +8,34 @@
 import SwiftUI
 import ComposableArchitecture
 
+import Kaori
 import KaoriLive
 
-import Posts
+import Explore
 import Login
+
+struct AppState {
+  var profile: Profile?
+
+  var login: LoginState
+  var posts: ExploreState
+}
 
 @main
 struct HanaApp: App {
   var body: some Scene {
     WindowGroup {
-      posts
+      explore
     }
   }
 
-  @ViewBuilder private var posts: some View {
+  @ViewBuilder private var explore: some View {
     NavigationView {
-      PostsView(
+      ExploreView(
         store: Store(
-          initialState: PostsState(login: LoginState()),
-          reducer: postsReducer,
-          environment: PostsEnvironment(
+          initialState: ExploreState(login: LoginState()),
+          reducer: exploreReducer,
+          environment: ExploreEnvironment(
             apiClient: .live(),
             mainQueue: DispatchQueue.main.eraseToAnyScheduler()
           )
@@ -36,10 +44,5 @@ struct HanaApp: App {
       .navigationBarHidden(true)
       .navigationViewStyle(StackNavigationViewStyle())
     }
-  }
-
-  @ViewBuilder private var settings: some View {
-    Color.primary
-      .colorInvert()
   }
 }

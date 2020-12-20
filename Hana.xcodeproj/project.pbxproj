@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CCB6D090257D4E0000A9E261 /* Posts in Frameworks */ = {isa = PBXBuildFile; productRef = CCB6D08F257D4E0000A9E261 /* Posts */; };
+		CC9FA894258FD7A600E796DA /* Explore in Frameworks */ = {isa = PBXBuildFile; productRef = CC9FA893258FD7A600E796DA /* Explore */; };
 		CCC380612574125A00AF4D96 /* HanaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC380602574125A00AF4D96 /* HanaApp.swift */; };
 		CCC380652574125B00AF4D96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCC380642574125B00AF4D96 /* Assets.xcassets */; };
 		CCC380682574125B00AF4D96 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCC380672574125B00AF4D96 /* Preview Assets.xcassets */; };
@@ -26,6 +26,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CC9FA890258FD77400E796DA /* Explore */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Explore; sourceTree = "<group>"; };
 		CCC3805D2574125A00AF4D96 /* Hana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hana.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCC380602574125A00AF4D96 /* HanaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaApp.swift; sourceTree = "<group>"; };
 		CCC380642574125B00AF4D96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -41,7 +42,6 @@
 		CCEA9266257D5A5D00D0572E /* WebImage */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WebImage; sourceTree = "<group>"; };
 		CCEA928A2580A99700D0572E /* UI */ = {isa = PBXFileReference; lastKnownFileType = folder; path = UI; sourceTree = "<group>"; };
 		CCEF65B9257D4A2A00D38E11 /* Kaori */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Kaori; path = /Users/ilisovyi/Developer/Hana/Hana/Kaori; sourceTree = "<absolute>"; };
-		CCEF65C0257D4C4D00D38E11 /* Posts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Posts; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,7 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CCB6D090257D4E0000A9E261 /* Posts in Frameworks */,
+				CC9FA894258FD7A600E796DA /* Explore in Frameworks */,
 				CCEF65BD257D4A5300D38E11 /* KaoriLive in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -67,8 +67,8 @@
 		CC9FA880258E964C00E796DA /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				CC9FA890258FD77400E796DA /* Explore */,
 				CCCEF2E1258DE21100683068 /* Login */,
-				CCEF65C0257D4C4D00D38E11 /* Posts */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -168,7 +168,7 @@
 			name = Hana;
 			packageProductDependencies = (
 				CCEF65BC257D4A5300D38E11 /* KaoriLive */,
-				CCB6D08F257D4E0000A9E261 /* Posts */,
+				CC9FA893258FD7A600E796DA /* Explore */,
 			);
 			productName = Hana;
 			productReference = CCC3805D2574125A00AF4D96 /* Hana.app */;
@@ -511,9 +511,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CCB6D08F257D4E0000A9E261 /* Posts */ = {
+		CC9FA893258FD7A600E796DA /* Explore */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Posts;
+			productName = Explore;
 		};
 		CCEF65BC257D4A5300D38E11 /* KaoriLive */ = {
 			isa = XCSwiftPackageProductDependency;

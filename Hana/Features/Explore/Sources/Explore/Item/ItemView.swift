@@ -1,5 +1,5 @@
 //
-//  PostView.swift
+//  ItemView.swift
 //  
 //
 //  Created by Ivan Lisovyi on 13.12.20.
@@ -12,7 +12,7 @@ import WebImage
 
 import ViewModifiers
 
-struct PostView: View {
+struct ItemView: View {
   private var image: Post.Image
 
   init(image: Post.Image) {

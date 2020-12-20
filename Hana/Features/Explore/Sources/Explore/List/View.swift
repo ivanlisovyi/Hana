@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  View.swift
 //  Hana
 //
 //  Created by Lisovyi, Ivan on 29.11.20.
@@ -13,16 +13,16 @@ import ComposableArchitecture
 import Kaori
 import Login
 
-public struct PostsView: View {
-  let store: Store<PostsState, PostsAction>
+public struct ExploreView: View {
+  let store: Store<ExploreState, ExploreAction>
 
-  @State var showProfile = false
+  @SwiftUI.State var showProfile = false
 
   private var columns = [
     GridItem(.flexible(minimum: 300))
   ]
 
-  public init(store: Store<PostsState, PostsAction>) {
+  public init(store: Store<ExploreState, ExploreAction>) {
     self.store = store
   }
 
@@ -47,7 +47,7 @@ public struct PostsView: View {
       }
     }
     .sheet(isPresented: $showProfile) {
-      IfLetStore(self.store.scope(state: { $0.login }, action: PostsAction.login)) { store in
+      IfLetStore(self.store.scope(state: { $0.login }, action: ExploreAction.login)) { store in
         NavigationView {
           LoginView(store: store)
         }
@@ -62,7 +62,7 @@ public struct PostsView: View {
       ScrollView {
         LazyVGrid(columns: columns, spacing: 10) {
           ForEach(store.posts, id: \.id) { post in
-            PostView(image: post.image)
+            ItemView(image: post.image)
               .onAppear {
                 store.send(.fetchNext(after: post))
               }
@@ -81,38 +81,17 @@ public struct PostsView: View {
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     let store = Store(
-      initialState: PostsState(login: LoginState()),
-      reducer: postsReducer,
-      environment: PostsEnvironment(
+      initialState: ExploreState(login: LoginState()),
+      reducer: exploreReducer,
+      environment: ExploreEnvironment(
         apiClient: .mock(posts: { _ in
-          guard let json = Bundle.module.url(forResource: "posts", withExtension: "json"),
-                let data = try? Data(contentsOf: json) else {
-            return Fail(error: Kaori.KaoriError.network)
-              .eraseToAnyPublisher()
-          }
-
-          let dateFormatter = DateFormatter()
-          dateFormatter.locale = .autoupdatingCurrent
-          dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-
-          let decoder = JSONDecoder()
-          decoder.dateDecodingStrategy = .formatted(dateFormatter)
-          decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-          guard let posts = try? decoder.decode([Post].self, from: data) else {
-            return Fail(error: Kaori.KaoriError.decoding)
-              .eraseToAnyPublisher()
-          }
-
-          return Just(posts)
-            .setFailureType(to: Kaori.KaoriError.self)
-            .eraseToAnyPublisher()
+          Kaori.decodeMock(of: [Post].self, for: "posts.json", in: Bundle.module)
         }),
         mainQueue: DispatchQueue.main.eraseToAnyScheduler()
       )
     )
 
-    return PostsView(store: store)
+    return ExploreView(store: store)
       .previewLayout(.device)
       .environment(\.colorScheme, .light)
   }

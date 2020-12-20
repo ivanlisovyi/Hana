@@ -64,32 +64,12 @@ struct LoginView_Previews: PreviewProvider {
     NavigationView {
       LoginView(
         store: Store(
-          initialState: LoginState(username: "", password: "", isLoggingIn: false),
+          initialState: LoginState(),
           reducer: loginReducer,
           environment: LoginEnvironment(
             apiClient: Kaori.mock(
               authenticate: { _ in
-                guard let json = Bundle.module.url(forResource: "profile", withExtension: "json"),
-                      let data = try? Data(contentsOf: json) else {
-                  return Fail(error: Kaori.KaoriError.network)
-                    .eraseToAnyPublisher()
-                }
-
-                let dateFormatter = DateFormatter()
-                dateFormatter.locale = .autoupdatingCurrent
-                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .formatted(dateFormatter)
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-                guard let profile = try? decoder.decode(Profile.self, from: data) else {
-                  return Fail(error: Kaori.KaoriError.decoding)
-                    .eraseToAnyPublisher()
-                }
-
-                return Just(profile)
-                  .setFailureType(to: Kaori.KaoriError.self)
+                Kaori.decodeMock(of: Profile.self, for: "profile.json", in: Bundle.module)
                   .delay(for: 3.0, scheduler: DispatchQueue.global())
                   .eraseToAnyPublisher()
               }

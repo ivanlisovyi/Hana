@@ -4,14 +4,14 @@
 import PackageDescription
 
 let package = Package(
-  name: "Posts",
+  name: "Explore",
   platforms: [
     .iOS(.v14),
   ],
   products: [
     .library(
-      name: "Posts",
-      targets: ["Posts"]
+      name: "Explore",
+      targets: ["Explore"]
     ),
   ],
   dependencies: [
@@ -24,7 +24,7 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "Posts",
+      name: "Explore",
       dependencies: [
         "Kaori",
         "WebImage",
@@ -39,8 +39,8 @@ let package = Package(
       ]
     ),
     .testTarget(
-      name: "PostsTests",
-      dependencies: ["Posts"]
+      name: "ExploreTests",
+      dependencies: ["Explore"]
     ),
   ]
 )
