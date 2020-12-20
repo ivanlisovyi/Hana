@@ -19,6 +19,19 @@ public struct LoginState: Equatable {
   public var isFormValid: Bool {
     !username.isEmpty && !password.isEmpty
   }
+
+  public init(
+    username: String = "",
+    password: String = "",
+    isLoggingIn: Bool = false,
+    alert: AlertState<LoginAction>? = nil
+  ) {
+    self.username = username
+    self.password = password
+
+    self.isLoggingIn = false
+    self.alert = alert
+  }
 }
 
 public enum LoginAction: Equatable {

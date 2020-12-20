@@ -12,14 +12,14 @@ import Kaori
 import Components 
 import ComposableArchitecture
 
-struct LoginView: View {
-  let store: Store<LoginState, LoginAction>
+public struct LoginView: View {
+  public let store: Store<LoginState, LoginAction>
 
   public init(store: Store<LoginState, LoginAction>) {
     self.store = store
   }
 
-  var body: some View {
+  public var body: some View {
     WithViewStore(store) { viewStore in
       VStack {
         Form {
@@ -53,6 +53,8 @@ struct LoginView: View {
       }
       .alert(self.store.scope(state: \.alert), dismiss: .alertDismissed)
     }
+    .navigationBarTitle("Login")
+    .navigationBarItems(trailing: EmptyView())
   }
 }
 

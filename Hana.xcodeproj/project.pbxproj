@@ -64,6 +64,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CC9FA880258E964C00E796DA /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				CCCEF2E1258DE21100683068 /* Login */,
+				CCEF65C0257D4C4D00D38E11 /* Posts */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		CC9FA889258E967500E796DA /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				CCCEF2E7258DE81100683068 /* Common */,
+				CCEA928A2580A99700D0572E /* UI */,
+				CCEA9266257D5A5D00D0572E /* WebImage */,
+				CCEF65B9257D4A2A00D38E11 /* Kaori */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
 		CCC380542574125A00AF4D96 = {
 			isa = PBXGroup;
 			children = (
@@ -87,7 +107,8 @@
 		CCC3805F2574125A00AF4D96 /* Hana */ = {
 			isa = PBXGroup;
 			children = (
-				CCCEF2E2258DE22300683068 /* Packages */,
+				CC9FA889258E967500E796DA /* Packages */,
+				CC9FA880258E964C00E796DA /* Features */,
 				CCC380602574125A00AF4D96 /* HanaApp.swift */,
 				CCC380642574125B00AF4D96 /* Assets.xcassets */,
 				CCC380692574125B00AF4D96 /* Info.plist */,
@@ -120,19 +141,6 @@
 				CCC3807F2574125B00AF4D96 /* Info.plist */,
 			);
 			path = HanaUITests;
-			sourceTree = "<group>";
-		};
-		CCCEF2E2258DE22300683068 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				CCCEF2E7258DE81100683068 /* Common */,
-				CCCEF2E1258DE21100683068 /* Login */,
-				CCEA928A2580A99700D0572E /* UI */,
-				CCEF65C0257D4C4D00D38E11 /* Posts */,
-				CCEA9266257D5A5D00D0572E /* WebImage */,
-				CCEF65B9257D4A2A00D38E11 /* Kaori */,
-			);
-			name = Packages;
 			sourceTree = "<group>";
 		};
 		CCD9EEA925742C7A009634B9 /* Frameworks */ = {

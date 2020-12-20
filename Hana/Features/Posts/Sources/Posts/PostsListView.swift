@@ -11,13 +11,12 @@ import Combine
 import ComposableArchitecture
 
 import Kaori
-
-import WebImage
-import ViewModifiers
-import Extensions
+import Login
 
 public struct PostsView: View {
   let store: Store<PostsState, PostsAction>
+
+  @State var showProfile = false
 
   private var columns = [
     GridItem(.flexible(minimum: 300))
@@ -41,6 +40,19 @@ public struct PostsView: View {
         .fontWeight(.bold)
 
       Spacer()
+
+      Button(action: { showProfile.toggle() }) {
+        Image(systemName: "person.crop.circle")
+          .font(.largeTitle)
+      }
+    }
+    .sheet(isPresented: $showProfile) {
+      IfLetStore(self.store.scope(state: { $0.login }, action: PostsAction.login)) { store in
+        NavigationView {
+          LoginView(store: store)
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+      }
     }
     .padding()
   }
@@ -54,7 +66,6 @@ public struct PostsView: View {
               .onAppear {
                 store.send(.fetchNext(after: post))
               }
-
           }
         }
         .padding([.leading, .trailing], 10)
@@ -66,17 +77,11 @@ public struct PostsView: View {
   }
 }
 
-extension View {
-  func nsfw() -> some View {
-    modifier(NSFW())
-  }
-}
-
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     let store = Store(
-      initialState: PostsState(page: 0),
+      initialState: PostsState(login: LoginState()),
       reducer: postsReducer,
       environment: PostsEnvironment(
         apiClient: .mock(posts: { _ in

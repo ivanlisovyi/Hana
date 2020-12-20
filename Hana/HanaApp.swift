@@ -9,7 +9,9 @@ import SwiftUI
 import ComposableArchitecture
 
 import KaoriLive
+
 import Posts
+import Login
 
 @main
 struct HanaApp: App {
@@ -23,7 +25,7 @@ struct HanaApp: App {
     NavigationView {
       PostsView(
         store: Store(
-          initialState: PostsState(page: 0),
+          initialState: PostsState(login: LoginState()),
           reducer: postsReducer,
           environment: PostsEnvironment(
             apiClient: .live(),

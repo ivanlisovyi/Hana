@@ -10,6 +10,8 @@ import SwiftUI
 import Kaori
 import WebImage
 
+import ViewModifiers
+
 struct PostView: View {
   private var image: Post.Image
 
@@ -26,3 +28,8 @@ struct PostView: View {
   }
 }
 
+extension View {
+  func nsfw() -> some View {
+    modifier(NSFW())
+  }
+}
