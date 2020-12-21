@@ -7,12 +7,15 @@
 
 import ComposableArchitecture
 
+import Kaori
+
 public struct LoginState: Equatable {
   public var username: String
   public var password: String
 
   public var isLoggingIn: Bool
 
+  public var profile: Profile?
   public var alert: AlertState<LoginAction>?
 
   public var isFormValid: Bool {
@@ -23,12 +26,15 @@ public struct LoginState: Equatable {
     username: String = "",
     password: String = "",
     isLoggingIn: Bool = false,
+    profile: Profile? = nil,
     alert: AlertState<LoginAction>? = nil
   ) {
     self.username = username
     self.password = password
 
     self.isLoggingIn = false
+
+    self.profile = profile
     self.alert = alert
   }
 }

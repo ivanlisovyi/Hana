@@ -15,5 +15,6 @@ public enum ExploreAction: Equatable {
   case fetchNext(after: Post)
   case fetchResponse(Result<[Post], Kaori.KaoriError>)
 
+  case setLoginSheet(isPresented: Bool)
   case login(LoginAction)
 }

@@ -28,11 +28,13 @@ public let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
 
   case let .loginResponse(.success(response)):
     state.isLoggingIn = false
+    state.profile = response
     return .none
 
   case let .loginResponse(.failure(error)):
     state.alert = .init(title: .init(error.localizedDescription))
     state.isLoggingIn = false
+    state.profile = nil
     return .none
 
   case let .formUsernameChanged(username):

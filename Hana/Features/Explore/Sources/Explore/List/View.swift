@@ -34,27 +34,34 @@ public struct ExploreView: View {
   }
 
   @ViewBuilder private var header: some View {
-    HStack {
-      Text("New")
-        .font(.largeTitle)
-        .fontWeight(.bold)
-
-      Spacer()
-
-      Button(action: { showProfile.toggle() }) {
-        Image(systemName: "person.crop.circle")
+    WithViewStore(self.store) { store in
+      HStack {
+        Text("New")
           .font(.largeTitle)
-      }
-    }
-    .sheet(isPresented: $showProfile) {
-      IfLetStore(self.store.scope(state: { $0.login }, action: ExploreAction.login)) { store in
-        NavigationView {
-          LoginView(store: store)
+          .fontWeight(.bold)
+
+        Spacer()
+
+        Button(action: { store.send(.setLoginSheet(isPresented: true)) }) {
+          Image(systemName: "person.crop.circle")
+            .font(.largeTitle)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
       }
+      .sheet(
+        isPresented: store.binding(
+          get: { $0.isLoginSheetPresented },
+          send: ExploreAction.setLoginSheet(isPresented:)
+        )
+      ) {
+        IfLetStore(self.store.scope(state: { $0.login }, action: ExploreAction.login)) { store in
+          NavigationView {
+            LoginView(store: store)
+          }
+          .navigationViewStyle(StackNavigationViewStyle())
+        }
+      }
+      .padding()
     }
-    .padding()
   }
 
   private var content: some View {

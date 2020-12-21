@@ -34,6 +34,8 @@ public let exploreReducer =
         }
 
         state.isFetching = true
+        state.posts = OrderedSet()
+        state.page = 0
 
         return fetchEffect(
           page: state.nextPage,
@@ -45,7 +47,8 @@ public let exploreReducer =
           return .none
         }
 
-        if let index = state.posts.firstIndex(of: post), index > state.posts.count - ExploreState.nextPageThreshold {
+        if let index = state.posts.firstIndex(of: post),
+           index > state.posts.count - ExploreState.nextPageThreshold {
           state.isFetching = true
 
           return fetchEffect(
@@ -66,6 +69,14 @@ public let exploreReducer =
         state.isFetching = false
 
         return .none
+
+      case let .setLoginSheet(isPresented):
+        state.isLoginSheetPresented = isPresented
+        return .none
+
+      case .login(.loginResponse(.success)):
+        state.isLoginSheetPresented = false
+        return Effect(value: .fetch)
 
       case .login:
         return .none
