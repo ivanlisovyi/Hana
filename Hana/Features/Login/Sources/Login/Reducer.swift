@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 import ComposableArchitecture
 import Kaori
@@ -15,16 +16,15 @@ public let loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
   switch action {
   case .loginButtonTapped:
     state.isLoggingIn = true
-    return environment.apiClient
-      .authenticate(
-        Authentication(
-          username: state.username,
-          apiKey: state.password
-        )
-      )
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(LoginAction.loginResponse)
+
+    return Effect<Void, Never>(
+      value: environment.apiClient.authenticate(.init(username: state.username, apiKey: state.password))
+    )
+    .flatMap(environment.apiClient.profile)
+    .receive(on: environment.mainQueue)
+    .print()
+    .catchToEffect()
+    .map(LoginAction.loginResponse)
 
   case let .loginResponse(.success(response)):
     state.isLoggingIn = false

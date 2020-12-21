@@ -11,7 +11,7 @@ import Kaori
 
 public enum LoginAction: Equatable {
   case loginButtonTapped
-  case loginResponse(Result<Profile, Kaori.KaoriError>)
+  case loginResponse(Result<Profile, KaoriError>)
 
   case formUsernameChanged(String)
   case formPasswordChanged(String)

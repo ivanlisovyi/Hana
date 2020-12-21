@@ -28,24 +28,20 @@ public enum Environment {
 public extension Kaori {
   static func live(environment: Environment = .production) -> Self {
     let session = Session(baseURL: environment.baseURL)
-
+ 
     return Self(
       authenticate: { request in
         session.register(AuthenticationAdapter(username: request.username, apiKey: request.apiKey))
-
-        return session.request(.profile(), decoder: decoder)
-          .mapError(KaoriError.init(error:))
-          .eraseToAnyPublisher()
       },
       profile: {
         session.request(.profile(), decoder: decoder)
-          .mapError(KaoriError.init(error:))
+          .mapError(KaoriError.init(underlayingError:))
           .eraseToAnyPublisher()
       },
       posts: {
         session.request(.posts(page: $0), decoder: decoder, of: CompactDecodableArray<Post>.self)
           .map(\.elements)
-          .mapError(KaoriError.init(error:))
+          .mapError(KaoriError.init(underlayingError:))
           .eraseToAnyPublisher()
       }
     )
@@ -63,12 +59,12 @@ public extension Kaori {
   }()
 }
 
-extension Kaori.KaoriError {
-  init(error: Error) {
-    if error is SessionError {
-      self = .network
-    } else if error is DecodingError {
-      self = .decoding
+public extension KaoriError {
+  init(underlayingError: Error) {
+    if underlayingError is SessionError {
+      self = .network(underlayingError.localizedDescription)
+    } else if underlayingError is DecodingError {
+      self = .decoding(underlayingError.localizedDescription)
     } else {
       self = .unknown
     }

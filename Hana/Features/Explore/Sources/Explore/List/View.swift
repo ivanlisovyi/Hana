@@ -92,7 +92,7 @@ struct ContentView_Previews: PreviewProvider {
       reducer: exploreReducer,
       environment: ExploreEnvironment(
         apiClient: .mock(posts: { _ in
-          Kaori.decodeMock(of: [Post].self, for: "posts.json", in: Bundle.module)
+          Kaori.decodeMockPublisher(of: [Post].self, for: "posts.json", in: Bundle.module)
         }),
         mainQueue: DispatchQueue.main.eraseToAnyScheduler()
       )

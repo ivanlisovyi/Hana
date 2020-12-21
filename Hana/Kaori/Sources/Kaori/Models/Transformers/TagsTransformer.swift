@@ -8,8 +8,6 @@
 import Foundation
 
 struct TagsTransformer {
-  init() {}
-
   func transform(_ value: String) -> [String] {
     value.components(separatedBy: " ")
   }

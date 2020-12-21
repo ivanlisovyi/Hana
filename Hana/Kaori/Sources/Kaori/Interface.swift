@@ -9,18 +9,12 @@ import Foundation
 import Combine
 
 public struct Kaori {
-  public enum KaoriError: LocalizedError, Equatable {
-    case network
-    case decoding
-    case unknown
-  }
-
-  public var authenticate: (Authentication) -> AnyPublisher<Profile, KaoriError>
-  public var profile: () -> AnyPublisher<Profile, KaoriError>
-  public var posts: (Int) -> AnyPublisher<[Post], KaoriError>
+  public let authenticate: (Authentication) -> Void
+  public let profile: () -> AnyPublisher<Profile, KaoriError>
+  public let posts: (Int) -> AnyPublisher<[Post], KaoriError>
 
   public init(
-    authenticate: @escaping (Authentication) -> AnyPublisher<Profile, KaoriError>,
+    authenticate: @escaping (Authentication) -> Void,
     profile:  @escaping () -> AnyPublisher<Profile, KaoriError>,
     posts:  @escaping (Int) -> AnyPublisher<[Post], KaoriError>
   ) {

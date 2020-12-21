@@ -10,7 +10,7 @@ import Combine
 
 public extension Kaori {
   static func mock(
-    authenticate: @escaping (Authentication) -> AnyPublisher<Profile, KaoriError> = { _ in
+    authenticate: @escaping (Authentication) -> Void = { _ in
       fatalError(
         """
         authenticate was called but is not implemented. Be sure to provide an implementation for
@@ -52,11 +52,10 @@ public extension Kaori {
     of type: T.Type,
     for resource: String,
     in bundle: Bundle = .main
-  ) -> AnyPublisher<T, KaoriError> {
+  ) throws -> T {
     guard let json = bundle.url(forResource: resource, withExtension: nil),
           let data = try? Data(contentsOf: json) else {
-      return Fail(error: Kaori.KaoriError.network)
-        .eraseToAnyPublisher()
+      throw KaoriError.decoding("Failed to load json data for resource \(resource) of \(type) type in \(bundle) bundle")
     }
 
     let dateFormatter = DateFormatter()
@@ -68,12 +67,25 @@ public extension Kaori {
     decoder.keyDecodingStrategy = .convertFromSnakeCase
 
     guard let result = try? decoder.decode(T.self, from: data) else {
-      return Fail(error: Kaori.KaoriError.decoding)
-        .eraseToAnyPublisher()
+      throw KaoriError.decoding("Failed to load json data for resource \(resource) of \(type) type in \(bundle) bundle")
     }
 
-    return Just(result)
-      .setFailureType(to: KaoriError.self)
-      .eraseToAnyPublisher()
+    return result
+  }
+
+  static func decodeMockPublisher<T: Decodable>(
+    of type: T.Type,
+    for resource: String,
+    in bundle: Bundle = .main
+  ) -> AnyPublisher<T, KaoriError> {
+    do {
+      return Just(try decodeMock(of: type, for: resource, in: bundle))
+        .setFailureType(to: KaoriError.self)
+        .eraseToAnyPublisher()
+    } catch {
+      return Fail(error: error)
+        .mapError { _ in KaoriError.decoding(error.localizedDescription)}
+        .eraseToAnyPublisher()
+    }
   }
 }

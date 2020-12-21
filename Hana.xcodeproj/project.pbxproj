@@ -27,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		CC9FA890258FD77400E796DA /* Explore */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Explore; sourceTree = "<group>"; };
+		CC9FA89925911F3000E796DA /* Profile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Profile; sourceTree = "<group>"; };
 		CCC3805D2574125A00AF4D96 /* Hana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hana.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCC380602574125A00AF4D96 /* HanaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaApp.swift; sourceTree = "<group>"; };
 		CCC380642574125B00AF4D96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -67,6 +68,7 @@
 		CC9FA880258E964C00E796DA /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				CC9FA89925911F3000E796DA /* Profile */,
 				CC9FA890258FD77400E796DA /* Explore */,
 				CCCEF2E1258DE21100683068 /* Login */,
 			);
