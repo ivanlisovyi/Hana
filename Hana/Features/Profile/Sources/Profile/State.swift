@@ -10,7 +10,11 @@ import Kaori
 
 @dynamicMemberLookup
 public struct ProfileState: Equatable {
-  var profile: Profile
+  public var profile: Profile
+
+  public init(profile: Profile) {
+    self.profile = profile
+  }
 
   public subscript<T>(dynamicMember keyPath: KeyPath<Profile, T>) -> T {
     profile[keyPath: keyPath]

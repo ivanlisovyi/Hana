@@ -8,8 +8,9 @@
 import Foundation
 import Common
 
-import Login
 import Kaori
+import Login
+import Profile
 
 public struct ExploreState: Equatable {
   static let nextPageThreshold = 4
@@ -18,25 +19,28 @@ public struct ExploreState: Equatable {
   public var page: Int
 
   public var isFetching: Bool
-  public var isLoginSheetPresented: Bool
+  public var isSheetPresented: Bool
 
   public var nextPage: Int {
     page + 1
   }
 
   public var login: LoginState?
+  public var profile: ProfileState?
 
   public init(
     posts: [Post] = [],
     page: Int = 0,
     isFetching: Bool = false,
-    isLoginSheetPresented: Bool = false,
-    login: LoginState? = nil
+    isSheetPresented: Bool = false,
+    login: LoginState? = nil,
+    profile: ProfileState? = nil
   ) {
     self.posts = OrderedSet([])
     self.page = page
     self.isFetching = isFetching
-    self.isLoginSheetPresented = isLoginSheetPresented
+    self.isSheetPresented = isSheetPresented
     self.login = login
+    self.profile = profile
   }
 }

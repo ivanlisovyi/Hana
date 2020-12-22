@@ -11,7 +11,10 @@ import Combine
 import ComposableArchitecture
 
 import Kaori
+import Components
+
 import Login
+import Profile
 
 public struct ExploreView: View {
   let store: Store<ExploreState, ExploreAction>
@@ -42,22 +45,29 @@ public struct ExploreView: View {
 
         Spacer()
 
-        Button(action: { store.send(.setLoginSheet(isPresented: true)) }) {
+        Button(action: { store.send(.setSheet(isPresented: true)) }) {
           Image(systemName: "person.crop.circle")
             .font(.largeTitle)
         }
       }
       .sheet(
         isPresented: store.binding(
-          get: { $0.isLoginSheetPresented },
-          send: ExploreAction.setLoginSheet(isPresented:)
+          get: { $0.isSheetPresented },
+          send: ExploreAction.setSheet(isPresented:)
         )
       ) {
-        IfLetStore(self.store.scope(state: { $0.login }, action: ExploreAction.login)) { store in
-          NavigationView {
-            LoginView(store: store)
+        if store.profile != nil {
+          IfLetStore(self.store.scope(state: { $0.profile }, action: ExploreAction.profile)) { store in
+            StackNavigationView {
+              ProfileView(store: store)
+            }
           }
-          .navigationViewStyle(StackNavigationViewStyle())
+        } else {
+          IfLetStore(self.store.scope(state: { $0.login }, action: ExploreAction.login)) { store in
+            StackNavigationView {
+              LoginView(store: store)
+            }
+          }
         }
       }
       .padding()

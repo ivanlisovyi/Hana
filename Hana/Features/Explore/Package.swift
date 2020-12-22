@@ -20,7 +20,8 @@ let package = Package(
     .package(path: "../Packages/WebImage"),
     .package(path: "../Packages/UI"),
     .package(path: "../Packages/Common"),
-    .package(path: "../Login")
+    .package(path: "../Login"),
+    .package(path: "../Profile")
   ],
   targets: [
     .target(
@@ -30,6 +31,7 @@ let package = Package(
         "WebImage",
         "Common",
         "Login",
+        "Profile",
         .product(name: "ViewModifiers", package: "UI"),
         .product(name: "Extensions", package: "UI"),
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture")

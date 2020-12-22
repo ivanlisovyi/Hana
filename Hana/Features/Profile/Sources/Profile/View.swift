@@ -19,7 +19,47 @@ public struct ProfileView: View {
 
   public var body: some View {
     WithViewStore(self.store) { store in
-      Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+      Form {
+        Section(header: Text("General")) {
+          cell(title: "ID", detail: "\(store.profile.id)")
+          cell(title: "Username", detail: store.profile.name)
+          cell(title: "Level", detail: "\(store.profile.level.rawValue)")
+        }
+
+        Section(header: Text("Favorites")) {
+          cell(title: "Favorites", detail: "\(store.profile.favoriteCount)")
+          cell(title: "Favorites Limit", detail: "\(store.profile.favoriteLimit)")
+        }
+
+        Section(header: Text("Tags")) {
+          cell(title: "Favorite", detail: "\(store.profile.tags.favorite.joined(separator: ","))")
+          cell(title: "Blocked", detail: "\(store.profile.tags.blacklisted.joined(separator: ","))")
+        }
+
+        Section {
+          Button(action: { store.send(.logoutButtonTapped) }, label: {
+            HStack {
+              Text("Logout")
+                .frame(maxWidth: .infinity)
+                .foregroundColor(.red)
+            }
+          })
+        }
+      }
+    }
+    .navigationBarTitle("Profile")
+    .navigationBarItems(trailing: EmptyView())
+  }
+
+  @ViewBuilder private func cell(title: String, detail: String) -> some View {
+    HStack {
+      Text(title)
+        .bold()
+
+      Spacer()
+
+      Text(detail)
+        .multilineTextAlignment(.trailing)
     }
   }
 }

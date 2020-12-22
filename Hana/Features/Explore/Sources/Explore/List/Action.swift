@@ -7,14 +7,16 @@
 
 import Foundation
 
-import Login
 import Kaori
+import Login
+import Profile
 
 public enum ExploreAction: Equatable {
   case fetch
   case fetchNext(after: Post)
   case fetchResponse(Result<[Post], KaoriError>)
 
-  case setLoginSheet(isPresented: Bool)
+  case setSheet(isPresented: Bool)
   case login(LoginAction)
+  case profile(ProfileAction)
 }

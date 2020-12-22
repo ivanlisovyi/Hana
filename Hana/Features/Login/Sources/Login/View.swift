@@ -45,6 +45,7 @@ public struct LoginView: View {
                   ActivityIndicator()
                 }
               }
+              .frame(maxWidth: .infinity)
             })
             .disabled(!viewStore.isFormValid)
           }
