@@ -9,16 +9,19 @@ import Foundation
 import Combine
 
 public struct Kaori {
-  public let authenticate: (Authentication) -> Void
+  public let login: (Authentication) -> Void
+  public let logout: () -> Void
   public let profile: () -> AnyPublisher<Profile, KaoriError>
   public let posts: (Int) -> AnyPublisher<[Post], KaoriError>
 
   public init(
-    authenticate: @escaping (Authentication) -> Void,
+    login: @escaping (Authentication) -> Void,
+    logout: @escaping () -> Void,
     profile:  @escaping () -> AnyPublisher<Profile, KaoriError>,
     posts:  @escaping (Int) -> AnyPublisher<[Post], KaoriError>
   ) {
-    self.authenticate = authenticate
+    self.login = login
+    self.logout = logout
     self.profile = profile
     self.posts = posts
   }

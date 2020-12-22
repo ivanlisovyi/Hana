@@ -19,8 +19,6 @@ import Profile
 public struct ExploreView: View {
   let store: Store<ExploreState, ExploreAction>
 
-  @SwiftUI.State var showProfile = false
-
   private var columns = [
     GridItem(.flexible(minimum: 300))
   ]
@@ -56,18 +54,8 @@ public struct ExploreView: View {
           send: ExploreAction.setSheet(isPresented:)
         )
       ) {
-        if store.profile != nil {
-          IfLetStore(self.store.scope(state: { $0.profile }, action: ExploreAction.profile)) { store in
-            StackNavigationView {
-              ProfileView(store: store)
-            }
-          }
-        } else {
-          IfLetStore(self.store.scope(state: { $0.login }, action: ExploreAction.login)) { store in
-            StackNavigationView {
-              LoginView(store: store)
-            }
-          }
+        StackNavigationView {
+          ProfileView(store: self.store.scope(state: \.profile, action: ExploreAction.profile))
         }
       }
       .padding()
@@ -98,7 +86,7 @@ public struct ExploreView: View {
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     let store = Store(
-      initialState: ExploreState(login: LoginState()),
+      initialState: ExploreState(),
       reducer: exploreReducer,
       environment: ExploreEnvironment(
         apiClient: .mock(posts: { _ in

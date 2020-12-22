@@ -7,6 +7,10 @@
 
 import Foundation
 
-public enum ProfileAction {
+import Login
+
+public enum ProfileAction: Equatable {
   case logoutButtonTapped
+  case logout
+  case login(LoginAction)
 }

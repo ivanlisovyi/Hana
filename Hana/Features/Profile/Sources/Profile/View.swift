@@ -6,9 +6,15 @@
 //
 
 import SwiftUI
+import Combine
 
 import ComposableArchitecture
+
 import Kaori
+import Login
+
+import Components
+import Extensions
 
 public struct ProfileView: View {
   public let store: Store<ProfileState, ProfileAction>
@@ -18,26 +24,37 @@ public struct ProfileView: View {
   }
 
   public var body: some View {
-    WithViewStore(self.store) { store in
+    WithViewStore(self.store) { viewStore in
+      IfLetElse(viewStore.profile, trueContent: profileView) {
+        LoginView(store: self.store.scope(state: \.login, action: ProfileAction.login))
+      }
+      .transition(.slide)
+      .navigationBarTitle(viewStore.isLoggedIn ? "Profile" : "Login")
+      .navigationBarItems(trailing: EmptyView())
+    }
+  }
+
+  @ViewBuilder private func profileView(_ profile: Profile) -> some View {
+    WithViewStore(self.store) { viewStore in
       Form {
         Section(header: Text("General")) {
-          cell(title: "ID", detail: "\(store.profile.id)")
-          cell(title: "Username", detail: store.profile.name)
-          cell(title: "Level", detail: "\(store.profile.level.rawValue)")
+          cellView(title: "ID", detail: "\(profile.id)")
+          cellView(title: "Username", detail: profile.name)
+          cellView(title: "Level", detail: "\(profile.level.rawValue)")
         }
 
         Section(header: Text("Favorites")) {
-          cell(title: "Favorites", detail: "\(store.profile.favoriteCount)")
-          cell(title: "Favorites Limit", detail: "\(store.profile.favoriteLimit)")
+          cellView(title: "Favorites", detail: "\(profile.favoriteCount)")
+          cellView(title: "Favorites Limit", detail: "\(profile.favoriteLimit)")
         }
 
         Section(header: Text("Tags")) {
-          cell(title: "Favorite", detail: "\(store.profile.tags.favorite.joined(separator: ","))")
-          cell(title: "Blocked", detail: "\(store.profile.tags.blacklisted.joined(separator: ","))")
+          cellView(title: "Favorite", detail: "\(profile.tags.favorite.joined(separator: ","))")
+          cellView(title: "Blocked", detail: "\(profile.tags.blacklisted.joined(separator: ","))")
         }
 
         Section {
-          Button(action: { store.send(.logoutButtonTapped) }, label: {
+          Button(action: { viewStore.send(.logoutButtonTapped) }, label: {
             HStack {
               Text("Logout")
                 .frame(maxWidth: .infinity)
@@ -47,11 +64,9 @@ public struct ProfileView: View {
         }
       }
     }
-    .navigationBarTitle("Profile")
-    .navigationBarItems(trailing: EmptyView())
   }
 
-  @ViewBuilder private func cell(title: String, detail: String) -> some View {
+  @ViewBuilder private func cellView(title: String, detail: String) -> some View {
     HStack {
       Text(title)
         .bold()
@@ -73,16 +88,26 @@ struct Profile_Previews: PreviewProvider {
       in: .module
     )
 
-    return ProfileView(
-      store: .init(
-        initialState: .init(profile: profile),
-        reducer: profileReducer,
-        environment: ProfileEnvironment(
-          apiClient: .mock(),
-          mainQueue: DispatchQueue.main.eraseToAnyScheduler()
+    return StackNavigationView {
+      ProfileView(
+        store: .init(
+          initialState: .init(profile: profile),
+          reducer: profileReducer,
+          environment: ProfileEnvironment(
+            apiClient: .mock(
+              login: { _ in },
+              logout: {},
+              profile: {
+                Just(profile)
+                  .setFailureType(to: KaoriError.self)
+                  .eraseToAnyPublisher()
+              }
+            ),
+            mainQueue: DispatchQueue.main.eraseToAnyScheduler()
+          )
         )
       )
-    )
+    }
   }
 }
 #endif

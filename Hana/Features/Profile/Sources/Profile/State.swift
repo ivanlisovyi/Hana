@@ -8,15 +8,27 @@
 import ComposableArchitecture
 import Kaori
 
+import Login
+
 @dynamicMemberLookup
 public struct ProfileState: Equatable {
-  public var profile: Profile
+  public var profile: Profile?
 
-  public init(profile: Profile) {
-    self.profile = profile
+  public var login: LoginState
+
+  public var isLoggedIn: Bool {
+    profile != nil
   }
 
-  public subscript<T>(dynamicMember keyPath: KeyPath<Profile, T>) -> T {
-    profile[keyPath: keyPath]
+  public init(
+    profile: Profile? = nil,
+    login: LoginState = LoginState()
+  ) {
+    self.profile = profile
+    self.login = login
+  }
+
+  public subscript<T>(dynamicMember keyPath: KeyPath<LoginState, T>) -> T {
+    login[keyPath: keyPath]
   }
 }

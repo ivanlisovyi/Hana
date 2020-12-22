@@ -14,20 +14,7 @@ import Login
 import Profile
 
 public let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment>.combine(
-  loginReducer
-    .optional()
-    .pullback(
-      state: \.login,
-      action: /ExploreAction.login,
-      environment: {
-        LoginEnvironment(
-          apiClient: $0.apiClient,
-          mainQueue: $0.mainQueue
-        )
-      }
-    ),
   profileReducer
-    .optional()
     .pullback(
       state: \.profile,
       action: /ExploreAction.profile,
@@ -86,19 +73,12 @@ public let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironm
       state.isSheetPresented = isPresented
       return .none
 
-    case let .login(.loginResponse(.success(profile))):
-      state.isSheetPresented = false
-      state.profile = ProfileState(profile: profile)
+    case .profile(.login(.loginResponse(.success))),
+         .profile(.logout):
       return Effect(value: .fetch)
 
-    case .login:
+    case .profile:
       return .none
-
-    case .profile(.logoutButtonTapped):
-      state.isSheetPresented = false
-      state.login = .init()
-      state.profile = nil
-      return Effect(value: .fetch)
     }
   }
 )

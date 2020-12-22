@@ -17,12 +17,16 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .upToNextMajor(from: "0.9.0")),
     .package(path: "../Packages/Kaori"),
+    .package(path: "../Packages/UI"),
+    .package(path: "../Login")
   ],
   targets: [
     .target(
       name: "Profile",
       dependencies: [
         "Kaori",
+        "Login",
+        .product(name: "Components", package: "UI"),
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ],
       resources: [

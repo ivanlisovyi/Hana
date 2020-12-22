@@ -69,7 +69,7 @@ struct LoginView_Previews: PreviewProvider {
           reducer: loginReducer,
           environment: LoginEnvironment(
             apiClient: Kaori.mock(
-              authenticate: { _ in },
+              login: { _ in },
               profile: {
                 Kaori.decodeMockPublisher(of: Profile.self, for: "profile.json", in: Bundle.module)
                   .delay(for: 3.0, scheduler: DispatchQueue.global())

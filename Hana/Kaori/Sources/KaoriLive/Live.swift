@@ -30,8 +30,11 @@ public extension Kaori {
     let session = Session(baseURL: environment.baseURL)
  
     return Self(
-      authenticate: { request in
-        session.register(AuthenticationAdapter(username: request.username, apiKey: request.apiKey))
+      login: { request in
+        session.authenticate(user: request.username, password: request.apiKey)
+      },
+      logout: {
+        session.deauthenticate()
       },
       profile: {
         session.request(.profile(), decoder: decoder)
@@ -59,8 +62,8 @@ public extension Kaori {
   }()
 }
 
-public extension KaoriError {
-  init(underlayingError: Error) {
+extension KaoriError {
+  public init(underlayingError: Error) {
     if underlayingError is SessionError {
       self = .network(underlayingError.localizedDescription)
     } else if underlayingError is DecodingError {

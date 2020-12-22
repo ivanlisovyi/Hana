@@ -8,7 +8,6 @@
 import Foundation
 
 import Kaori
-import Login
 import Profile
 
 public enum ExploreAction: Equatable {
@@ -17,6 +16,5 @@ public enum ExploreAction: Equatable {
   case fetchResponse(Result<[Post], KaoriError>)
 
   case setSheet(isPresented: Bool)
-  case login(LoginAction)
   case profile(ProfileAction)
 }

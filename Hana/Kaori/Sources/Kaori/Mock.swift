@@ -10,10 +10,20 @@ import Combine
 
 public extension Kaori {
   static func mock(
-    authenticate: @escaping (Authentication) -> Void = { _ in
+    login: @escaping (Authentication) -> Void = { _ in
       fatalError(
         """
-        authenticate was called but is not implemented. Be sure to provide an implementation for
+        login was called but is not implemented. Be sure to provide an implementation for
+        this endpoint when creating the mock.
+        """,
+        file: #file,
+        line: #line
+      )
+    },
+    logout: @escaping () -> Void = {
+      fatalError(
+        """
+        logout was called but is not implemented. Be sure to provide an implementation for
         this endpoint when creating the mock.
         """,
         file: #file,
@@ -42,7 +52,8 @@ public extension Kaori {
     }
   ) -> Self {
     Self(
-      authenticate: authenticate,
+      login: login,
+      logout: logout,
       profile: profile,
       posts: posts
     )

@@ -25,22 +25,19 @@ public struct ExploreState: Equatable {
     page + 1
   }
 
-  public var login: LoginState?
-  public var profile: ProfileState?
+  public var profile: ProfileState
 
   public init(
     posts: [Post] = [],
     page: Int = 0,
     isFetching: Bool = false,
     isSheetPresented: Bool = false,
-    login: LoginState? = nil,
-    profile: ProfileState? = nil
+    profile: ProfileState = .init()
   ) {
     self.posts = OrderedSet([])
     self.page = page
     self.isFetching = isFetching
     self.isSheetPresented = isSheetPresented
-    self.login = login
     self.profile = profile
   }
 }

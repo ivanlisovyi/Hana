@@ -20,7 +20,6 @@ let package = Package(
     .package(path: "../Packages/WebImage"),
     .package(path: "../Packages/UI"),
     .package(path: "../Packages/Common"),
-    .package(path: "../Login"),
     .package(path: "../Profile")
   ],
   targets: [
@@ -30,7 +29,6 @@ let package = Package(
         "Kaori",
         "WebImage",
         "Common",
-        "Login",
         "Profile",
         .product(name: "ViewModifiers", package: "UI"),
         .product(name: "Extensions", package: "UI"),

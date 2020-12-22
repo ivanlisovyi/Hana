@@ -12,14 +12,6 @@ import Kaori
 import KaoriLive
 
 import Explore
-import Login
-
-struct AppState {
-  var profile: Profile?
-
-  var login: LoginState
-  var posts: ExploreState
-}
 
 @main
 struct HanaApp: App {
@@ -33,7 +25,7 @@ struct HanaApp: App {
     NavigationView {
       ExploreView(
         store: Store(
-          initialState: ExploreState(login: LoginState()),
+          initialState: ExploreState(),
           reducer: exploreReducer,
           environment: ExploreEnvironment(
             apiClient: .live(),
