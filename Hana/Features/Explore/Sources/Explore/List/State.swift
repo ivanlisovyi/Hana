@@ -15,12 +15,16 @@ import Profile
 public struct ExploreState: Equatable {
   static let nextPageThreshold = 4
 
-  public var posts: OrderedSet<Post>
-  public var page: Int
+  public var orderedPosts: OrderedSet<PostState>
+  public var posts: [PostState] {
+    get { orderedPosts.contents }
+    set { orderedPosts = OrderedSet(newValue) }
+  }
 
   public var isFetching: Bool
   public var isSheetPresented: Bool
 
+  public var page: Int
   public var nextPage: Int {
     page + 1
   }
@@ -28,13 +32,13 @@ public struct ExploreState: Equatable {
   public var profile: ProfileState
 
   public init(
-    posts: [Post] = [],
+    posts: [PostState] = [],
     page: Int = 0,
     isFetching: Bool = false,
     isSheetPresented: Bool = false,
     profile: ProfileState = .init()
   ) {
-    self.posts = OrderedSet([])
+    self.orderedPosts = OrderedSet(posts)
     self.page = page
     self.isFetching = isFetching
     self.isSheetPresented = isSheetPresented

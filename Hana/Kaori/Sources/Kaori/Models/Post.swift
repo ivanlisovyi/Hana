@@ -74,6 +74,36 @@ public struct Post: Decodable, Identifiable, Equatable, Hashable {
 
   public let tags: Tags
   public let flags: Flags
+
+  public init(
+    id: Int,
+    pixivId: Int? = nil,
+    createdAt: Date,
+    updatedAt: Date,
+    rating: Rating,
+    favoritesCount: Int,
+    isFavorited: Bool,
+    source: String,
+    score: Score,
+    image: Image,
+    file: File,
+    tags: Tags,
+    flags: Flags
+  ) {
+    self.id = id
+    self.pixivId = pixivId
+    self.createdAt = createdAt
+    self.updatedAt = updatedAt
+    self.rating = rating
+    self.favoritesCount = favoritesCount
+    self.isFavorited = isFavorited
+    self.source = source
+    self.score = score
+    self.image = image
+    self.file = file
+    self.tags = tags
+    self.flags = flags
+  }
 }
 
 public extension Post {

@@ -66,11 +66,15 @@ public struct ExploreView: View {
     WithViewStore(self.store) { store in
       ScrollView {
         LazyVGrid(columns: columns, spacing: 10) {
-          ForEach(store.posts, id: \.id) { post in
-            ItemView(image: post.image)
-              .onAppear {
-                store.send(.fetchNext(after: post))
-              }
+          ForEachStore(
+            self.store.scope(state: \.posts, action: ExploreAction.post(index:action:))
+          ) { rowStore in
+            WithViewStore(rowStore) { rowViewStore in
+              PostView(store: rowStore)
+                .onAppear {
+                  store.send(.fetchNext(after: rowViewStore.state))
+                }
+            }
           }
         }
         .padding([.leading, .trailing], 10)

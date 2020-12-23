@@ -28,6 +28,7 @@ public struct LoginView: View {
               "danbooru_user",
               text: viewStore.binding(get: \.username, send: LoginAction.formUsernameChanged)
             )
+            .textContentType(.username)
             .autocapitalization(.none)
           }
           Section(header: Text("Password")) {
@@ -35,6 +36,7 @@ public struct LoginView: View {
               "••••••••",
               text: viewStore.binding(get: \.password, send: LoginAction.formPasswordChanged)
             )
+            .textContentType(.password)
           }
           Section {
             Button(action: { viewStore.send(.loginButtonTapped) }, label: {

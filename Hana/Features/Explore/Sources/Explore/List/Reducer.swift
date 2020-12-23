@@ -13,7 +13,19 @@ import Kaori
 import Login
 import Profile
 
-public let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment>.combine(
+public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironment> = .combine(
+  postReducer.forEach(
+    state: \ExploreState.posts,
+    action: /ExploreAction.post(index:action:),
+    environment: { env in
+      PostEnvironment(
+        favorite: { id, isFavorite in
+          favoriteEffect(id: id, isFavorite: isFavorite, using: env)
+        },
+        mainQueue: env.mainQueue
+      )
+    }
+  ),
   profileReducer
     .pullback(
       state: \.profile,
@@ -33,7 +45,7 @@ public let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironm
       }
 
       state.isFetching = true
-      state.posts = OrderedSet()
+      state.orderedPosts = OrderedSet()
       state.page = 0
 
       return fetchEffect(
@@ -58,7 +70,7 @@ public let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironm
       return .none
 
     case let .fetchResponse(.success(posts)):
-      state.posts.append(contentsOf: posts)
+      state.orderedPosts.append(contentsOf: posts)
       state.page += 1
       state.isFetching = false
 
@@ -79,6 +91,9 @@ public let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironm
 
     case .profile:
       return .none
+
+    case .post:
+      return .none
     }
   }
 )
@@ -86,8 +101,25 @@ public let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironm
 private func fetchEffect(page: Int, using environment: ExploreEnvironment) -> Effect<ExploreAction, Never> {
   return environment.apiClient
     .posts(page)
+    .map { posts in posts.map(PostState.init) }
     .catchToEffect()
     .map(ExploreAction.fetchResponse)
     .receive(on: environment.mainQueue)
+    .eraseToEffect()
+}
+
+private func favoriteEffect(id: Int, isFavorite: Bool, using environment: ExploreEnvironment) -> Effect<Bool, Error> {
+  if isFavorite {
+    return environment.apiClient.favorite(id)
+      .map { _ in true }
+      .receive(on: environment.mainQueue)
+      .mapError { $0 as Error }
+      .eraseToEffect()
+  }
+
+  return environment.apiClient.unfavorite(id)
+    .map { _ in false }
+    .receive(on: environment.mainQueue)
+    .mapError { $0 as Error }
     .eraseToEffect()
 }

@@ -12,8 +12,10 @@ import Profile
 
 public enum ExploreAction: Equatable {
   case fetch
-  case fetchNext(after: Post)
-  case fetchResponse(Result<[Post], KaoriError>)
+  case fetchNext(after: PostState)
+  case fetchResponse(Result<[PostState], KaoriError>)
+
+  case post(index: Int, action: PostAction)
 
   case setSheet(isPresented: Bool)
   case profile(ProfileAction)
