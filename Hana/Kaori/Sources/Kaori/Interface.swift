@@ -18,7 +18,9 @@ public struct Kaori {
     login: @escaping (Authentication) -> Void,
     logout: @escaping () -> Void,
     profile:  @escaping () -> AnyPublisher<Profile, KaoriError>,
-    posts:  @escaping (Int) -> AnyPublisher<[Post], KaoriError>
+    posts:  @escaping (Int) -> AnyPublisher<[Post], KaoriError>,
+    favorite: @escaping (Int) -> AnyPublisher<Post, KaoriError>,
+    unfavorite: @escaping (Int) -> AnyPublisher<Void, KaoriError>
   ) {
     self.login = login
     self.logout = logout

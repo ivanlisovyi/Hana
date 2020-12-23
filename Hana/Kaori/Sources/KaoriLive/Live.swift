@@ -46,6 +46,16 @@ public extension Kaori {
           .map(\.elements)
           .mapError(KaoriError.init(underlayingError:))
           .eraseToAnyPublisher()
+      },
+      favorite: {
+        session.request(.favorite(id: $0), decoder: decoder)
+          .mapError(KaoriError.init(underlayingError:))
+          .eraseToAnyPublisher()
+      },
+      unfavorite: { 
+        session.request(.unfavorite(id: $0))
+          .mapError(KaoriError.init(underlayingError:))
+          .eraseToAnyPublisher()
       }
     )
   }

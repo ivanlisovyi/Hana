@@ -11,51 +11,31 @@ import Combine
 public extension Kaori {
   static func mock(
     login: @escaping (Authentication) -> Void = { _ in
-      fatalError(
-        """
-        login was called but is not implemented. Be sure to provide an implementation for
-        this endpoint when creating the mock.
-        """,
-        file: #file,
-        line: #line
-      )
+      _unimplemented("login")
     },
     logout: @escaping () -> Void = {
-      fatalError(
-        """
-        logout was called but is not implemented. Be sure to provide an implementation for
-        this endpoint when creating the mock.
-        """,
-        file: #file,
-        line: #line
-      )
+      _unimplemented("logout")
     },
     profile: @escaping () -> AnyPublisher<Profile, KaoriError> = {
-      fatalError(
-        """
-        profile was called but is not implemented. Be sure to provide an implementation for
-        this endpoint when creating the mock.
-        """,
-        file: #file,
-        line: #line
-      )
+      _unimplemented("profile")
     },
     posts: @escaping (Int) -> AnyPublisher<[Post], KaoriError> = { _ in
-      fatalError(
-        """
-        posts was called but is not implemented. Be sure to provide an implementation for
-        this endpoint when creating the mock.
-        """,
-        file: #file,
-        line: #line
-      )
+      _unimplemented("posts")
+    },
+    favorite: @escaping (Int) -> AnyPublisher<Post, KaoriError> = { _ in
+      _unimplemented("favorite")
+    },
+    unfavorite: @escaping (Int) -> AnyPublisher<Void, KaoriError> = { _ in
+      _unimplemented("unfavorite")
     }
   ) -> Self {
     Self(
       login: login,
       logout: logout,
       profile: profile,
-      posts: posts
+      posts: posts,
+      favorite: favorite,
+      unfavorite: unfavorite
     )
   }
 
@@ -99,4 +79,17 @@ public extension Kaori {
         .eraseToAnyPublisher()
     }
   }
+}
+
+public func _unimplemented(
+  _ function: StaticString, file: StaticString = #file, line: UInt = #line
+) -> Never {
+  fatalError(
+    """
+    `\(function)` was called but is not implemented. Be sure to provide an implementation for
+    this endpoint when creating the mock.
+    """,
+    file: file,
+    line: line
+  )
 }
