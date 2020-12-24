@@ -28,45 +28,29 @@ public struct ExploreView: View {
   }
 
   public var body: some View {
-    GeometryReader { geometry in
-      VStack(spacing: 20) {
-        header(insets: geometry.safeAreaInsets)
-        content
-
-      }
+    Navigation {
+      leading
+    } trailing: {
+      trailing
+    } content: {
+      content
     }
-    .background(Color(.systemBackground))
   }
 
-  @ViewBuilder private func header(insets: EdgeInsets) -> some View {
-    WithViewStore(self.store) { store in
-      VStack {
-        Spacer()
+  @ViewBuilder private var leading: some View {
+    Text("New")
+      .font(.largeTitle)
+      .fontWeight(.bold)
+  }
 
-        HStack {
-          Text("New")
-            .font(.largeTitle)
-            .fontWeight(.bold)
-
-          Spacer()
-
-          Button(action: { store.send(.setSheet(isPresented: true)) }) {
-            Image(systemName: "person.crop.circle")
-              .font(.title)
-          }
-          .fixedSize()
-        }
-        .padding(
-          EdgeInsets(
-            top: 10,
-            leading: insets.leading + 16,
-            bottom: 10,
-            trailing: insets.trailing + 16
-          )
-        )
+  @ViewBuilder private var trailing: some View {
+    WithViewStore(self.store) { viewStore in
+      Button(action: { viewStore.send(.setSheet(isPresented: true)) }) {
+        Image(systemName: "person.crop.circle")
+          .font(.title)
       }
       .sheet(
-        isPresented: store.binding(
+        isPresented: viewStore.binding(
           get: { $0.isSheetPresented },
           send: ExploreAction.setSheet(isPresented:)
         )
@@ -76,9 +60,6 @@ public struct ExploreView: View {
         }
       }
     }
-    .background(Color(.secondarySystemBackground))
-    .edgesIgnoringSafeArea([.leading, .top, .trailing])
-    .frame(height: 60)
   }
 
   private var content: some View {

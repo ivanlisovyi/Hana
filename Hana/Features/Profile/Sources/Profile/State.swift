@@ -28,7 +28,8 @@ public struct ProfileState: Equatable {
     self.login = login
   }
 
-  public subscript<T>(dynamicMember keyPath: KeyPath<LoginState, T>) -> T {
-    login[keyPath: keyPath]
+  public subscript<T>(dynamicMember keyPath: WritableKeyPath<LoginState, T>) -> T {
+    get { login[keyPath: keyPath] }
+    set { login[keyPath: keyPath] = newValue }
   }
 }

@@ -11,17 +11,17 @@ import Kaori
 import Profile
 import Keychain
 
-public enum ExploreAction: Equatable {
+public enum ExploreAction {
   case onAppear
-
-  case credentials(Result<Keychain.Credentials, KeychainError>)
 
   case fetch
   case fetchNext(after: PostState)
   case fetchResponse(Result<[PostState], KaoriError>)
 
+  case setSheet(isPresented: Bool)
+
   case post(index: Int, action: PostAction)
 
-  case setSheet(isPresented: Bool)
   case profile(ProfileAction)
+  case keychain(KeychainAction)
 }

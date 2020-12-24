@@ -26,7 +26,7 @@ struct HanaApp: App {
       ExploreView(
         store: Store(
           initialState: ExploreState(),
-          reducer: exploreReducer,
+          reducer: exploreReducer.debug(),
           environment: ExploreEnvironment(
             apiClient: .live(),
             keychain: .live(),

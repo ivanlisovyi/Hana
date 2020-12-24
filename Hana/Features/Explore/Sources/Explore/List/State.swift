@@ -31,6 +31,15 @@ public struct ExploreState: Equatable {
 
   public var profile: ProfileState
 
+  public var keychain: KeychainState {
+    get { .init(credentials: .init(username: profile.username, password: profile.password)) }
+    set {
+      if let newCredentials = newValue.credentials {
+        (profile.username, profile.password) = (newCredentials.username, newCredentials.password)
+      }
+    }
+  }
+
   public init(
     posts: [PostState] = [],
     page: Int = 0,

@@ -37,25 +37,10 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
         )
       }
     ),
-  .init { state, action, environment in
+  Reducer<ExploreState, ExploreAction, ExploreEnvironment> { state, action, environment in
     switch action {
     case .onAppear:
-      return environment.keychain
-        .retrieve()
-        .catchToEffect()
-        .receive(on: environment.mainQueue)
-        .map(ExploreAction.credentials)
-        .eraseToEffect()
-
-    case let .credentials(.success(credentials)):
-      state.profile.login = LoginState(
-        username: credentials.username,
-        password: credentials.password
-      )
-      return Effect(value: .profile(.login(.loginButtonTapped)))
-
-    case .credentials(.failure):
-      return Effect(value: .fetch)
+      return Effect(value: .keychain(.restore))
 
     case .fetch:
       if state.isFetching {
@@ -104,20 +89,23 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
 
       return .none
 
+    case .keychain(.onRestore(.success)):
+      return Effect(value: .profile(.login(.loginButtonTapped)))
+
+    case .keychain(.onRestore(.failure)):
+      return Effect(value: .fetch)
+
+    case .keychain(.onSave(.success)):
+      return Effect(value: .fetch)
+
+    case .keychain:
+      return .none
+
     case .profile(.login(.loginResponse(.success))):
-      return environment.keychain.save(
-        .init(
-          username: state.profile.login.username,
-          password: state.profile.login.password
-        )
-      )
-      .catchToEffect()
-      .map { _ in ExploreAction.fetch }
+      return Effect(value: .keychain(.save))
 
     case .profile(.logout):
-      return environment.keychain.clear()
-        .catchToEffect()
-        .map { _ in ExploreAction.fetch }
+      return Effect(value: .keychain(.clear))
 
     case .profile:
       return .none
@@ -126,6 +114,16 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
       return .none
     }
   }
+  .keychain(
+    state: \.keychain,
+    action: /ExploreAction.keychain,
+    environment: {
+      KeychainEnvironment(
+        keychain: $0.keychain,
+        mainQueue: $0.mainQueue
+      )
+    }
+  )
 )
 
 private func fetchEffect(page: Int, using environment: ExploreEnvironment) -> Effect<ExploreAction, Never> {
