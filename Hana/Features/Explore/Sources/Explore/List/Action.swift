@@ -9,8 +9,13 @@ import Foundation
 
 import Kaori
 import Profile
+import Keychain
 
 public enum ExploreAction: Equatable {
+  case onAppear
+
+  case credentials(Result<Keychain.Credentials, KeychainError>)
+
   case fetch
   case fetchNext(after: PostState)
   case fetchResponse(Result<[PostState], KaoriError>)

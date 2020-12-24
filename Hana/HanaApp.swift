@@ -29,12 +29,12 @@ struct HanaApp: App {
           reducer: exploreReducer,
           environment: ExploreEnvironment(
             apiClient: .live(),
+            keychain: .live(),
             mainQueue: DispatchQueue.main.eraseToAnyScheduler()
           )
         )
       )
       .navigationBarHidden(true)
-      .navigationViewStyle(StackNavigationViewStyle())
     }
   }
 }

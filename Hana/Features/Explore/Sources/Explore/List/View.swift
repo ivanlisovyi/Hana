@@ -20,7 +20,7 @@ public struct ExploreView: View {
   let store: Store<ExploreState, ExploreAction>
 
   private var columns = [
-    GridItem(.flexible(minimum: 300))
+    GridItem(.adaptive(minimum: 300), alignment: .top)
   ]
 
   public init(store: Store<ExploreState, ExploreAction>) {
@@ -28,25 +28,42 @@ public struct ExploreView: View {
   }
 
   public var body: some View {
-    VStack {
-      header
-      content
+    GeometryReader { geometry in
+      VStack(spacing: 20) {
+        header(insets: geometry.safeAreaInsets)
+        content
+
+      }
     }
+    .background(Color(.systemBackground))
   }
 
-  @ViewBuilder private var header: some View {
+  @ViewBuilder private func header(insets: EdgeInsets) -> some View {
     WithViewStore(self.store) { store in
-      HStack {
-        Text("New")
-          .font(.largeTitle)
-          .fontWeight(.bold)
-
+      VStack {
         Spacer()
 
-        Button(action: { store.send(.setSheet(isPresented: true)) }) {
-          Image(systemName: "person.crop.circle")
+        HStack {
+          Text("New")
             .font(.largeTitle)
+            .fontWeight(.bold)
+
+          Spacer()
+
+          Button(action: { store.send(.setSheet(isPresented: true)) }) {
+            Image(systemName: "person.crop.circle")
+              .font(.title)
+          }
+          .fixedSize()
         }
+        .padding(
+          EdgeInsets(
+            top: 10,
+            leading: insets.leading + 16,
+            bottom: 10,
+            trailing: insets.trailing + 16
+          )
+        )
       }
       .sheet(
         isPresented: store.binding(
@@ -58,14 +75,16 @@ public struct ExploreView: View {
           ProfileView(store: self.store.scope(state: \.profile, action: ExploreAction.profile))
         }
       }
-      .padding()
     }
+    .background(Color(.secondarySystemBackground))
+    .edgesIgnoringSafeArea([.leading, .top, .trailing])
+    .frame(height: 60)
   }
 
   private var content: some View {
     WithViewStore(self.store) { store in
       ScrollView {
-        LazyVGrid(columns: columns, spacing: 10) {
+        LazyVGrid(columns: columns, alignment: .leading, spacing: 10) {
           ForEachStore(
             self.store.scope(state: \.posts, action: ExploreAction.post(index:action:))
           ) { rowStore in
@@ -80,7 +99,7 @@ public struct ExploreView: View {
         .padding([.leading, .trailing], 10)
       }
       .onAppear {
-        store.send(.fetch)
+        store.send(.onAppear)
       }
     }
   }
@@ -89,13 +108,26 @@ public struct ExploreView: View {
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
+    let posts = try! Kaori.decodeMock(of: [Post].self, for: "posts.json", in: Bundle.module)
+    let states = posts.map(PostState.init(post:))
+
     let store = Store(
-      initialState: ExploreState(),
+      initialState: ExploreState(posts: states),
       reducer: exploreReducer,
       environment: ExploreEnvironment(
         apiClient: .mock(posts: { _ in
           Kaori.decodeMockPublisher(of: [Post].self, for: "posts.json", in: Bundle.module)
         }),
+        keychain: .mock(
+          save: { _ in
+            Empty(completeImmediately: true)
+              .eraseToAnyPublisher()
+          },
+          retrieve: {
+            Empty(completeImmediately: true)
+              .eraseToAnyPublisher()
+          }
+        ),
         mainQueue: DispatchQueue.main.eraseToAnyScheduler()
       )
     )

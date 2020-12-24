@@ -25,9 +25,10 @@ public struct PostView: View {
       ZStack {
         WebImage(url: viewStore.post.image.url)
           .resized(width: 300)
-          .frame(minHeight: (CGFloat(300) / CGFloat(viewStore.post.image.width)) * CGFloat(viewStore.post.image.height))
+          .frame(
+            height: CGFloat(300) / CGFloat(viewStore.post.image.width) * CGFloat(viewStore.post.image.height)
+          )
           .clipped()
-          .clipShape(RoundedRectangle.init(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))
 
         VStack {
           Spacer()
@@ -42,6 +43,8 @@ public struct PostView: View {
           .padding()
         }
       }
+      .background(Color(.secondarySystemBackground))
+      .clipShape(RoundedRectangle(cornerRadius: 10, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))
     }
   }
 }
