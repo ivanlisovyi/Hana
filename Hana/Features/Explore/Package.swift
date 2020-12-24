@@ -16,24 +16,17 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .upToNextMajor(from: "0.9.0")),
-    .package(path: "../Packages/Kaori"),
-    .package(path: "../Packages/WebImage"),
     .package(path: "../Packages/UI"),
     .package(path: "../Packages/Common"),
-    .package(path: "../Packages/Keychain"),
     .package(path: "../Profile")
   ],
   targets: [
     .target(
       name: "Explore",
       dependencies: [
-        "Kaori",
-        "WebImage",
+        "UI",
         "Common",
-        "Keychain",
         "Profile",
-        .product(name: "ViewModifiers", package: "UI"),
-        .product(name: "Extensions", package: "UI"),
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ],
       resources: [

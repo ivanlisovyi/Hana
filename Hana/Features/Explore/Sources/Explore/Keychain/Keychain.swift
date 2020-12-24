@@ -10,13 +10,8 @@ import ComposableArchitecture
 
 import Keychain
 
-@dynamicMemberLookup
 public struct KeychainState: Equatable {
   public var credentials: Keychain.Credentials?
-
-  public subscript<T>(dynamicMember keyPath: WritableKeyPath<Keychain.Credentials?, T>) -> T {
-    credentials[keyPath: keyPath]
-  }
 }
 
 public enum KeychainAction {
@@ -44,7 +39,8 @@ public extension Reducer {
         state, action, environment in
         switch action {
         case .save:
-          guard let username = state.credentials?.username, let password = state.credentials?.password else {
+          guard let username = state.credentials?.username,
+                let password = state.credentials?.password else {
             return .none
           }
 

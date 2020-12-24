@@ -24,7 +24,7 @@ let package = Package(
       name: "Login",
       dependencies: [
         "Kaori",
-        .product(name: "Components", package: "UI"),
+        "UI",
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ],
       resources: [

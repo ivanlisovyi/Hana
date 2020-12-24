@@ -9,9 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 import Kaori
-import WebImage
-
-import ViewModifiers
+import UI
 
 public struct PostView: View {
   public let store: Store<PostState, PostAction>
