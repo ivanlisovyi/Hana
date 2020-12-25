@@ -12,6 +12,7 @@ import ComposableArchitecture
 
 import Kaori
 import Components
+import Common
 
 import Login
 import Profile
@@ -94,23 +95,31 @@ public struct ExploreView: View {
 #if DEBUG
 struct ExploreView_Previews: PreviewProvider {
   static var previews: some View {
-    let posts = try! Kaori.decodeMock(of: [Post].self, for: "posts.json", in: Bundle.module)
-    let states = posts.map(PostState.init(post:))
+    let states = try! KaoriMocks.decode([Post].self, from: .posts)
+      .map(PostState.init(post:))
 
     let store = Store(
       initialState: ExploreState(posts: states),
       reducer: exploreReducer,
       environment: ExploreEnvironment(
-        apiClient: .mock(posts: { _ in
-          Kaori.decodeMockPublisher(of: [Post].self, for: "posts.json", in: Bundle.module)
-        }),
+        apiClient: .mock(
+          login: { _ in },
+          profile: {
+            KaoriMocks.decodePublisher(Profile.self, from: .profile)
+          },
+          posts: { _ in
+            KaoriMocks.decodePublisher([Post].self, from: .posts)
+          }
+        ),
         keychain: .mock(
           save: { _ in
-            Empty(completeImmediately: true)
+            Just(())
+              .setFailureType(to: KeychainError.self)
               .eraseToAnyPublisher()
           },
           retrieve: {
-            Empty(completeImmediately: true)
+            Just(Keychain.Credentials(username: "test", password: "test"))
+              .setFailureType(to: KeychainError.self)
               .eraseToAnyPublisher()
           }
         ),

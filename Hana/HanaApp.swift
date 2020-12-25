@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import ComposableArchitecture
 
 import Kaori
@@ -13,6 +14,8 @@ import KaoriLive
 
 import Explore
 import UI
+
+import Keychain
 
 @main
 struct HanaApp: App {
@@ -27,7 +30,7 @@ struct HanaApp: App {
       ExploreView(
         store: Store(
           initialState: ExploreState(),
-          reducer: exploreReducer.debug(),
+          reducer: exploreReducer,
           environment: ExploreEnvironment(
             apiClient: .live(),
             keychain: .live(),

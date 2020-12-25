@@ -38,15 +38,47 @@ public extension Kaori {
       unfavorite: unfavorite
     )
   }
+}
 
-  static func decodeMock<T: Decodable>(
-    of type: T.Type,
-    for resource: String,
+public enum KaoriMocks {
+  public enum JSON: String, Equatable {
+    case posts
+    case profile
+
+    public var url: URL? {
+      Bundle.module.url(forResource: self.rawValue, withExtension: "json")
+    }
+  }
+
+  public static func decode<T: Decodable>(
+    _ type: T.Type,
+    from asset: JSON
+  ) throws -> T {
+    guard let url = asset.url else {
+      throw KaoriError.decoding("Failed to load json data for asset \(asset.rawValue) of \(type)")
+    }
+
+    return try decode(type, from: url)
+  }
+
+  public static func decode<T: Decodable>(
+    _ type: T.Type,
+    from resource: String,
     in bundle: Bundle = .main
   ) throws -> T {
-    guard let json = bundle.url(forResource: resource, withExtension: nil),
-          let data = try? Data(contentsOf: json) else {
+    guard let url = bundle.url(forResource: resource, withExtension: nil) else {
       throw KaoriError.decoding("Failed to load json data for resource \(resource) of \(type) type in \(bundle) bundle")
+    }
+
+    return try decode(type, from: url)
+  }
+
+  public static func decode<T: Decodable>(
+    _ type: T.Type,
+    from url: URL
+  ) throws -> T {
+    guard let data = try? Data(contentsOf: url) else {
+      throw KaoriError.decoding("Failed to load json data for resource at \(url) of \(type) type")
     }
 
     let dateFormatter = DateFormatter()
@@ -58,27 +90,38 @@ public extension Kaori {
     decoder.keyDecodingStrategy = .convertFromSnakeCase
 
     guard let result = try? decoder.decode(T.self, from: data) else {
-      throw KaoriError.decoding("Failed to load json data for resource \(resource) of \(type) type in \(bundle) bundle")
+      throw KaoriError.decoding("Failed to load json data for resource \(url) of \(type) type")
     }
 
     return result
   }
 
-  static func decodeMockPublisher<T: Decodable>(
-    of type: T.Type,
+  public static func decodePublisher<T: Decodable>(
+    _ type: T.Type,
+    from asset: JSON
+  ) -> AnyPublisher<T, KaoriError> {
+    Result {
+      try decode(type, from: asset)
+    }
+    .publisher
+    .mapError { KaoriError.decoding($0.localizedDescription) }
+    .eraseToAnyPublisher()
+  }
+
+  public static func decodePublisher<T: Decodable>(
+    _ type: T.Type,
     for resource: String,
     in bundle: Bundle = .main
   ) -> AnyPublisher<T, KaoriError> {
-    do {
-      return Just(try decodeMock(of: type, for: resource, in: bundle))
-        .setFailureType(to: KaoriError.self)
-        .eraseToAnyPublisher()
-    } catch {
-      return Fail(error: error)
-        .mapError { _ in KaoriError.decoding(error.localizedDescription)}
-        .eraseToAnyPublisher()
+    Result {
+      try decode(type, from: resource, in: bundle)
     }
+    .publisher
+    .mapError { KaoriError.decoding($0.localizedDescription) }
+    .eraseToAnyPublisher()
   }
+
+  public class BundleFinder {}
 }
 
 public func _unimplemented(

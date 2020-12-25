@@ -30,7 +30,9 @@ let package = Package(
       dependencies: [
         "Amber"
       ],
-      resources: [.copy("Assets")]
+      resources: [
+        .process("Assets")
+      ]
     ),
     .target(
       name: "KaoriLive",

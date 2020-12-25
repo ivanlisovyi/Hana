@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import CoreGraphics
+
 import Kaori
 
 @dynamicMemberLookup
@@ -15,6 +17,10 @@ public struct PostState: Equatable, Identifiable, Hashable {
   public var favorite: FavoriteState<ID> {
     get { .init(id: id, isFavorite: post.isFavorited) }
     set { post = post.favorite(isFavorite: newValue.isFavorite) }
+  }
+
+  public var aspectRatio: CGFloat {
+    CGFloat(post.image.width) / CGFloat(post.image.height)
   }
 
   var post: Post

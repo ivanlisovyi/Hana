@@ -30,7 +30,7 @@ let package = Package(
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ],
       resources: [
-        .process("JsonMocks")
+        .copy("../Packages/Kaori/Sources/Kaori/Assets")
       ]
     ),
     .testTarget(

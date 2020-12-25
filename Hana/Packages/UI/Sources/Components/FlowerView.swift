@@ -71,7 +71,7 @@ public struct FlowerView: View {
           )
         )
         .opacity(0.8)
-        
+
         path.stroke(Color.white.opacity(0.2))
       }
     }

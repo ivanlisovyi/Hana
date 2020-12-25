@@ -82,11 +82,7 @@ public struct ProfileView: View {
 #if DEBUG
 struct Profile_Previews: PreviewProvider {
   static var previews: some View {
-    let profile = try! Kaori.decodeMock(
-      of: Profile.self,
-      for: "profile.json",
-      in: .module
-    )
+    let profile = try! KaoriMocks.decode(Profile.self, from: .profile)
 
     return StackNavigationView {
       ProfileView(
