@@ -19,6 +19,8 @@ import Profile
 public struct ExploreView: View {
   let store: Store<ExploreState, ExploreAction>
 
+  @State var isAnimating = false
+
   private var columns = [
     GridItem(.adaptive(minimum: 300), alignment: .top)
   ]
@@ -37,13 +39,16 @@ public struct ExploreView: View {
     }
   }
 
-  @ViewBuilder private var leading: some View {
-    Text("New")
-      .font(.largeTitle)
-      .fontWeight(.bold)
+  private var leading: some View {
+    WithViewStore(self.store) { viewStore in
+      Button(action: { viewStore.send(.fetch) }) {
+        FlowerView()
+          .frame(width: 30, height: 30, alignment: .center)
+      }
+    }
   }
 
-  @ViewBuilder private var trailing: some View {
+  private var trailing: some View {
     WithViewStore(self.store) { viewStore in
       Button(action: { viewStore.send(.setSheet(isPresented: true)) }) {
         Image(systemName: "person.crop.circle")
@@ -87,7 +92,7 @@ public struct ExploreView: View {
 }
 
 #if DEBUG
-struct ContentView_Previews: PreviewProvider {
+struct ExploreView_Previews: PreviewProvider {
   static var previews: some View {
     let posts = try! Kaori.decodeMock(of: [Post].self, for: "posts.json", in: Bundle.module)
     let states = posts.map(PostState.init(post:))

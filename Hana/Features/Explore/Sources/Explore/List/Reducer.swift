@@ -43,11 +43,6 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
       return Effect(value: .keychain(.restore))
 
     case .fetch:
-      if state.isFetching {
-        return .none
-      }
-
-      state.isFetching = true
       state.orderedPosts = OrderedSet()
       state.page = 0
 
@@ -57,13 +52,8 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
       )
 
     case let .fetchNext(after: post):
-      if state.isFetching {
-        return .none
-      }
-
       if let index = state.posts.firstIndex(of: post),
          index > state.posts.count - ExploreState.nextPageThreshold {
-        state.isFetching = true
 
         return fetchEffect(
           page: state.nextPage,
@@ -75,13 +65,9 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
     case let .fetchResponse(.success(posts)):
       state.orderedPosts.append(contentsOf: posts)
       state.page += 1
-      state.isFetching = false
-
       return .none
 
     case .fetchResponse(.failure):
-      state.isFetching = false
-
       return .none
 
     case let .setSheet(isPresented):

@@ -14,9 +14,9 @@ public struct KeychainState: Equatable {
   public var credentials: Keychain.Credentials?
 }
 
-public enum KeychainAction {
+public enum KeychainAction: Equatable {
   case save
-  case onSave(Result<Void, KeychainError>)
+  case onSave(Result<Keychain.Credentials, KeychainError>)
   case restore
   case onRestore(Result<Keychain.Credentials, KeychainError>)
   case clear
@@ -44,8 +44,11 @@ public extension Reducer {
             return .none
           }
 
-          return environment.keychain.save(.init(username: username, password: password))
+          let credentials = Keychain.Credentials(username: username, password: password)
+
+          return environment.keychain.save(credentials)
             .receive(on: environment.mainQueue)
+            .map { _ in credentials }
             .catchToEffect()
             .map(KeychainAction.onSave)
 

@@ -21,7 +21,6 @@ public struct ExploreState: Equatable {
     set { orderedPosts = OrderedSet(newValue) }
   }
 
-  public var isFetching: Bool
   public var isSheetPresented: Bool
 
   public var page: Int
@@ -43,13 +42,11 @@ public struct ExploreState: Equatable {
   public init(
     posts: [PostState] = [],
     page: Int = 0,
-    isFetching: Bool = false,
     isSheetPresented: Bool = false,
     profile: ProfileState = .init()
   ) {
     self.orderedPosts = OrderedSet(posts)
     self.page = page
-    self.isFetching = isFetching
     self.isSheetPresented = isSheetPresented
     self.profile = profile
   }

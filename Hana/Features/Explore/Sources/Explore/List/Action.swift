@@ -11,7 +11,7 @@ import Kaori
 import Profile
 import Keychain
 
-public enum ExploreAction {
+public enum ExploreAction: Equatable {
   case onAppear
 
   case fetch

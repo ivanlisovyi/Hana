@@ -12,6 +12,7 @@ import Kaori
 import KaoriLive
 
 import Explore
+import UI
 
 @main
 struct HanaApp: App {
@@ -21,8 +22,8 @@ struct HanaApp: App {
     }
   }
 
-  @ViewBuilder private var explore: some View {
-    NavigationView {
+  private var explore: some View {
+    StackNavigationView {
       ExploreView(
         store: Store(
           initialState: ExploreState(),
