@@ -18,11 +18,11 @@ import Login
 import Profile
 
 public struct ExploreView: View {
-  let store: Store<ExploreState, ExploreAction>
+  @Environment(\.colorScheme) var colorScheme
 
-  @State var isAnimating = false
+  private let store: Store<ExploreState, ExploreAction>
 
-  private var columns = [
+  private let columns = [
     GridItem(.adaptive(minimum: 300), alignment: .top)
   ]
 
@@ -42,7 +42,7 @@ public struct ExploreView: View {
 
   private var leading: some View {
     WithViewStore(self.store) { viewStore in
-      Button(action: { viewStore.send(.fetch) }) {
+      Button(action: { viewStore.send(.pagination(.first)) }) {
         FlowerView()
           .frame(width: 30, height: 30, alignment: .center)
       }
@@ -52,9 +52,13 @@ public struct ExploreView: View {
   private var trailing: some View {
     WithViewStore(self.store) { viewStore in
       Button(action: { viewStore.send(.setSheet(isPresented: true)) }) {
-        Image(systemName: "person.crop.circle")
-          .font(.title)
-          .foregroundColor(.darkPink)
+        LinearGradient.primary
+          .mask(
+            Image(systemName: "person.crop.circle")
+              .font(.title)
+          )
+          .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+
       }
       .sheet(
         isPresented: viewStore.binding(
@@ -74,20 +78,20 @@ public struct ExploreView: View {
       ScrollView {
         LazyVGrid(columns: columns, alignment: .leading, spacing: 10) {
           ForEachStore(
-            self.store.scope(state: \.posts, action: ExploreAction.post(index:action:))
+            self.store.scope(state: \.pagination.items, action: ExploreAction.post(index:action:))
           ) { rowStore in
             WithViewStore(rowStore) { rowViewStore in
               PostView(store: rowStore)
                 .onAppear {
-                  store.send(.fetchNext(after: rowViewStore.state))
+                  store.send(.pagination(.next(after: rowViewStore.id)))
                 }
             }
           }
         }
         .padding([.leading, .trailing], 10)
-      }
-      .onAppear {
-        store.send(.onAppear)
+        .onAppear {
+          store.send(.keychain(.restore))
+        }
       }
     }
   }
@@ -100,7 +104,9 @@ struct ExploreView_Previews: PreviewProvider {
       .map(PostState.init(post:))
 
     let store = Store(
-      initialState: ExploreState(posts: states),
+      initialState: ExploreState(
+        pagination: PaginationState(items: states)
+      ),
       reducer: exploreReducer,
       environment: ExploreEnvironment(
         apiClient: .mock(

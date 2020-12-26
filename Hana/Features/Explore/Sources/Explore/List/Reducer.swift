@@ -15,7 +15,7 @@ import Profile
 
 public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironment> = .combine(
   postReducer.forEach(
-    state: \ExploreState.posts,
+    state: \ExploreState.pagination.items,
     action: /ExploreAction.post(index:action:),
     environment: { env in
       PostEnvironment(
@@ -39,50 +39,16 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
     ),
   Reducer<ExploreState, ExploreAction, ExploreEnvironment> { state, action, environment in
     switch action {
-    case .onAppear:
-      return Effect(value: .keychain(.restore))
-
-    case .fetch:
-      state.orderedPosts = OrderedSet()
-      state.page = 0
-
-      return fetchEffect(
-        page: state.nextPage,
-        using: environment
-      )
-
-    case let .fetchNext(after: post):
-      if let index = state.posts.firstIndex(of: post),
-         index > state.posts.count - ExploreState.nextPageThreshold {
-
-        return fetchEffect(
-          page: state.nextPage,
-          using: environment
-        )
-      }
-      return .none
-
-    case let .fetchResponse(.success(posts)):
-      state.orderedPosts.append(contentsOf: posts)
-      state.page += 1
-      return .none
-
-    case .fetchResponse(.failure):
-      return .none
-
     case let .setSheet(isPresented):
       state.isSheetPresented = isPresented
-
       return .none
 
     case .keychain(.onRestore(.success)):
       return Effect(value: .profile(.login(.loginButtonTapped)))
 
-    case .keychain(.onRestore(.failure)):
-      return Effect(value: .fetch)
-
-    case .keychain(.onSave(.success)):
-      return Effect(value: .fetch)
+    case .keychain(.onRestore(.failure)),
+         .keychain(.onSave(.success)):
+      return Effect(value: .pagination(.first))
 
     case .keychain:
       return .none
@@ -98,8 +64,26 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
 
     case .post:
       return .none
+
+    case .pagination:
+      return .none
     }
   }
+  .pagination(
+    state: \.pagination,
+    action: /ExploreAction.pagination,
+    environment: { global in
+      PaginationEnvironment(
+        fetch: { page, _ in
+          global.apiClient.posts(page)
+            .map { $0.map(PostState.init(post:)) }
+            .mapError(PaginationError.init(underlayingError:))
+            .eraseToAnyPublisher()
+        },
+        mainQueue: global.mainQueue
+      )
+    }
+  )
   .keychain(
     state: \.keychain,
     action: /ExploreAction.keychain,
@@ -111,16 +95,6 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
     }
   )
 )
-
-private func fetchEffect(page: Int, using environment: ExploreEnvironment) -> Effect<ExploreAction, Never> {
-  return environment.apiClient
-    .posts(page)
-    .map { posts in posts.map(PostState.init) }
-    .catchToEffect()
-    .map(ExploreAction.fetchResponse)
-    .receive(on: environment.mainQueue)
-    .eraseToEffect()
-}
 
 private func favoriteEffect(id: Int, isFavorite: Bool, using environment: ExploreEnvironment) -> Effect<Bool, Error> {
   if isFavorite {

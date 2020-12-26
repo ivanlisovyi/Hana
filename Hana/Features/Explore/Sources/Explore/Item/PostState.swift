@@ -11,7 +11,7 @@ import CoreGraphics
 import Kaori
 
 @dynamicMemberLookup
-public struct PostState: Equatable, Identifiable, Hashable {
+public struct PostState: Identifiable, Hashable, Comparable {
   public let id: Int
 
   public var favorite: FavoriteState<ID> {
@@ -32,6 +32,10 @@ public struct PostState: Equatable, Identifiable, Hashable {
 
   public subscript<T>(dynamicMember keyPath: WritableKeyPath<Post, T>) -> T {
     post[keyPath: keyPath]
+  }
+
+  public static func < (lhs: PostState, rhs: PostState) -> Bool {
+    lhs.id < rhs.id
   }
 }
 

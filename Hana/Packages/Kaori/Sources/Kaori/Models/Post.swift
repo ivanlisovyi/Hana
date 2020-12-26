@@ -8,7 +8,7 @@
 import Foundation
 import Amber
 
-public struct Post: Decodable, Identifiable, Equatable, Hashable {
+public struct Post: Decodable, Identifiable, Hashable, Comparable {
   public enum Rating: String, Decodable, Equatable, Hashable {
     case safe = "s"
     case explicit = "e"
@@ -103,6 +103,10 @@ public struct Post: Decodable, Identifiable, Equatable, Hashable {
     self.file = file
     self.tags = tags
     self.flags = flags
+  }
+
+  public static func < (lhs: Post, rhs: Post) -> Bool {
+    lhs.id < rhs.id
   }
 }
 

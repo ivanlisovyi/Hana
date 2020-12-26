@@ -8,7 +8,7 @@
 import Foundation
 import Amber
 
-public struct Profile: Decodable, Identifiable, Equatable {
+public struct Profile: Decodable, Identifiable, Hashable {
   public enum Level: Int, Decodable, Equatable {
     case anonymous = 0
     case member = 20
@@ -19,7 +19,7 @@ public struct Profile: Decodable, Identifiable, Equatable {
     case admin = 50
   }
 
-  public struct Tags: Decodable, Equatable {
+  public struct Tags: Decodable, Equatable, Hashable {
     public let favorite: [String]
     public let blacklisted: [String]
   }

@@ -13,21 +13,9 @@ import Login
 import Profile
 
 public struct ExploreState: Equatable {
-  static let nextPageThreshold = 4
-
-  public var orderedPosts: OrderedSet<PostState>
-  public var posts: [PostState] {
-    get { orderedPosts.contents }
-    set { orderedPosts = OrderedSet(newValue) }
-  }
-
   public var isSheetPresented: Bool
 
-  public var page: Int
-  public var nextPage: Int {
-    page + 1
-  }
-
+  public var pagination: PaginationState<PostState>
   public var profile: ProfileState
 
   public var keychain: KeychainState {
@@ -40,14 +28,12 @@ public struct ExploreState: Equatable {
   }
 
   public init(
-    posts: [PostState] = [],
-    page: Int = 0,
     isSheetPresented: Bool = false,
+    pagination: PaginationState<PostState> = .init(),
     profile: ProfileState = .init()
   ) {
-    self.orderedPosts = OrderedSet(posts)
-    self.page = page
     self.isSheetPresented = isSheetPresented
+    self.pagination = pagination
     self.profile = profile
   }
 }

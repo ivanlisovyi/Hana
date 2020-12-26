@@ -8,6 +8,8 @@
 import SwiftUI
 
 public struct Navigation<Leading: View, Trailing: View, Content: View>: View {
+  @Environment(\.colorScheme) var colorScheme
+
   private let leading: () -> Leading
   private let trailing: () -> Trailing
   private let content: () -> Content
@@ -24,9 +26,17 @@ public struct Navigation<Leading: View, Trailing: View, Content: View>: View {
 
   public var body: some View {
     GeometryReader { geometry in
-      VStack {
-        navigationView(geometry: geometry)
-        content()
+      ZStack {
+        if colorScheme == .dark {
+          Color.primaryDark.ignoresSafeArea()
+        } else {
+          Color.primaryLight.ignoresSafeArea()
+        }
+
+        VStack(spacing: 0) {
+          navigationView(geometry: geometry)
+          content()
+        }
       }
     }
   }
@@ -51,9 +61,9 @@ public struct Navigation<Leading: View, Trailing: View, Content: View>: View {
         )
       )
     }
-    .edgesIgnoringSafeArea([.leading, .top, .trailing])
     .clipped()
     .frame(height: 60)
+    .background(colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
   }
 }
 
@@ -75,7 +85,14 @@ struct NavigationView_Previews: PreviewProvider {
         )
       },
       content: {
-        Text("Content")
+        VStack {
+          Spacer()
+          Text("Content")
+          Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color.primary.colorInvert())
+        .edgesIgnoringSafeArea(.bottom)
       }
     )
 
@@ -85,7 +102,7 @@ struct NavigationView_Previews: PreviewProvider {
       .environment(\.colorScheme, .light)
       navigation
         .previewDevice(PreviewDevice(rawValue: "iPhone X"))
-        .environment(\.colorScheme, .light)
+        .environment(\.colorScheme, .dark)
     }
   }
 }

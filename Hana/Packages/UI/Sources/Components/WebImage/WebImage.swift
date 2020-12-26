@@ -11,6 +11,8 @@ import FetchImage
 import Nuke
 
 public struct WebImage: View {
+  @Environment(\.colorScheme) var colorScheme
+
   @ObservedObject var image: FetchImage
 
   public init(url: URL) {
@@ -23,7 +25,7 @@ public struct WebImage: View {
 
   public var body: some View {
     ZStack {
-      Rectangle().fill(Color(.secondarySystemBackground))
+      Rectangle().fill(colorScheme == .dark ? Color.secondaryDark : Color.secondaryLight)
       image.view?
         .resizable()
         .scaledToFill()

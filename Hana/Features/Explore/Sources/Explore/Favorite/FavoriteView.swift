@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Components
 
 public struct FavoriteView<ID>: View where ID: Hashable {
   let store: Store<FavoriteState<ID>, FavoriteAction>
@@ -15,12 +16,14 @@ public struct FavoriteView<ID>: View where ID: Hashable {
     WithViewStore(self.store) { viewStore in
       Button(action: { viewStore.send(.favoriteTapped) }) {
         ZStack {
-          Circle().foregroundColor(.darkPink)
+          Color.clear
+            .background(LinearGradient.primary)
 
           Image(systemName: viewStore.isFavorite ? "heart.fill" : "heart")
             .font(.headline)
             .foregroundColor(.white)
         }
+        .clipShape(Circle())
       }
     }
   }
@@ -76,7 +79,7 @@ struct FavoriteView_Previews: PreviewProvider {
         )
         .frame(width: 40, height: 40, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
       }
-     }
+    }
 
     return Group {
       view.preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
