@@ -35,11 +35,15 @@ public struct PostView: View {
       }
       .frame(height: size.width / viewStore.aspectRatio)
       .clipShape(RoundedRectangle(cornerRadius: 10, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))
+//      .contextMenu(
+//        ContextMenu(menuItems: {
+//          shareButton
+//        })
+//      )
     }
   }
 
-
-  public var bottomView: some View {
+  private var bottomView: some View {
     VStack {
       Spacer()
 
@@ -49,9 +53,19 @@ public struct PostView: View {
         FavoriteView(
           store: self.store.scope(state: { $0.favorite }, action: PostAction.favorite)
         )
+        .frame(width: 40, height: 40)
       }
       .padding()
     }
+  }
+
+  private var shareButton: some View {
+    Button(action: {}, label: {
+      HStack {
+        Image(systemName: "square.and.arrow.down")
+        Text("Download")
+      }
+    })
   }
 }
 
@@ -60,20 +74,18 @@ struct PostView_Previews: PreviewProvider {
   static var previews: some View {
     let post = try! KaoriMocks.decode([Post].self, from: .posts).first!
 
-    return VStack {
-      PostView(
-        store: Store(
-          initialState: PostState(post: post),
-          reducer: postReducer,
-          environment: PostEnvironment(
-            favorite: { _, isFavorite in
-              return Effect(value: isFavorite)
-            },
-            mainQueue: DispatchQueue.main.eraseToAnyScheduler()
-          )
+    return PostView(
+      store: Store(
+        initialState: PostState(post: post),
+        reducer: postReducer,
+        environment: PostEnvironment(
+          favorite: { _, isFavorite in
+            return Effect(value: isFavorite)
+          },
+          mainQueue: DispatchQueue.main.eraseToAnyScheduler()
         )
       )
-    }
+    )
     .previewLayout(.sizeThatFits)
   }
 }

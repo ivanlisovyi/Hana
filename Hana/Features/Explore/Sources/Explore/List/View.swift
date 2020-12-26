@@ -54,6 +54,7 @@ public struct ExploreView: View {
       Button(action: { viewStore.send(.setSheet(isPresented: true)) }) {
         Image(systemName: "person.crop.circle")
           .font(.title)
+          .foregroundColor(.darkPink)
       }
       .sheet(
         isPresented: viewStore.binding(

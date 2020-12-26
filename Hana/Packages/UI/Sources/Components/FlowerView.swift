@@ -14,10 +14,7 @@ public struct FlowerView: View {
   private let angles: [Angle]
 
   public init(
-    colors: [Color] = [
-      Color(#colorLiteral(red: 0.5568627451, green: 0.9725490196, blue: 0.7019607843, alpha: 1)),
-      Color(#colorLiteral(red: 0.3882352941, green: 0.768627451, blue: 0.9764705882, alpha: 1))
-    ],
+    colors: [Color] = [.darkPink, .flamenco],
     angles: [Angle] = [
       .degrees(-15),
       .degrees(15),
@@ -37,7 +34,6 @@ public struct FlowerView: View {
         petal.rotationEffect(angle, anchor: .bottom)
       }
     }
-    .hueRotation(Angle(degrees: colorScheme == .dark ? 0 : 180))
   }
 
   var petal: some View {

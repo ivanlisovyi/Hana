@@ -14,9 +14,13 @@ public struct FavoriteView<ID>: View where ID: Hashable {
   public var body: some View {
     WithViewStore(self.store) { viewStore in
       Button(action: { viewStore.send(.favoriteTapped) }) {
-        Image(systemName: viewStore.isFavorite ? "heart.fill" : "heart")
-          .font(.title)
-          .foregroundColor(.red)
+        ZStack {
+          Circle().foregroundColor(.darkPink)
+
+          Image(systemName: viewStore.isFavorite ? "heart.fill" : "heart")
+            .font(.headline)
+            .foregroundColor(.white)
+        }
       }
     }
   }
@@ -63,15 +67,23 @@ struct FavoriteView_Previews: PreviewProvider {
       )
     )
 
-    return WithViewStore(store) { viewStore in
+    let view = WithViewStore(store) { viewStore in
       HStack {
         Text("Try it out!")
 
         FavoriteView(
           store: store.scope(state: { $0.favorite }, action: Action.favorite)
         )
+        .frame(width: 40, height: 40, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
       }
+     }
+
+    return Group {
+      view.preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
+
+      view.preferredColorScheme(.light)
     }
+    .previewLayout(.fixed(width: 200, height: 100))
   }
 }
 #endif
