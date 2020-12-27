@@ -16,8 +16,7 @@ public struct FavoriteView<ID>: View where ID: Hashable {
     WithViewStore(self.store) { viewStore in
       Button(action: { viewStore.send(.favoriteTapped) }) {
         ZStack {
-          Color.clear
-            .background(LinearGradient.primary)
+          Color.darkPink
 
           Image(systemName: viewStore.isFavorite ? "heart.fill" : "heart")
             .font(.headline)

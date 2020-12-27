@@ -31,11 +31,11 @@ public struct ExploreView: View {
   }
 
   public var body: some View {
-    Navigation {
-      leading
-    } trailing: {
-      trailing
-    } content: {
+    VStack {
+      TopBar {
+        leading
+      }
+
       content
     }
   }
@@ -52,13 +52,9 @@ public struct ExploreView: View {
   private var trailing: some View {
     WithViewStore(self.store) { viewStore in
       Button(action: { viewStore.send(.setSheet(isPresented: true)) }) {
-        LinearGradient.primary
-          .mask(
-            Image(systemName: "person.crop.circle")
-              .font(.title)
-          )
-          .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-
+        Image(systemName: "person")
+          .font(.title)
+          .foregroundColor(.darkPink)
       }
       .sheet(
         isPresented: viewStore.binding(
