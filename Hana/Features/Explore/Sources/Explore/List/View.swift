@@ -31,12 +31,17 @@ public struct ExploreView: View {
   }
 
   public var body: some View {
-    VStack {
-      TopBar {
-        leading
-      }
+    ZStack {
+     (colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
+      .ignoresSafeArea()
 
-      content
+      VStack(spacing: 0) {
+        TopBar {
+          leading
+        }
+
+        content
+      }
     }
   }
 
@@ -89,6 +94,7 @@ public struct ExploreView: View {
           store.send(.keychain(.restore))
         }
       }
+      .background(colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
     }
   }
 }
