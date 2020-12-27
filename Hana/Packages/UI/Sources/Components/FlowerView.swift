@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import DesignSystem
+
 public struct FlowerView: View {
   @Environment(\.colorScheme) var colorScheme
 

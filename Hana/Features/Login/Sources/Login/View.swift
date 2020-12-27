@@ -73,7 +73,7 @@ struct LoginView_Previews: PreviewProvider {
             apiClient: Kaori.mock(
               login: { _ in },
               profile: {
-                KaoriMocks.decodePublisher(Profile.self, from: .profile)
+                KaoriMocks.decodePublisher(Profile.self, for: "profile", in: .module)
                   .delay(for: 3.0, scheduler: DispatchQueue.global())
                   .eraseToAnyPublisher()
               }

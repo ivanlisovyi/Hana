@@ -29,11 +29,12 @@ struct HanaApp: App {
     StackNavigationView {
       ExploreView(
         store: Store(
-          initialState: ExploreState(),
+          initialState: .init(),
           reducer: exploreReducer,
-          environment: ExploreEnvironment(
+          environment: .init(
             apiClient: .live(),
             keychain: .live(),
+            imagePreheater: .live(),
             mainQueue: DispatchQueue.main.eraseToAnyScheduler()
           )
         )

@@ -33,7 +33,7 @@ public struct Navigation<Leading: View, Trailing: View, Content: View>: View {
           Color.primaryLight.ignoresSafeArea()
         }
 
-        VStack(spacing: 0) {
+        VStack(spacing: 10) {
           navigationView(geometry: geometry)
           content()
         }

@@ -23,8 +23,8 @@ public struct PostView: View {
   public var body: some View {
     WithViewStore(self.store) { viewStore in
       ZStack(alignment: .bottomTrailing) {
-        WebImage(url: viewStore.post.image.url)
-          .resized(width: size.width)
+        Kitsu.Image(url: viewStore.image.url)
+          .resize(width: size.width)
         bottomView
       }
       .background(Color(.secondarySystemBackground))
@@ -71,7 +71,7 @@ public struct PostView: View {
   private var copyURLButton: some View {
     Button(action: {}, label: {
       HStack {
-        Image(systemName: "doc.on.doc")
+        Image(systemName: "square.and.arrow.down")
         Text("Copy URL")
       }
     })
@@ -81,7 +81,7 @@ public struct PostView: View {
 #if DEBUG
 struct PostView_Previews: PreviewProvider {
   static var previews: some View {
-    let post = try! KaoriMocks.decode([Post].self, from: .posts).first!
+    let post = try! KaoriMocks.decode([Post].self, from: "posts", in: .module).first!
 
     return PostView(
       store: Store(

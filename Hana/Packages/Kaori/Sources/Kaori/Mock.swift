@@ -10,7 +10,7 @@ import Combine
 
 public extension Kaori {
   static func mock(
-    login: @escaping (Authentication) -> Void = { _ in
+    login: @escaping (AuthenticationRequest) -> Void = { _ in
       _unimplemented("login")
     },
     logout: @escaping () -> Void = {
@@ -19,7 +19,7 @@ public extension Kaori {
     profile: @escaping () -> AnyPublisher<Profile, KaoriError> = {
       _unimplemented("profile")
     },
-    posts: @escaping (Int) -> AnyPublisher<[Post], KaoriError> = { _ in
+    posts: @escaping (PostsRequest) -> AnyPublisher<[Post], KaoriError> = { _ in
       _unimplemented("posts")
     },
     favorite: @escaping (Int) -> AnyPublisher<Post, KaoriError> = { _ in

@@ -10,3 +10,5 @@ import Foundation
 @_exported import Components
 @_exported import ViewModifiers
 @_exported import Extensions
+@_exported import Kitsu
+@_exported import DesignSystem

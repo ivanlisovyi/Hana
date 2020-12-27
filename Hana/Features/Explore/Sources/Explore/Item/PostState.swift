@@ -30,7 +30,7 @@ public struct PostState: Identifiable, Hashable, Comparable {
     self.post = post
   }
 
-  public subscript<T>(dynamicMember keyPath: WritableKeyPath<Post, T>) -> T {
+  public subscript<T>(dynamicMember keyPath: KeyPath<Post, T>) -> T {
     post[keyPath: keyPath]
   }
 

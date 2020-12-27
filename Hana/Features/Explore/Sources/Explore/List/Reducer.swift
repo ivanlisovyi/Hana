@@ -5,6 +5,7 @@
 //  Created by Ivan Lisovyi on 05.12.20.
 //
 
+import Combine
 import ComposableArchitecture
 
 import Common
@@ -65,6 +66,12 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
     case .post:
       return .none
 
+    case let .pagination(.response(.success(items))):
+      return Effect.fireAndForget {
+        let urls = items.map(\.image.url)
+        environment.imagePreheater.start(urls)
+      }
+
     case .pagination:
       return .none
     }
@@ -72,15 +79,15 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
   .pagination(
     state: \.pagination,
     action: /ExploreAction.pagination,
-    environment: { global in
+    environment: { env in
       PaginationEnvironment(
-        fetch: { page, _ in
-          global.apiClient.posts(page)
+        fetch: { page, limit in
+          env.apiClient.posts(.init(page: page, limit: limit))
             .map { $0.map(PostState.init(post:)) }
             .mapError(PaginationError.init(underlayingError:))
             .eraseToAnyPublisher()
         },
-        mainQueue: global.mainQueue
+        mainQueue: env.mainQueue
       )
     }
   )

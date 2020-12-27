@@ -6,7 +6,9 @@
 //
 
 import Foundation
+
 import Ning
+import Kaori
 
 // MARK: - Profile
 
@@ -19,13 +21,18 @@ public extension Endpoint {
 // MARK: - Posts
 
 public extension Endpoint {
-  static func posts(page: Int = 1, limit: Int = 20) -> Self {
-    Endpoint(
+  static func posts(request: PostsRequest) -> Self {
+    var parameters: Parameters = [
+      "page": request.page,
+      "limit": request.limit
+    ]
+
+    parameters["tags"] = request.tags
+    parameters["only"] = request.only
+
+    return Endpoint(
       path: "/posts.json",
-      parameters: [
-        "page": page,
-        "limit": limit
-      ]
+      parameters: parameters
     )
   }
 }

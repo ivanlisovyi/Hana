@@ -1,5 +1,5 @@
 //
-//  WebImage.swift
+//  Image.swift
 //
 //
 //  Created by Ivan Lisovyi on 06.12.20.
@@ -10,7 +10,9 @@ import SwiftUI
 import FetchImage
 import Nuke
 
-public struct WebImage: View {
+import DesignSystem
+
+public struct Image: View {
   @Environment(\.colorScheme) var colorScheme
 
   @ObservedObject var image: FetchImage
@@ -29,23 +31,22 @@ public struct WebImage: View {
       image.view?
         .resizable()
         .scaledToFill()
-        .transition(AnyTransition.opacity.animation(Animation.default))
     }
-    .compositingGroup()
     .onAppear(perform: image.fetch)
-    .onDisappear(perform: image.cancel)
+    .onDisappear { image.priority = .low }
+    .transition(AnyTransition.opacity.animation(Animation.default))
   }
 }
 
-public extension WebImage {
+public extension Image {
   typealias Unit = ImageProcessingOptions.Unit
   typealias Border = ImageProcessingOptions.Border
   typealias ContentMode = ImageProcessors.Resize.ContentMode
 
-  fileprivate func configure(_ block: @autoclosure () -> ImageProcessing) -> WebImage {
+  fileprivate func configure(_ block: @autoclosure () -> ImageProcessing) -> Image {
     var result = self.image.request
     result.processors.append(block())
-    return WebImage(request: result)
+    return Image(request: result)
   }
 
   /// Resizes the image to the given width preserving aspect ratio.
@@ -58,7 +59,7 @@ public extension WebImage {
   ///   - crop: If `true` will crop the image to match the target size.
   ///           Does nothing with content mode .aspectFill. `false` by default.
   ///   - upscale: `false` by default.
-  func resized(
+  func resize(
     width: CGFloat = 4096,
     height: CGFloat = 4096,
     unit: ImageProcessingOptions.Unit = .points,
@@ -106,8 +107,8 @@ public extension WebImage {
 struct ImageView_Previews: PreviewProvider {
   static var previews: some View {
     let url = URL(string: "https://danbooru.donmai.us/data/sample/__original_drawn_by_seelean__sample-55e62175a58a9f7b46a6461ca1111540.jpg")!
-    return WebImage(url: url)
-      .resized(width: 300, height: 300)
+    return Image(url: url)
+      .resize(width: 300, height: 300)
       .clipped()
   }
 }

@@ -9,18 +9,18 @@ import Foundation
 import Combine
 
 public struct Kaori {
-  public let login: (Authentication) -> Void
+  public let login: (AuthenticationRequest) -> Void
   public let logout: () -> Void
   public let profile: () -> AnyPublisher<Profile, KaoriError>
-  public let posts: (Int) -> AnyPublisher<[Post], KaoriError>
+  public let posts: (PostsRequest) -> AnyPublisher<[Post], KaoriError>
   public let favorite: (Int) -> AnyPublisher<Post, KaoriError>
   public let unfavorite: (Int) -> AnyPublisher<Void, KaoriError>
 
   public init(
-    login: @escaping (Authentication) -> Void,
+    login: @escaping (AuthenticationRequest) -> Void,
     logout: @escaping () -> Void,
     profile:  @escaping () -> AnyPublisher<Profile, KaoriError>,
-    posts:  @escaping (Int) -> AnyPublisher<[Post], KaoriError>,
+    posts:  @escaping (PostsRequest) -> AnyPublisher<[Post], KaoriError>,
     favorite: @escaping (Int) -> AnyPublisher<Post, KaoriError>,
     unfavorite: @escaping (Int) -> AnyPublisher<Void, KaoriError>
   ) {

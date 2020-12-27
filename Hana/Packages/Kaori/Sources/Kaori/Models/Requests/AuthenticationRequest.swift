@@ -1,5 +1,5 @@
 //
-//  Authentication.swift
+//  AuthenticationRequest.swift
 //  
 //
 //  Created by Ivan Lisovyi on 06.12.20.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Authentication: Codable, Equatable {
+public struct AuthenticationRequest: Codable, Equatable {
   public let username: String
   public let apiKey: String
 

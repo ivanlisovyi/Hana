@@ -23,6 +23,10 @@ let package = Package(
     .library(
       name: "Extensions",
       targets: ["Extensions"]
+    ),
+    .library(
+      name: "Kitsu",
+      targets: ["Kitsu"]
     )
   ],
   dependencies: [
@@ -35,6 +39,8 @@ let package = Package(
         "Components",
         "ViewModifiers",
         "Extensions",
+        "DesignSystem",
+        "Kitsu"
       ]
     ),
     .target(
@@ -44,9 +50,16 @@ let package = Package(
       name: "Extensions"
     ),
     .target(
-      name: "Components",
+      name: "Components"
+    ),
+    .target(
+      name: "DesignSystem"
+    ),
+    .target(
+      name: "Kitsu",
       dependencies: [
-        "FetchImage"
+        "FetchImage",
+        "DesignSystem"
       ]
     )
   ]

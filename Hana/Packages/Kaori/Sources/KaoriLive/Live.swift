@@ -42,7 +42,7 @@ public extension Kaori {
           .eraseToAnyPublisher()
       },
       posts: {
-        session.request(.posts(page: $0), decoder: decoder, of: CompactDecodableArray<Post>.self)
+        session.request(.posts(request: $0), decoder: decoder, of: CompactDecodableArray<Post>.self)
           .map(\.elements)
           .mapError(KaoriError.init(underlayingError:))
           .eraseToAnyPublisher()

@@ -100,8 +100,8 @@ public struct ExploreView: View {
 #if DEBUG
 struct ExploreView_Previews: PreviewProvider {
   static var previews: some View {
-    let states = try! KaoriMocks.decode([Post].self, from: .posts)
-      .map(PostState.init(post:))
+    let posts = try! KaoriMocks.decode([Post].self, from: "posts", in: .module)
+    let states = posts.map(PostState.init(post:))
 
     let store = Store(
       initialState: ExploreState(
@@ -112,10 +112,12 @@ struct ExploreView_Previews: PreviewProvider {
         apiClient: .mock(
           login: { _ in },
           profile: {
-            KaoriMocks.decodePublisher(Profile.self, from: .profile)
+            KaoriMocks.decodePublisher(Profile.self, for: "profile", in: .module)
           },
           posts: { _ in
-            KaoriMocks.decodePublisher([Post].self, from: .posts)
+            Just(posts)
+              .setFailureType(to: KaoriError.self)
+              .eraseToAnyPublisher()
           }
         ),
         keychain: .mock(
@@ -130,6 +132,7 @@ struct ExploreView_Previews: PreviewProvider {
               .eraseToAnyPublisher()
           }
         ),
+        imagePreheater: .live(),
         mainQueue: DispatchQueue.main.eraseToAnyScheduler()
       )
     )
