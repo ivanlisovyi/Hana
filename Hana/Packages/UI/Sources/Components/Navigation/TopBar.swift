@@ -30,22 +30,17 @@ public struct TopBar<Leading: View, Trailing: View>: View {
           Color.primaryLight.ignoresSafeArea()
         }
 
-        navigationView(geometry: geometry)
+        VStack(spacing: 0) {
+          HStack {
+            leading()
+            Spacer()
+            trailing()
+          }
+        }
+        .padding()
       }
     }
     .frame(maxHeight: 60)
-  }
-
-  private func navigationView(geometry: GeometryProxy) -> some View {
-    VStack(spacing: 0) {
-      HStack {
-        leading()
-        Spacer()
-        trailing()
-      }
-    }
-    .padding()
-    .background(colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
   }
 }
 
