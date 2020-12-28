@@ -34,12 +34,7 @@ public struct PostView: View {
         }
       }
       .frame(height: size.width / viewStore.aspectRatio)
-      .clipShape(RoundedRectangle(cornerRadius: 10, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))
-      .contextMenu(
-        ContextMenu(menuItems: {
-          shareButton
-        })
-      )
+      .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
   }
 
@@ -57,24 +52,6 @@ public struct PostView: View {
       }
       .padding()
     }
-  }
-
-  private var shareButton: some View {
-    Button(action: {}, label: {
-      HStack {
-        Image(systemName: "square.and.arrow.down")
-        Text("Download")
-      }
-    })
-  }
-
-  private var copyURLButton: some View {
-    Button(action: {}, label: {
-      HStack {
-        Image(systemName: "square.and.arrow.down")
-        Text("Copy URL")
-      }
-    })
   }
 }
 
