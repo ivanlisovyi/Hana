@@ -1,5 +1,5 @@
 //
-//  State.swift
+//  KeychainReducer.swift
 //  
 //
 //  Created by Ivan Lisovyi on 24.12.20.
@@ -7,8 +7,6 @@
 
 import Foundation
 import ComposableArchitecture
-
-import Keychain
 
 public struct KeychainState: Equatable {
   public var credentials: Keychain.Credentials?

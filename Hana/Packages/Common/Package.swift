@@ -17,7 +17,8 @@ let package = Package(
     )
   ],
   dependencies: [
-    .package(url: "https://github.com/kishikawakatsumi/KeychainAccess", .upToNextMajor(from: "4.2.1"))
+    .package(url: "https://github.com/kishikawakatsumi/KeychainAccess", .upToNextMajor(from: "4.2.1")),
+    .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .upToNextMajor(from: "0.9.0"))
   ],
   targets: [
     .target(
@@ -29,7 +30,8 @@ let package = Package(
     .target(
       name: "Keychain",
       dependencies: [
-        "KeychainAccess"
+        "KeychainAccess",
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ]
     ),
     .testTarget(
