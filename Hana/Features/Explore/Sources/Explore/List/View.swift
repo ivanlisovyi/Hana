@@ -54,26 +54,6 @@ public struct ExploreView: View {
     }
   }
 
-  private var trailing: some View {
-    WithViewStore(self.store) { viewStore in
-      Button(action: { viewStore.send(.setSheet(isPresented: true)) }) {
-        Image(systemName: "person")
-          .font(.title)
-          .foregroundColor(.darkPink)
-      }
-      .sheet(
-        isPresented: viewStore.binding(
-          get: { $0.isSheetPresented },
-          send: ExploreAction.setSheet(isPresented:)
-        )
-      ) {
-        StackNavigationView {
-          ProfileView(store: self.store.scope(state: \.profile, action: ExploreAction.profile))
-        }
-      }
-    }
-  }
-
   private var content: some View {
     WithViewStore(self.store) { store in
       ScrollView {
@@ -90,9 +70,6 @@ public struct ExploreView: View {
           }
         }
         .padding([.leading, .trailing], 10)
-        .onAppear {
-          store.send(.keychain(.restore))
-        }
       }
       .background(colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
     }
@@ -112,25 +89,9 @@ struct ExploreView_Previews: PreviewProvider {
       reducer: exploreReducer,
       environment: ExploreEnvironment(
         apiClient: .mock(
-          login: { _ in },
-          profile: {
-            KaoriMocks.decodePublisher(Profile.self, for: "profile", in: .module)
-          },
           posts: { _ in
             Just(posts)
               .setFailureType(to: KaoriError.self)
-              .eraseToAnyPublisher()
-          }
-        ),
-        keychain: .mock(
-          save: { _ in
-            Just(())
-              .setFailureType(to: KeychainError.self)
-              .eraseToAnyPublisher()
-          },
-          retrieve: {
-            Just(Keychain.Credentials(username: "test", password: "test"))
-              .setFailureType(to: KeychainError.self)
               .eraseToAnyPublisher()
           }
         ),

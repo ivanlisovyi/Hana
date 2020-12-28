@@ -10,6 +10,7 @@
 		CC9FA894258FD7A600E796DA /* Explore in Frameworks */ = {isa = PBXBuildFile; productRef = CC9FA893258FD7A600E796DA /* Explore */; };
 		CCC36DFA2595FD7300237273 /* AppIcon-DarkMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CCC36DF82595FD7300237273 /* AppIcon-DarkMode@2x.png */; };
 		CCC36DFB2595FD7300237273 /* AppIcon-DarkMode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = CCC36DF92595FD7300237273 /* AppIcon-DarkMode@3x.png */; };
+		CCC36E172599C46C00237273 /* Profile in Frameworks */ = {isa = PBXBuildFile; productRef = CCC36E162599C46C00237273 /* Profile */; };
 		CCC380612574125A00AF4D96 /* HanaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC380602574125A00AF4D96 /* HanaApp.swift */; };
 		CCC380652574125B00AF4D96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCC380642574125B00AF4D96 /* Assets.xcassets */; };
 		CCC380682574125B00AF4D96 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCC380672574125B00AF4D96 /* Preview Assets.xcassets */; };
@@ -53,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCC36E172599C46C00237273 /* Profile in Frameworks */,
 				CC9FA894258FD7A600E796DA /* Explore in Frameworks */,
 				CCEF65BD257D4A5300D38E11 /* KaoriLive in Frameworks */,
 			);
@@ -191,6 +193,7 @@
 			packageProductDependencies = (
 				CCEF65BC257D4A5300D38E11 /* KaoriLive */,
 				CC9FA893258FD7A600E796DA /* Explore */,
+				CCC36E162599C46C00237273 /* Profile */,
 			);
 			productName = Hana;
 			productReference = CCC3805D2574125A00AF4D96 /* Hana.app */;
@@ -540,6 +543,10 @@
 		CC9FA893258FD7A600E796DA /* Explore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Explore;
+		};
+		CCC36E162599C46C00237273 /* Profile */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Profile;
 		};
 		CCEF65BC257D4A5300D38E11 /* KaoriLive */ = {
 			isa = XCSwiftPackageProductDependency;

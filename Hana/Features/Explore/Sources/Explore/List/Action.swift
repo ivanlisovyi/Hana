@@ -16,6 +16,4 @@ public enum ExploreAction: Equatable {
 
   case post(index: Int, action: PostAction)
   case pagination(PaginationAction<PostState>)
-  case profile(ProfileAction)
-  case keychain(KeychainAction)
 }

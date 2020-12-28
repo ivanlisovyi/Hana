@@ -27,40 +27,10 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
       )
     }
   ),
-  profileReducer
-    .pullback(
-      state: \.profile,
-      action: /ExploreAction.profile,
-      environment: {
-        ProfileEnvironment(
-          apiClient: $0.apiClient,
-          mainQueue: $0.mainQueue
-        )
-      }
-    ),
   Reducer<ExploreState, ExploreAction, ExploreEnvironment> { state, action, environment in
     switch action {
     case let .setSheet(isPresented):
       state.isSheetPresented = isPresented
-      return .none
-
-    case .keychain(.onRestore(.success)):
-      return Effect(value: .profile(.login(.loginButtonTapped)))
-
-    case .keychain(.onRestore(.failure)),
-         .keychain(.onSave(.success)):
-      return Effect(value: .pagination(.first))
-
-    case .keychain:
-      return .none
-
-    case .profile(.login(.loginResponse(.success))):
-      return Effect(value: .keychain(.save))
-
-    case .profile(.logout):
-      return Effect(value: .keychain(.clear))
-
-    case .profile:
       return .none
 
     case .post:
@@ -88,16 +58,6 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
             .eraseToAnyPublisher()
         },
         mainQueue: env.mainQueue
-      )
-    }
-  )
-  .keychain(
-    state: \.keychain,
-    action: /ExploreAction.keychain,
-    environment: {
-      KeychainEnvironment(
-        keychain: $0.keychain,
-        mainQueue: $0.mainQueue
       )
     }
   )

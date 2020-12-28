@@ -12,6 +12,10 @@ import Keychain
 
 public struct KeychainState: Equatable {
   public var credentials: Keychain.Credentials?
+
+  public init(credentials: Keychain.Credentials? = nil) {
+    self.credentials = credentials
+  }
 }
 
 public enum KeychainAction: Equatable {
@@ -23,8 +27,16 @@ public enum KeychainAction: Equatable {
 }
 
 public struct KeychainEnvironment {
-  var keychain: Keychain
-  var mainQueue: AnySchedulerOf<DispatchQueue>
+  public var keychain: Keychain
+  public var mainQueue: AnySchedulerOf<DispatchQueue>
+
+  public init(
+    keychain: Keychain,
+    mainQueue: AnySchedulerOf<DispatchQueue>
+  ) {
+    self.keychain = keychain
+    self.mainQueue = mainQueue
+  }
 }
 
 public extension Reducer {
