@@ -13,7 +13,7 @@ public struct FavoriteView<ID>: View where ID: Hashable {
   let store: Store<FavoriteState<ID>, FavoriteAction>
 
   public var body: some View {
-    WithViewStore(self.store) { viewStore in
+    WithViewStore(store) { viewStore in
       Button(action: { viewStore.send(.favoriteTapped) }) {
         ZStack {
           Color.darkPink
@@ -76,12 +76,12 @@ struct FavoriteView_Previews: PreviewProvider {
         FavoriteView(
           store: store.scope(state: { $0.favorite }, action: Action.favorite)
         )
-        .frame(width: 40, height: 40, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        .frame(width: 40, height: 40, alignment: .center)
       }
     }
 
     return Group {
-      view.preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
+      view.preferredColorScheme(.dark)
 
       view.preferredColorScheme(.light)
     }

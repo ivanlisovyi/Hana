@@ -11,6 +11,8 @@
 		CCC36DFA2595FD7300237273 /* AppIcon-DarkMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CCC36DF82595FD7300237273 /* AppIcon-DarkMode@2x.png */; };
 		CCC36DFB2595FD7300237273 /* AppIcon-DarkMode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = CCC36DF92595FD7300237273 /* AppIcon-DarkMode@3x.png */; };
 		CCC36E172599C46C00237273 /* Profile in Frameworks */ = {isa = PBXBuildFile; productRef = CCC36E162599C46C00237273 /* Profile */; };
+		CCC36E1B2599D17900237273 /* AppCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC36E1A2599D17900237273 /* AppCore.swift */; };
+		CCC36E212599D24700237273 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC36E202599D24700237273 /* AppView.swift */; };
 		CCC380612574125A00AF4D96 /* HanaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC380602574125A00AF4D96 /* HanaApp.swift */; };
 		CCC380652574125B00AF4D96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCC380642574125B00AF4D96 /* Assets.xcassets */; };
 		CCC380682574125B00AF4D96 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCC380672574125B00AF4D96 /* Preview Assets.xcassets */; };
@@ -34,6 +36,8 @@
 		CCC36DF82595FD7300237273 /* AppIcon-DarkMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-DarkMode@2x.png"; sourceTree = "<group>"; };
 		CCC36DF92595FD7300237273 /* AppIcon-DarkMode@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-DarkMode@3x.png"; sourceTree = "<group>"; };
 		CCC36E0A259670B700237273 /* Kaori */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Kaori; sourceTree = "<group>"; };
+		CCC36E1A2599D17900237273 /* AppCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCore.swift; sourceTree = "<group>"; };
+		CCC36E202599D24700237273 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		CCC3805D2574125A00AF4D96 /* Hana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hana.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCC380602574125A00AF4D96 /* HanaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaApp.swift; sourceTree = "<group>"; };
 		CCC380642574125B00AF4D96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -134,6 +138,8 @@
 				CC9FA889258E967500E796DA /* Packages */,
 				CC9FA880258E964C00E796DA /* Features */,
 				CCC380602574125A00AF4D96 /* HanaApp.swift */,
+				CCC36E1A2599D17900237273 /* AppCore.swift */,
+				CCC36E202599D24700237273 /* AppView.swift */,
 				CCC36DF62595FC9600237273 /* Assets */,
 				CCC380692574125B00AF4D96 /* Info.plist */,
 				CCC380662574125B00AF4D96 /* Preview Content */,
@@ -283,6 +289,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CCC380612574125A00AF4D96 /* HanaApp.swift in Sources */,
+				CCC36E1B2599D17900237273 /* AppCore.swift in Sources */,
+				CCC36E212599D24700237273 /* AppView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

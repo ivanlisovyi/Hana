@@ -11,9 +11,6 @@ import ComposableArchitecture
 import Common
 import Kaori
 
-import Login
-import Profile
-
 public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironment> = .combine(
   postReducer.forEach(
     state: \ExploreState.pagination.items,
@@ -29,10 +26,6 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
   ),
   Reducer<ExploreState, ExploreAction, ExploreEnvironment> { state, action, environment in
     switch action {
-    case let .setSheet(isPresented):
-      state.isSheetPresented = isPresented
-      return .none
-
     case .post:
       return .none
 

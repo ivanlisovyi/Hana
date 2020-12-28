@@ -14,9 +14,6 @@ import Kaori
 import Components
 import Common
 
-import Login
-import Profile
-
 public struct ExploreView: View {
   @Environment(\.colorScheme) var colorScheme
 
