@@ -69,6 +69,7 @@ struct AppView: View {
 
   private var explore: some View {
     StackNavigationView {
+      EmptyView()
       ExploreView(
         store: store.scope(state: { $0.explore }, action: AppAction.explore)
       )
@@ -78,10 +79,10 @@ struct AppView: View {
 
   private var favorites: some View {
     StackNavigationView {
-      VStack {
-        EmptyView()
-      }
-      .frame(maxWidth: .infinity)
+      ExploreView(
+        store: store.scope(state: { $0.favorites }, action: AppAction.favorites)
+      )
+      .navigationBarHidden(true)
     }
   }
 

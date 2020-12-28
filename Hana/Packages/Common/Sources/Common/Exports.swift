@@ -9,4 +9,5 @@ import Foundation
 
 #if canImport(Keychain)
 @_exported import Keychain
+@_exported import ComposableArchitecture
 #endif

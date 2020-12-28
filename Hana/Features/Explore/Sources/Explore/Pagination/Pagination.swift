@@ -10,6 +10,8 @@ import Foundation
 import Combine
 import ComposableArchitecture
 
+import Kaori
+
 public typealias PaginationItem = Hashable & Identifiable & Comparable
 
 public struct PaginationError: LocalizedError, Equatable, Identifiable {
@@ -64,7 +66,7 @@ public struct PaginationState<Item: PaginationItem>: Equatable {
 }
 
 public struct PaginationEnvironment<Item: PaginationItem>  {
-  let fetch: (Int, Int) -> AnyPublisher<[Item], PaginationError>
+  let fetch:  (Int, Int) -> AnyPublisher<[Item], PaginationError>
   let mainQueue: AnySchedulerOf<DispatchQueue>
 
   public init(
@@ -80,7 +82,7 @@ public extension Reducer {
   func pagination<Item>(
     state: WritableKeyPath<State, PaginationState<Item>>,
     action: CasePath<Action, PaginationAction<Item>>,
-    environment: @escaping (Environment) -> PaginationEnvironment<Item>
+    environment: @escaping (State, Environment) -> PaginationEnvironment<Item>
   ) -> Reducer where Item: Equatable {
     .combine(
       self,

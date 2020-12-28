@@ -83,7 +83,7 @@ struct ExploreView_Previews: PreviewProvider {
       initialState: ExploreState(
         pagination: PaginationState(items: states)
       ),
-      reducer: exploreReducer,
+      reducer: Explore.reducer,
       environment: ExploreEnvironment(
         apiClient: .mock(
           posts: { _ in

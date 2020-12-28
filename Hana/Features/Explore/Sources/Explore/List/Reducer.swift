@@ -11,7 +11,23 @@ import ComposableArchitecture
 import Common
 import Kaori
 
-public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironment> = .combine(
+private let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment> { state, action, environment in
+  switch action {
+  case .post:
+    return .none
+
+  case let .pagination(.response(.success(items))):
+    return Effect.fireAndForget {
+      let urls = items.map(\.image.url)
+      environment.imagePreheater.start(urls)
+    }
+
+  case .pagination:
+    return .none
+  }
+}
+
+public let reducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment>.combine(
   postReducer.forEach(
     state: \ExploreState.pagination.items,
     action: /ExploreAction.post(index:action:),
@@ -24,36 +40,22 @@ public let exploreReducer: Reducer<ExploreState, ExploreAction, ExploreEnvironme
       )
     }
   ),
-  Reducer<ExploreState, ExploreAction, ExploreEnvironment> { state, action, environment in
-    switch action {
-    case .post:
-      return .none
-
-    case let .pagination(.response(.success(items))):
-      return Effect.fireAndForget {
-        let urls = items.map(\.image.url)
-        environment.imagePreheater.start(urls)
+  exploreReducer
+    .pagination(
+      state: \.pagination,
+      action: /ExploreAction.pagination,
+      environment: { state, env in
+        return PaginationEnvironment<PostState>(
+          fetch: { page, limit in
+            env.apiClient.posts(.init(page: page, limit: limit, tags: state.tags))
+              .map { $0.map(PostState.init(post:)) }
+              .mapError(PaginationError.init(underlayingError:))
+              .eraseToAnyPublisher()
+          },
+          mainQueue: env.mainQueue
+        )
       }
-
-    case .pagination:
-      return .none
-    }
-  }
-  .pagination(
-    state: \.pagination,
-    action: /ExploreAction.pagination,
-    environment: { env in
-      PaginationEnvironment(
-        fetch: { page, limit in
-          env.apiClient.posts(.init(page: page, limit: limit))
-            .map { $0.map(PostState.init(post:)) }
-            .mapError(PaginationError.init(underlayingError:))
-            .eraseToAnyPublisher()
-        },
-        mainQueue: env.mainQueue
-      )
-    }
-  )
+    )
 )
 
 private func favoriteEffect(id: Int, isFavorite: Bool, using environment: ExploreEnvironment) -> Effect<Bool, Error> {

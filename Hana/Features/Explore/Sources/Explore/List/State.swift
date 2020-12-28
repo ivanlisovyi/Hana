@@ -8,10 +8,18 @@
 import Foundation
 import Common
 
+import Kaori
+
 public struct ExploreState: Equatable {
   public var pagination: PaginationState<PostState>
 
-  public init(pagination: PaginationState<PostState> = .init()) {
+  public var tags: [Tag]?
+
+  public init(
+    pagination: PaginationState<PostState> = .init(),
+    tags: [Tag]? = nil
+  ) {
     self.pagination = pagination
+    self.tags = tags
   }
 }
