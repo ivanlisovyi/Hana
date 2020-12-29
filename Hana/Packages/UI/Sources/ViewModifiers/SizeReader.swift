@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  SizeModifier.swift
 //  
 //
 //  Created by Ivan Lisovyi on 25.12.20.

@@ -8,8 +8,6 @@
 import SwiftUI
 
 public struct NavigationBar<Leading: View, Trailing: View>: View {
-  @Environment(\.colorScheme) var colorScheme
-
   private let leading: () -> Leading
   private let trailing: () -> Trailing
 
@@ -22,25 +20,12 @@ public struct NavigationBar<Leading: View, Trailing: View>: View {
   }
 
   public var body: some View {
-    GeometryReader { geometry in
-      ZStack {
-        if colorScheme == .dark {
-          Color.primaryDark.ignoresSafeArea()
-        } else {
-          Color.primaryLight.ignoresSafeArea()
-        }
-
-        VStack(spacing: 0) {
-          HStack {
-            leading()
-            Spacer()
-            trailing()
-          }
-        }
-        .padding()
-      }
+    HStack {
+      leading()
+      Spacer()
+      trailing()
     }
-    .frame(maxHeight: 60)
+    .padding()
   }
 }
 

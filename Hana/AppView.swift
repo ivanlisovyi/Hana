@@ -17,24 +17,7 @@ import Profile
 import Keychain
 
 struct AppView: View {
-  private enum Tab: Int, Equatable {
-    case explore
-    case favorites
-    case profile
-  }
-
-  @State private var selectedTab = Tab.explore
-
-  private var selectedTabBinding: Binding<Int> {
-    Binding(
-      get: { selectedTab.rawValue },
-      set: {
-        if let tab = Tab(rawValue: $0) {
-          selectedTab = tab
-        }
-      }
-    )
-  }
+  @Environment(\.colorScheme) var colorScheme
 
   let store: Store<AppState, AppAction>
 
@@ -43,25 +26,38 @@ struct AppView: View {
   }
 
   var body: some View {
-    WithViewStore(store) { viewStore in
-      VStack(spacing: 0) {
-        switch selectedTab {
-        case .explore:
-          explore
-        case .favorites:
-          favorites
-        case .profile:
-          profile
-        }
-
-        TabView(selectedIndex: selectedTabBinding) {
-          TabItem { tabItem(systemName: "square.stack", isSelected: $0) }
-          TabItem { tabItem(systemName: "heart", isSelected: $0) }
-          TabItem { tabItem(systemName: "person", isSelected: $0) }
-        }
+    ZStack {
+      if colorScheme == .dark {
+        Color.primaryDark.ignoresSafeArea()
+      } else {
+        Color.primaryLight.ignoresSafeArea()
       }
-      .onAppear {
-        viewStore.send(.launch)
+
+      WithViewStore(store) { viewStore in
+        VStack(spacing: 0) {
+          GeometryReader { geometry in
+            HStack(alignment: .center, spacing: 0) {
+              Group {
+                explore.id(0)
+                profile.id(1)
+              }
+              .frame(width: geometry.size.width, height: geometry.size.height)
+            }
+            .selection(
+              width: geometry.size.width,
+              spacing: 0,
+              selection: viewStore.binding(get: \.selectedTab, send: AppAction.changeTab)
+            )
+          }
+
+          TabView(selectedIndex: viewStore.binding(get: \.selectedTab, send: AppAction.changeTab)) {
+            TabItem { tabItem(systemName: "square.stack", isSelected: $0) }
+            TabItem { tabItem(systemName: "person", isSelected: $0) }
+          }
+        }
+        .onAppear {
+          viewStore.send(.launch)
+        }
       }
     }
   }
@@ -79,14 +75,6 @@ struct AppView: View {
         store: store.scope(state: { $0.explore }, action: AppAction.explore)
       )
       .navigationBarHidden(true)
-    }
-  }
-
-  private var favorites: some View {
-    StackNavigationView {
-      EmptyView()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .navigationBarHidden(true)
     }
   }
 

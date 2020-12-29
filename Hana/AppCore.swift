@@ -17,6 +17,8 @@ import Kaori
 import Keychain
 
 struct AppState: Equatable {
+  var selectedTab = 0
+
   var explore: ExploreState = ExploreState()
   var favorites: ExploreState = ExploreState(tags: ["ordfav:mrcooltemp"])
   var profile: ProfileState = ProfileState()
@@ -33,6 +35,7 @@ struct AppState: Equatable {
 
 enum AppAction: Equatable {
   case launch
+  case changeTab(Int)
   case explore(ExploreAction)
   case favorites(ExploreAction)
   case profile(ProfileAction)
@@ -82,6 +85,10 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
     switch action {
     case .launch:
       return Effect(value: .keychain(.restore))
+
+    case let .changeTab(selected):
+      state.selectedTab = selected
+      return .none
 
     case .explore, .favorites:
       return .none
