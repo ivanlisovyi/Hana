@@ -17,7 +17,8 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .upToNextMajor(from: "0.9.0")),
     .package(path: "../Packages/UI"),
-    .package(path: "../Packages/Common")
+    .package(path: "../Packages/Common"),
+    .package(path: "../Packages/Kaori")
   ],
   targets: [
     .target(
@@ -25,6 +26,7 @@ let package = Package(
       dependencies: [
         "UI",
         "Common",
+        "Kaori",
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ],
       resources: [

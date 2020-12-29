@@ -23,6 +23,7 @@ public struct Image: View {
 
   init(request: ImageRequest) {
     image = FetchImage(request: request)
+    image.fetch()
   }
 
   public var body: some View {
@@ -30,10 +31,11 @@ public struct Image: View {
       Rectangle().fill(colorScheme == .dark ? Color.secondaryDark : Color.secondaryLight)
       image.view?
         .resizable()
-        .scaledToFill()
+        .aspectRatio(contentMode: .fill)
     }
     .onAppear(perform: image.fetch)
-    .onDisappear { image.priority = .low }
+    .onDisappear(perform: image.reset)
+    .animation(.default)
   }
 }
 

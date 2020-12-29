@@ -24,7 +24,10 @@ public struct PostView: View {
     WithViewStore(self.store) { viewStore in
       ZStack(alignment: .bottomTrailing) {
         Kitsu.Image(url: viewStore.image.url)
-          .resize(width: size.width)
+          .if(!size.equalTo(.zero)) {
+            $0.resize(width: size.width, height: size.height)
+          }
+
         bottomView
       }
       .background(Color(.secondarySystemBackground))
