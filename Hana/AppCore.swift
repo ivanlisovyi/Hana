@@ -20,7 +20,6 @@ struct AppState: Equatable {
   var selectedTab = 0
 
   var explore: ExploreState = ExploreState()
-  var favorites: ExploreState = ExploreState(tags: ["ordfav:mrcooltemp"])
   var profile: ProfileState = ProfileState()
 
   public var keychain: KeychainState {
@@ -37,7 +36,6 @@ enum AppAction: Equatable {
   case launch
   case changeTab(Int)
   case explore(ExploreAction)
-  case favorites(ExploreAction)
   case profile(ProfileAction)
   case keychain(KeychainAction)
 }
@@ -70,17 +68,6 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
       )
     }
   ),
-  Explore.reducer.pullback(
-    state: \.favorites,
-    action: /AppAction.favorites,
-    environment: {
-      ExploreEnvironment(
-        apiClient: $0.apiClient,
-        imagePreheater: .live(),
-        mainQueue: $0.mainQueue
-      )
-    }
-  ),
   Reducer { state, action, environment in
     switch action {
     case .launch:
@@ -90,7 +77,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
       state.selectedTab = selected
       return .none
 
-    case .explore, .favorites:
+    case .explore:
       return .none
 
     case .profile(.login(.loginResponse(.success))):
@@ -107,10 +94,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
 
     case .keychain(.onRestore(.failure)),
          .keychain(.onSave(.success)):
-      return Effect.concatenate(
-        Effect(value: .explore(.pagination(.first))),
-        Effect(value: .favorites(.pagination(.first)))
-      )
+      return Effect(value: .explore(.pagination(.first)))
 
     case .keychain:
       return .none
