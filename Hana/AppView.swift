@@ -36,7 +36,7 @@ struct AppView: View {
       WithViewStore(store) { viewStore in
         VStack(spacing: 0) {
           GeometryReader { geometry in
-            HStack(alignment: .center, spacing: 0) {
+            HStack(alignment: .center, spacing: geometry.safeAreaInsets.trailing) {
               Group {
                 explore.id(0)
                 profile.id(1)
@@ -45,15 +45,15 @@ struct AppView: View {
             }
             .selection(
               width: geometry.size.width,
-              spacing: 0,
+              spacing: geometry.safeAreaInsets.trailing,
               selection: viewStore.binding(get: \.selectedTab, send: AppAction.changeTab)
             )
           }
 
-          TabView(selectedIndex: viewStore.binding(get: \.selectedTab, send: AppAction.changeTab)) {
+          Components.TabView(selectedIndex: viewStore.binding(get: \.selectedTab, send: AppAction.changeTab)) {
             TabItem { tabItem(systemName: "square.stack", isSelected: $0) }
             TabItem { tabItem(systemName: "person", isSelected: $0) }
-          }
+          }.animation(.default)
         }
         .onAppear {
           viewStore.send(.launch)

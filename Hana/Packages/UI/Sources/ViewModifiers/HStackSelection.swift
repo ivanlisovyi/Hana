@@ -32,6 +32,6 @@ public struct HStackSelectionModifier: ViewModifier {
 
   public func body(content: Content) -> some View {
     let offset = -CGFloat(selection) * (width + spacing)
-    return content.offset(x: offset, y: 0).animation(.none)
+    return content.offset(x: offset, y: 0)
   }
 }

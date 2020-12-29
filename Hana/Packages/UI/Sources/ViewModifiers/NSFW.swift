@@ -13,7 +13,7 @@ public struct NSFW: ViewModifier {
   public init() {}
 
   public func body(content: Content) -> some View {
-    ZStack(alignment: .center, content: {
+    ZStack(alignment: .center) {
       if isVisible {
         content
       } else {
@@ -29,7 +29,8 @@ public struct NSFW: ViewModifier {
             .foregroundColor(.white)
         }
       }
-    }).onTapGesture {
+    }
+    .onTapGesture {
       withAnimation {
         self.isVisible.toggle()
       }

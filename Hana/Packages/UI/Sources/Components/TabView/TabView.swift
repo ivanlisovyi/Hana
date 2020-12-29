@@ -55,7 +55,6 @@ public struct TabView<Content: View, Style: TabViewStyle>: View {
         Spacer()
       }
     }
-    .animation(.default)
     .overlayPreferenceValue(AnchorKey.self, {
       style.indicator(with: $0)
     })
@@ -98,6 +97,8 @@ public protocol TabViewStyle {
 public struct DefaultTabViewStyle: TabViewStyle {
   public let spacing: CGFloat = 40
 
+  public init() {}
+
   public func indicator(with bounds: Anchor<CGRect>?) -> some View {
     GeometryReader { proxy in
       if bounds != nil {
@@ -113,6 +114,8 @@ public struct DefaultTabViewStyle: TabViewStyle {
 
 public struct PagedTabViewStyle: TabViewStyle {
   public let spacing: CGFloat = 10
+
+  public init() {}
 
   public func indicator(with bounds: Anchor<CGRect>?) -> some View {
     GeometryReader { proxy in
@@ -139,36 +142,36 @@ struct TabBar_Previews : PreviewProvider {
     @State var selected = 0
 
     var body: some View {
-      let tabView = TabView(selectedIndex: $selected) {
-        TabItem { isSelected in
-          Image(systemName: "square.stack")
-            .imageScale(.large)
-            .foregroundColor(isSelected ? .darkPink : .primary)
-            .padding()
-
-        }
-        TabItem { isSelected in
-          Image(systemName: "heart")
-            .imageScale(.large)
-            .foregroundColor(isSelected ? .darkPink : .primary)
-            .padding()
-        }
-
-        TabItem { isSelected in
-          Image(systemName: "person")
-            .imageScale(.large)
-            .foregroundColor(isSelected ? .darkPink : .primary)
-            .padding()
-        }
-      }
-
-      return VStack(spacing: 10) {
+      VStack(spacing: 10) {
         Color.white.ignoresSafeArea()
 
-        tabView
-        tabView.tabViewStyle(PagedTabViewStyle())
+        TabView(selectedIndex: $selected) {
+          TabItem { imageTab(systemName: "square.stack", isSelected: $0) }
+          TabItem { imageTab(systemName: "heart", isSelected: $0) }
+          TabItem { imageTab(systemName: "person", isSelected: $0) }
+        }
+
+        TabView(selectedIndex: $selected) {
+          TabItem { textTabItem(text: "New", isSelected: $0) }
+          TabItem { textTabItem(text: "Favorites", isSelected: $0) }
+          TabItem { textTabItem(text: "Updated", isSelected: $0) }
+        }.tabViewStyle(PagedTabViewStyle())
       }
       .frame(maxWidth: .infinity)
+    }
+
+    private func imageTab(systemName: String, isSelected: Bool) -> some View {
+      Image(systemName: systemName)
+        .imageScale(.large)
+        .foregroundColor(isSelected ? .darkPink : .primary)
+        .padding()
+    }
+
+    private func textTabItem(text: String, isSelected: Bool) -> some View {
+      Text(text)
+        .font(.subheadline)
+        .foregroundColor(isSelected ? .darkPink : .secondary)
+        .padding()
     }
   }
 

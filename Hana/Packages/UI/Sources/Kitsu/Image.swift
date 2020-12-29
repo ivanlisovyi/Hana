@@ -34,7 +34,6 @@ public struct Image: View {
     }
     .onAppear(perform: image.fetch)
     .onDisappear { image.priority = .low }
-    .transition(AnyTransition.opacity.animation(Animation.default))
   }
 }
 
