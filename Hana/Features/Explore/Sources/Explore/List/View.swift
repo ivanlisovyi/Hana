@@ -33,7 +33,7 @@ public struct ExploreView: View {
       .ignoresSafeArea()
 
       VStack(spacing: 0) {
-        TopBar {
+        NavigationBar {
           leading
         }
 

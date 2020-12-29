@@ -54,22 +54,27 @@ struct AppView: View {
           profile
         }
 
-        BottomBar(selectedIndex: selectedTabBinding) {
-          BottomBarItem(icon: "square.stack", text: "Explore", color: .darkPink)
-          BottomBarItem(icon: "heart", text: "Favorites", color: .darkPink)
-          BottomBarItem(icon: "person", text: "Profile", color: .darkPink)
+        TabView(selectedIndex: selectedTabBinding) {
+          TabItem { tabItem(systemName: "square.stack", isSelected: $0) }
+          TabItem { tabItem(systemName: "heart", isSelected: $0) }
+          TabItem { tabItem(systemName: "person", isSelected: $0) }
         }
       }
-      .frame(maxWidth: .infinity)
       .onAppear {
         viewStore.send(.launch)
       }
     }
   }
 
+  private func tabItem(systemName: String, isSelected: Bool) -> some View {
+    Image(systemName: systemName)
+      .imageScale(.large)
+      .foregroundColor(isSelected ? .darkPink : .primary)
+      .padding()
+  }
+
   private var explore: some View {
     StackNavigationView {
-      EmptyView()
       ExploreView(
         store: store.scope(state: { $0.explore }, action: AppAction.explore)
       )
@@ -79,10 +84,9 @@ struct AppView: View {
 
   private var favorites: some View {
     StackNavigationView {
-      ExploreView(
-        store: store.scope(state: { $0.favorites }, action: AppAction.favorites)
-      )
-      .navigationBarHidden(true)
+      EmptyView()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .navigationBarHidden(true)
     }
   }
 

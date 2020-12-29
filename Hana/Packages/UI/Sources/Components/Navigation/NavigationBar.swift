@@ -1,5 +1,5 @@
 //
-//  TopBar.swift
+//  NavigationBar.swift
 //  
 //
 //  Created by Ivan Lisovyi on 24.12.20.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct TopBar<Leading: View, Trailing: View>: View {
+public struct NavigationBar<Leading: View, Trailing: View>: View {
   @Environment(\.colorScheme) var colorScheme
 
   private let leading: () -> Leading
@@ -44,7 +44,7 @@ public struct TopBar<Leading: View, Trailing: View>: View {
   }
 }
 
-extension TopBar where Trailing == EmptyView {
+extension NavigationBar where Trailing == EmptyView {
   public init(@ViewBuilder leading: @escaping () -> Leading) {
     self.leading = leading
     self.trailing = { EmptyView() }
@@ -54,7 +54,7 @@ extension TopBar where Trailing == EmptyView {
 #if DEBUG
 struct NavigationView_Previews: PreviewProvider {
   static var previews: some View {
-    let topBar = TopBar(
+    let topBar = NavigationBar(
       leading: {
         FlowerView()
           .frame(width: 30, height: 30)

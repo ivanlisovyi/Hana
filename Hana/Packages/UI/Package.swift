@@ -52,7 +52,8 @@ let package = Package(
     .target(
       name: "Components",
       dependencies: [
-        "DesignSystem"
+        "DesignSystem",
+        "Extensions"
       ]
     ),
     .target(
