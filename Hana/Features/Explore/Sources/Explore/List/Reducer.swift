@@ -11,8 +11,27 @@ import ComposableArchitecture
 import Common
 import Kaori
 
+struct ScaleThrottlingID: Hashable {}
+
 private let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment> { state, action, environment in
   switch action {
+  case let .scaleChanged(scale):
+    let max = Swift.max(50, Float(150) * Float(scale))
+    let min = Swift.min(max, 300)
+    let newValue = Int(min)
+    return Effect(value: .sizeChanged(newValue))
+      .throttle(
+        id: ScaleThrottlingID(),
+        for: 0.3,
+        scheduler: environment.mainQueue,
+        latest: true
+      )
+      .eraseToEffect()
+
+  case let .sizeChanged(size):
+    state.itemSize = size
+    return .none
+    
   case .post:
     return .none
 

@@ -32,10 +32,10 @@ public struct Image: View {
       image.view?
         .resizable()
         .aspectRatio(contentMode: .fill)
+        .clipped()
     }
     .onAppear(perform: image.fetch)
     .onDisappear(perform: image.reset)
-    .animation(.default)
   }
 }
 

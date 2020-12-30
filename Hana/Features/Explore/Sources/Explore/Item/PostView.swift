@@ -12,49 +12,49 @@ import Kaori
 import UI
 
 public struct PostView: View {
+  public enum DisplayMode: Equatable {
+    case `default`
+    case large
+  }
+
   public let store: Store<PostState, PostAction>
 
   @State var size: CGSize = .zero
+
+  var displayMode: DisplayMode = .default
 
   public init(store: Store<PostState, PostAction>) {
     self.store = store
   }
 
   public var body: some View {
-    WithViewStore(self.store) { viewStore in
-      ZStack(alignment: .bottomTrailing) {
-        Kitsu.Image(url: viewStore.image.url)
-          .if(!size.equalTo(.zero)) {
-            $0.resize(width: size.width, height: size.height)
-          }
+    GeometryReader { geometry in
+      WithViewStore(store) { viewStore in
 
-        bottomView
+        Kitsu.Image(url: displayMode == .default ? viewStore.image.previewURL : viewStore.image.url)
+          .frame(width: geometry.size.width, height: geometry.size.height)
+          .if(displayMode == .large) { $0.overlay(bottomView, alignment: .bottomTrailing) }
+          .contentShape(Rectangle())
+          .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
+          .animation(.default )
       }
-      .background(Color(.secondarySystemBackground))
-      .onSizeChange {
-        if !$0.equalTo(size) {
-          size = $0
-        }
-      }
-      .frame(height: size.width / viewStore.aspectRatio)
-      .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
   }
 
   private var bottomView: some View {
-    VStack {
-      Spacer()
+    FavoriteView(
+      store: store.scope(state: { $0.favorite }, action: PostAction.favorite)
+    )
+    .frame(width: 40, height: 40)
+    .padding(10)
+  }
+}
 
-      HStack {
-        Spacer()
-
-        FavoriteView(
-          store: self.store.scope(state: { $0.favorite }, action: PostAction.favorite)
-        )
-        .frame(width: 40, height: 40)
-      }
-      .padding()
-    }
+extension PostView {
+  func displayMode(_ mode: DisplayMode) -> Self {
+    var view = self
+    view.displayMode = mode
+    return view
   }
 }
 

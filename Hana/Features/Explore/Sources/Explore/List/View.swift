@@ -16,12 +16,9 @@ import Common
 
 public struct ExploreView: View {
   @Environment(\.colorScheme) var colorScheme
+  @Environment(\.verticalSizeClass) var sizeClass
 
   private let store: Store<ExploreState, ExploreAction>
-
-  private let columns = [
-    GridItem(.adaptive(minimum: 300), alignment: .top)
-  ]
 
   public init(store: Store<ExploreState, ExploreAction>) {
     self.store = store
@@ -29,8 +26,8 @@ public struct ExploreView: View {
 
   public var body: some View {
     ZStack {
-     (colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
-      .ignoresSafeArea()
+      (colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
+        .ignoresSafeArea()
 
       VStack(spacing: 0) {
         NavigationBar {
@@ -52,21 +49,33 @@ public struct ExploreView: View {
   }
 
   private var content: some View {
-    WithViewStore(self.store) { store in
+    WithViewStore(store) { viewStore in
       ScrollView {
-        LazyVGrid(columns: columns, alignment: .leading, spacing: 10) {
+        LazyVGrid(
+          columns: [GridItem(.adaptive(minimum: CGFloat(viewStore.itemSize)))],
+          alignment: .leading,
+          spacing: 10
+        ) {
           ForEachStore(
-            self.store.scope(state: \.pagination.items, action: ExploreAction.post(index:action:))
+            store.scope(state: \.pagination.items, action: ExploreAction.post(index:action:))
           ) { rowStore in
             WithViewStore(rowStore) { rowViewStore in
               PostView(store: rowStore)
+                .displayMode(viewStore.itemSize > 150 ? .large : .default)
                 .onAppear {
-                  store.send(.pagination(.next(after: rowViewStore.id)))
+                  viewStore.send(.pagination(.next(after: rowViewStore.id)))
                 }
+                .frame(height: CGFloat(viewStore.itemSize))
             }
           }
         }
         .padding([.leading, .trailing], 10)
+        .gesture(
+          MagnificationGesture(minimumScaleDelta: 0.1)
+            .onChanged { value in
+              viewStore.send(.scaleChanged(value))
+            }
+        )
       }
       .background(colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
     }

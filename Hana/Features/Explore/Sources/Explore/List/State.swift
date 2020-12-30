@@ -11,15 +11,19 @@ import Common
 import Kaori
 
 public struct ExploreState: Equatable {
-  public var pagination: PaginationState<PostState>
+  public var itemSize: Int
 
   public var tags: [Tag]?
 
+  public var pagination: PaginationState<PostState>
+
   public init(
-    pagination: PaginationState<PostState> = .init(),
-    tags: [Tag]? = nil
+    itemSize: Int = 150,
+    tags: [Tag]? = nil,
+    pagination: PaginationState<PostState> = .init()
   ) {
-    self.pagination = pagination
+    self.itemSize = itemSize
     self.tags = tags
+    self.pagination = pagination
   }
 }
