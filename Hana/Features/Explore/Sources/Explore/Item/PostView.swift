@@ -36,7 +36,7 @@ public struct PostView: View {
           .if(displayMode == .large) { $0.overlay(bottomView, alignment: .bottomTrailing) }
           .contentShape(Rectangle())
           .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-          .animation(.default )
+          .animation(.default)
       }
     }
   }

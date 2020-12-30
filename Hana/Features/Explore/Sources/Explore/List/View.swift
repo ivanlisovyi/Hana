@@ -49,35 +49,42 @@ public struct ExploreView: View {
   }
 
   private var content: some View {
-    WithViewStore(store) { viewStore in
-      ScrollView {
-        LazyVGrid(
-          columns: [GridItem(.adaptive(minimum: CGFloat(viewStore.itemSize)))],
-          alignment: .leading,
-          spacing: 10
-        ) {
-          ForEachStore(
-            store.scope(state: \.pagination.items, action: ExploreAction.post(index:action:))
-          ) { rowStore in
-            WithViewStore(rowStore) { rowViewStore in
-              PostView(store: rowStore)
-                .displayMode(viewStore.itemSize > 150 ? .large : .default)
-                .onAppear {
-                  viewStore.send(.pagination(.next(after: rowViewStore.id)))
-                }
-                .frame(height: CGFloat(viewStore.itemSize))
+    GeometryReader { geometry in
+      WithViewStore(store) { viewStore in
+        ScrollView {
+          LazyVGrid(
+            columns: [GridItem(.adaptive(minimum: CGFloat(viewStore.itemSize)))],
+            alignment: .leading,
+            spacing: 10
+          ) {
+            ForEachStore(
+              store.scope(state: \.pagination.items, action: ExploreAction.post(index:action:))
+            ) { rowStore in
+              WithViewStore(rowStore) { rowViewStore in
+                PostView(store: rowStore)
+                  .displayMode(viewStore.itemSize > 150 ? .large : .default)
+                  .onAppear {
+                    viewStore.send(.pagination(.next(after: rowViewStore.id)))
+                  }
+                  .frame(height: CGFloat(viewStore.itemSize) / (geometry.size.width / geometry.size.height))
+              }
             }
           }
+          .padding([.leading, .trailing], 10)
+          .gesture(
+            MagnificationGesture(minimumScaleDelta: 0.1)
+              .onChanged { value in
+                withAnimation {
+                  viewStore.send(.scale(.changed(value)))
+                }
+              }
+              .onEnded { value in
+                viewStore.send(.scale(.ended(value)))
+              }
+          )
         }
-        .padding([.leading, .trailing], 10)
-        .gesture(
-          MagnificationGesture(minimumScaleDelta: 0.1)
-            .onChanged { value in
-              viewStore.send(.scaleChanged(value))
-            }
-        )
+        .background(colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
       }
-      .background(colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
     }
   }
 }
