@@ -17,11 +17,9 @@ public struct PostItemView: View {
     case large
   }
 
+  @Environment(\.postDisplayMode) var displayMode
+
   public let store: Store<PostItemState, PostItemAction>
-
-  @State var size: CGSize = .zero
-
-  var displayMode: DisplayMode = .default
 
   public init(store: Store<PostItemState, PostItemAction>) {
     self.store = store
@@ -30,10 +28,9 @@ public struct PostItemView: View {
   public var body: some View {
     GeometryReader { geometry in
       WithViewStore(store) { viewStore in
-
         Kitsu.Image(url: displayMode == .default ? viewStore.image.previewURL : viewStore.image.url)
           .frame(width: geometry.size.width, height: geometry.size.height)
-          .if(displayMode == .large) { $0.overlay(bottomView, alignment: .bottomTrailing) }
+          .overlay(bottomView, alignment: .bottomTrailing)
           .contentShape(Rectangle())
           .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
           .animation(.default)
@@ -42,33 +39,51 @@ public struct PostItemView: View {
   }
 
   private var bottomView: some View {
-    FavoriteView(
+    FavoriteButton(
       store: store.scope(state: { $0.favorite }, action: PostItemAction.favorite)
     )
-    .frame(width: 40, height: 40)
+    .if(displayMode == .default) {
+      $0.buttonStyle(PlainFavoriteButtonStyle())
+    } else: {
+      $0.buttonStyle(ShapeBackgroundFavoriteButtonStyle())
+    }
     .padding(10)
   }
 }
 
 extension PostItemView {
-  func displayMode(_ mode: DisplayMode) -> Self {
-    var view = self
-    view.displayMode = mode
-    return view
+  func displayMode(_ mode: DisplayMode) -> some View {
+    self.environment(\.postDisplayMode, mode)
   }
 
-  func displayMode(for width: Int) -> Self {
+  func displayMode(for width: Int) -> some View {
     let mode: DisplayMode = width >= 150 ? .large : .default
     return displayMode(mode)
   }
 }
 
+extension EnvironmentValues {
+  var postDisplayMode: PostItemView.DisplayMode {
+    get {
+      return self[PostItemDisplayModeKey.self]
+    }
+    set {
+      self[PostItemDisplayModeKey.self] = newValue
+    }
+  }
+}
+
+struct PostItemDisplayModeKey: EnvironmentKey {
+  static let defaultValue: PostItemView.DisplayMode = .default
+}
+
 #if DEBUG
 struct PostView_Previews: PreviewProvider {
   static var previews: some View {
-    let post = try! KaoriMocks.decode([Post].self, from: "posts", in: .module).first!
+    let post = try! KaoriMocks.decode([Post].self, from: "posts.json", in: .module).first!
+    let aspectRatio = CGFloat(post.image.width) / CGFloat(post.image.height)
 
-    return PostItemView(
+    let item = PostItemView(
       store: Store(
         initialState: PostItemState(post: post),
         reducer: postItemReducer,
@@ -80,6 +95,16 @@ struct PostView_Previews: PreviewProvider {
         )
       )
     )
+
+    return Group {
+      item
+        .displayMode(.large)
+        .frame(width: 300.0, height: 300 / aspectRatio)
+
+      item
+        .displayMode(.default)
+        .frame(width: 100, height: 150)
+    }
     .previewLayout(.sizeThatFits)
   }
 }

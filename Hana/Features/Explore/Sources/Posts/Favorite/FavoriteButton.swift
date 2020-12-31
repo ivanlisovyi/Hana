@@ -9,22 +9,33 @@ import SwiftUI
 import ComposableArchitecture
 import Components
 
-public struct FavoriteView<ID>: View where ID: Hashable {
+public struct FavoriteButton<ID>: View where ID: Hashable {
   let store: Store<FavoriteState<ID>, FavoriteAction>
 
   public var body: some View {
     WithViewStore(store) { viewStore in
       Button(action: { viewStore.send(.favoriteTapped) }) {
-        ZStack {
-          Color.darkPink
-
-          Image(systemName: viewStore.isFavorite ? "heart.fill" : "heart")
-            .font(.headline)
-            .foregroundColor(.white)
-        }
-        .clipShape(Circle())
+        Image(systemName: viewStore.isFavorite ? "heart.fill" : "heart")
+          .font(.headline)
       }
     }
+  }
+}
+
+struct PlainFavoriteButtonStyle: ButtonStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    configuration.label.foregroundColor(.darkPink)
+  }
+}
+
+struct ShapeBackgroundFavoriteButtonStyle: ButtonStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    configuration.label
+      .padding(10)
+      .background(
+        Color.darkPink.clipShape(Circle())
+      )
+      .foregroundColor(.white)
   }
 }
 
@@ -73,7 +84,7 @@ struct FavoriteView_Previews: PreviewProvider {
       HStack {
         Text("Try it out!")
 
-        FavoriteView(
+        FavoriteButton(
           store: store.scope(state: { $0.favorite }, action: Action.favorite)
         )
         .frame(width: 40, height: 40, alignment: .center)
@@ -81,9 +92,12 @@ struct FavoriteView_Previews: PreviewProvider {
     }
 
     return Group {
-      view.preferredColorScheme(.dark)
-
-      view.preferredColorScheme(.light)
+      view
+        .buttonStyle(ShapeBackgroundFavoriteButtonStyle())
+        .preferredColorScheme(.dark)
+      view
+        .buttonStyle(PlainFavoriteButtonStyle())
+        .preferredColorScheme(.light)
     }
     .previewLayout(.fixed(width: 200, height: 100))
   }
