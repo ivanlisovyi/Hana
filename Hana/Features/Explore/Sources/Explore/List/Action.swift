@@ -8,14 +8,9 @@
 import Foundation
 import CoreGraphics
 
-public enum ScaleEvent: Equatable {
-  case changed(CGFloat)
-  case ended(CGFloat)
-}
-
 public enum ExploreAction: Equatable {
-  case scale(ScaleEvent)
   case itemSizeChanged(Int)
   case post(index: Int, action: PostAction)
+  case magnification(MagnificationAction)
   case pagination(PaginationAction<PostState>)
 }

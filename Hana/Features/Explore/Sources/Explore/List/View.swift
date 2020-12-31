@@ -58,29 +58,26 @@ public struct ExploreView: View {
             spacing: 10
           ) {
             ForEachStore(
-              store.scope(state: \.pagination.items, action: ExploreAction.post(index:action:))
+              store.scope(
+                state: \.pagination.items,
+                action: ExploreAction.post(index:action:)
+              )
             ) { rowStore in
               WithViewStore(rowStore) { rowViewStore in
                 PostView(store: rowStore)
-                  .displayMode(viewStore.itemSize > 150 ? .large : .default)
+                  .displayMode(for: viewStore.itemSize)
                   .onAppear {
                     viewStore.send(.pagination(.next(after: rowViewStore.id)))
                   }
-                  .frame(height: CGFloat(viewStore.itemSize) / (geometry.size.width / geometry.size.height))
+                  .frame(height: CGFloat(viewStore.itemSize) / geometry.aspectRatio)
               }
             }
           }
           .padding([.leading, .trailing], 10)
           .gesture(
-            MagnificationGesture(minimumScaleDelta: 0.1)
-              .onChanged { value in
-                withAnimation {
-                  viewStore.send(.scale(.changed(value)))
-                }
-              }
-              .onEnded { value in
-                viewStore.send(.scale(.ended(value)))
-              }
+            MagnificationGesture.magnification(
+              store: store.scope(state: \.magnification, action: ExploreAction.magnification)
+            )
           )
         }
         .background(colorScheme == .dark ? Color.primaryDark : Color.primaryLight)

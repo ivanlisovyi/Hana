@@ -15,31 +15,22 @@ struct ScaleThrottlingID: Hashable {}
 
 private let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment> { state, action, environment in
   switch action {
-  case let .scale(.changed(scale)):
-    let delta = scale / state.lastScale
-    if abs(state.lastScale - (state.currentScale * delta)) <= 0.1 {
-      return .none
-    }
-
-    state.lastScale = scale
-    state.currentScale = state.currentScale * delta
-
-    let max = Swift.max(100, Float(state.itemSize) * Float(scale))
-    let min = Swift.min(max, 300)
-    let newValue = Int(min)
-    return Effect(value: .itemSizeChanged(newValue))
-      .throttle(id: ScaleThrottlingID(), for: 0.2, scheduler: environment.mainQueue, latest: true)
-      .eraseToEffect()
-
-  case .scale(.ended):
-    state.lastScale = 1.0
-    return .none
-
   case let .itemSizeChanged(size):
     state.itemSize = size
     return .none
     
   case .post:
+    return .none
+
+  case let .magnification(.onChange(newValue)):
+    let max = Swift.max(100, Float(state.itemSize) * Float(newValue))
+    let min = Swift.min(max, 300)
+    let newValue = Int(min)
+    return Effect(value: .itemSizeChanged(newValue))
+      .throttle(id: ScaleThrottlingID(), for: 0.1, scheduler: environment.mainQueue, latest: true)
+      .eraseToEffect()
+
+  case .magnification:
     return .none
 
   case let .pagination(.response(.success(items))):
@@ -81,6 +72,10 @@ public let reducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment>.co
           mainQueue: env.mainQueue
         )
       }
+    )
+    .magnification(
+      state: \.magnification,
+      action: /ExploreAction.magnification
     )
 )
 

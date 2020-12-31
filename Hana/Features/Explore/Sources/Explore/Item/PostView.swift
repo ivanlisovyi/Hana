@@ -56,6 +56,11 @@ extension PostView {
     view.displayMode = mode
     return view
   }
+
+  func displayMode(for width: Int) -> Self {
+    let mode: DisplayMode = width >= 150 ? .large : .default
+    return displayMode(mode)
+  }
 }
 
 #if DEBUG

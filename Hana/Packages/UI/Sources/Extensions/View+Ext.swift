@@ -1,5 +1,5 @@
 //
-//  View+Conditions.swift
+//  View+Ext.swift
 //  
 //
 //  Created by Ivan Lisovyi on 09.12.20.
@@ -43,5 +43,11 @@ public extension View {
     } else {
       self
     }
+  }
+}
+
+public extension View {
+  func eraseToAnyView() -> AnyView {
+    AnyView(self)
   }
 }
