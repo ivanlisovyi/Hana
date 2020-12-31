@@ -21,13 +21,16 @@ public struct Image: View {
     self.init(request: ImageRequest(url: url))
   }
 
-  init(request: ImageRequest) {
-    image = FetchImage(request: request)
+  init(
+    request: ImageRequest,
+    pipeline: ImagePipeline = Self.defaultPipeline
+  ) {
+    image = FetchImage(request: request, pipeline: pipeline)
     image.fetch()
   }
 
   public var body: some View {
-    ZStack {
+    ZStack(alignment: .top) {
       Rectangle().fill(colorScheme == .dark ? Color.secondaryDark : Color.secondaryLight)
       image.view?
         .resizable()
@@ -36,6 +39,14 @@ public struct Image: View {
     }
     .onAppear(perform: image.fetch)
     .onDisappear(perform: image.reset)
+  }
+}
+
+extension Image {
+  static let defaultPipeline = ImagePipeline {
+    $0.dataCache = try? DataCache(name: "com.ivanlisovyi.hana.data.cache")
+
+    DataLoader.sharedUrlCache.diskCapacity = 0
   }
 }
 

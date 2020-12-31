@@ -33,7 +33,7 @@ public struct PostItemView: View {
           .overlay(bottomView, alignment: .bottomTrailing)
           .contentShape(Rectangle())
           .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-          .animation(.default)
+          .animation(.easeInOut)
       }
     }
   }

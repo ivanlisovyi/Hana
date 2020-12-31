@@ -13,12 +13,12 @@ import Keychain
 
 public struct PostsEnvironment {
   public var apiClient: Kaori
-  public var imagePreheater: ImagePreheater
+  public var imagePreheater: ImagePrefetcher
   public var mainQueue: AnySchedulerOf<DispatchQueue>
 
   public init(
     apiClient: Kaori,
-    imagePreheater: ImagePreheater,
+    imagePreheater: ImagePrefetcher,
     mainQueue: AnySchedulerOf<DispatchQueue>
   ) {
     self.apiClient = apiClient

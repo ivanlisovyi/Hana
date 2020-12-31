@@ -8,7 +8,7 @@
 import Foundation
 import Nuke
 
-public struct ImagePreheater {
+public struct ImagePrefetcher {
   public let start: ([URL]) -> Void
   public let stop: ([URL]) -> Void
 
@@ -21,10 +21,10 @@ public struct ImagePreheater {
   }
 }
 
-public extension ImagePreheater {
-  static func live() -> Self {
-    let preheater = Nuke.ImagePreheater(destination: .diskCache)
+public extension ImagePrefetcher {
+  static let preheater = Nuke.ImagePreheater(destination: .diskCache)
 
+  static func live() -> Self {
     return Self(
       start: preheater.startPreheating(with:),
       stop: preheater.stopPreheating(with:)
