@@ -107,8 +107,7 @@ struct AppView_Previews: PreviewProvider {
                 .setFailureType(to: KeychainError.self)
                 .eraseToAnyPublisher()
             }
-          ),
-          mainQueue: DispatchQueue.main.eraseToAnyScheduler()
+          )
         )
       )
     )

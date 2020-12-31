@@ -19,13 +19,11 @@ struct HanaApp: App {
     WindowGroup {
       AppView(
         store: Store(
-          initialState: .init(),
+          initialState: AppState(
+            savedState: .tryRestore()
+          ),
           reducer: appReducer,
-          environment: AppEnvironment(
-            apiClient: .live(),
-            keychain: .live(),
-            mainQueue: DispatchQueue.main.eraseToAnyScheduler()
-          )
+          environment: .init()
         )
       )
     }

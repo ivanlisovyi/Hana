@@ -6,15 +6,16 @@
 //
 
 import Foundation
-import ComposableArchitecture
+import CoreGraphics
 
 import Combine
+import ComposableArchitecture
 
 import Posts
 import Profile
 
 import Kaori
-import Keychain
+import Common
 
 struct AppState: Equatable {
   var selectedTab = 0
@@ -22,12 +23,63 @@ struct AppState: Equatable {
   var explore: PostsState = PostsState()
   var profile: ProfileState = ProfileState()
 
+  public var savingState: SavingState {
+    SavingState(
+      itemSize: explore.itemSize,
+      scale: explore.magnification.currentScale,
+      selectedTab: selectedTab
+    )
+  }
+
   public var keychain: KeychainState {
     get { .init(credentials: .init(username: profile.username, password: profile.password)) }
     set {
       if let newCredentials = newValue.credentials {
         (profile.username, profile.password) = (newCredentials.username, newCredentials.password)
       }
+    }
+  }
+
+  init(savedState: SavingState?) {
+    guard let state = savedState else {
+      self = AppState()
+      return
+    }
+
+    self = .init(
+      selectedTab: state.selectedTab,
+      explore: PostsState(
+        itemSize: state.itemSize,
+        tags: nil,
+        magnification: .init(currentScale: state.scale),
+        pagination: .init()
+      ),
+      profile: .init()
+    )
+  }
+
+  init(
+    selectedTab: Int = 0,
+    explore: PostsState = .init(),
+    profile: ProfileState = .init()
+  ) {
+    self.selectedTab = selectedTab
+    self.explore = explore
+    self.profile = profile
+  }
+}
+
+extension AppState {
+  struct SavingState: Equatable, Codable {
+    static let key = "com.ivanlisovyi.hana.saved.state"
+
+    var itemSize: Int
+    var scale: CGFloat
+    var selectedTab: Int
+
+    static func tryRestore() -> Self? {
+      UserDefaults.standard.data(forKey: Self.key)
+        .flatMap { try? JSONDecoder().decode(Self.self, from: $0) }
     }
   }
 }
@@ -44,6 +96,19 @@ struct AppEnvironment {
   let apiClient: Kaori
   let keychain: Keychain
   let mainQueue: AnySchedulerOf<DispatchQueue>
+  let savingQueue: AnySchedulerOf<DispatchQueue>
+
+  init(
+    apiClient: Kaori = .live(),
+    keychain: Keychain = .live(),
+    mainQueue: AnySchedulerOf<DispatchQueue> = DispatchQueue.main.eraseToAnyScheduler(),
+    savingQueue: AnySchedulerOf<DispatchQueue> = DispatchQueue(label: "com.ivanlisovyi.hana.state.saving").eraseToAnyScheduler()
+  ) {
+    self.apiClient = apiClient
+    self.keychain = keychain
+    self.mainQueue = mainQueue
+    self.savingQueue = savingQueue
+  }
 }
 
 let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
@@ -110,3 +175,15 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
     )
   }
 )
+.saving(AppState.SavingState.key, state: \.savingState) { key, environment in
+  SavingEnvironment(
+    save: { state in
+      guard let data = try? JSONEncoder().encode(state) else {
+        return
+      }
+
+      UserDefaults.standard.set(data, forKey: key)
+    },
+    queue: environment.savingQueue
+  )
+}
