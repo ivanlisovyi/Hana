@@ -1,5 +1,5 @@
 //
-//  PostState.swift
+//  PostItemState.swift
 //  
 //
 //  Created by Ivan Lisovyi on 23.12.20.
@@ -11,7 +11,7 @@ import CoreGraphics
 import Kaori
 
 @dynamicMemberLookup
-public struct PostState: Identifiable, Hashable, Comparable {
+public struct PostItemState: Identifiable, Hashable, Comparable {
   public let id: Int
 
   public var favorite: FavoriteState<ID> {
@@ -34,7 +34,7 @@ public struct PostState: Identifiable, Hashable, Comparable {
     post[keyPath: keyPath]
   }
 
-  public static func < (lhs: PostState, rhs: PostState) -> Bool {
+  public static func < (lhs: PostItemState, rhs: PostItemState) -> Bool {
     lhs.id < rhs.id
   }
 }

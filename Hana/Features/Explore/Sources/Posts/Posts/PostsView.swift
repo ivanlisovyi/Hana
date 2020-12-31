@@ -64,7 +64,7 @@ public struct PostsView: View {
               )
             ) { rowStore in
               WithViewStore(rowStore) { rowViewStore in
-                PostView(store: rowStore)
+                PostItemView(store: rowStore)
                   .displayMode(for: viewStore.itemSize)
                   .onAppear {
                     viewStore.send(.pagination(.next(after: rowViewStore.id)))
@@ -90,7 +90,7 @@ public struct PostsView: View {
 struct PostsView_Previews: PreviewProvider {
   static var previews: some View {
     let posts = try! KaoriMocks.decode([Post].self, from: "posts", in: .module)
-    let states = posts.map(PostState.init(post:))
+    let states = posts.map(PostItemState.init(post:))
 
     let store = Store(
       initialState: PostsState(

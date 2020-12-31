@@ -1,5 +1,5 @@
 //
-//  PostView.swift
+//  PostItemView.swift
 //  
 //
 //  Created by Ivan Lisovyi on 13.12.20.
@@ -11,19 +11,19 @@ import ComposableArchitecture
 import Kaori
 import UI
 
-public struct PostView: View {
+public struct PostItemView: View {
   public enum DisplayMode: Equatable {
     case `default`
     case large
   }
 
-  public let store: Store<PostState, PostAction>
+  public let store: Store<PostItemState, PostItemAction>
 
   @State var size: CGSize = .zero
 
   var displayMode: DisplayMode = .default
 
-  public init(store: Store<PostState, PostAction>) {
+  public init(store: Store<PostItemState, PostItemAction>) {
     self.store = store
   }
 
@@ -43,14 +43,14 @@ public struct PostView: View {
 
   private var bottomView: some View {
     FavoriteView(
-      store: store.scope(state: { $0.favorite }, action: PostAction.favorite)
+      store: store.scope(state: { $0.favorite }, action: PostItemAction.favorite)
     )
     .frame(width: 40, height: 40)
     .padding(10)
   }
 }
 
-extension PostView {
+extension PostItemView {
   func displayMode(_ mode: DisplayMode) -> Self {
     var view = self
     view.displayMode = mode
@@ -68,11 +68,11 @@ struct PostView_Previews: PreviewProvider {
   static var previews: some View {
     let post = try! KaoriMocks.decode([Post].self, from: "posts", in: .module).first!
 
-    return PostView(
+    return PostItemView(
       store: Store(
-        initialState: PostState(post: post),
-        reducer: postReducer,
-        environment: PostEnvironment(
+        initialState: PostItemState(post: post),
+        reducer: postItemReducer,
+        environment: PostItemEnvironment(
           favorite: { _, isFavorite in
             return Effect(value: isFavorite)
           },

@@ -45,11 +45,11 @@ private let postsReducer = Reducer<PostsState, PostsAction, PostsEnvironment> { 
 }
 
 public let reducer = Reducer<PostsState, PostsAction, PostsEnvironment>.combine(
-  postReducer.forEach(
+  postItemReducer.forEach(
     state: \PostsState.pagination.items,
     action: /PostsAction.post(index:action:),
     environment: { env in
-      PostEnvironment(
+      PostItemEnvironment(
         favorite: { id, isFavorite in
           favoriteEffect(id: id, isFavorite: isFavorite, using: env)
         },
@@ -62,10 +62,10 @@ public let reducer = Reducer<PostsState, PostsAction, PostsEnvironment>.combine(
       state: \.pagination,
       action: /PostsAction.pagination,
       environment: { state, env in
-        return PaginationEnvironment<PostState>(
+        return PaginationEnvironment<PostItemState>(
           fetch: { page, limit in
             env.apiClient.posts(.init(page: page, limit: limit, tags: state.tags))
-              .map { $0.map(PostState.init(post:)) }
+              .map { $0.map(PostItemState.init(post:)) }
               .mapError(PaginationError.init(underlayingError:))
               .eraseToAnyPublisher()
           },
