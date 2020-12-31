@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 import Combine
 
-import Explore
+import Posts
 import Profile
 
 import Kaori
@@ -19,7 +19,7 @@ import Keychain
 struct AppState: Equatable {
   var selectedTab = 0
 
-  var explore: ExploreState = ExploreState()
+  var explore: PostsState = PostsState()
   var profile: ProfileState = ProfileState()
 
   public var keychain: KeychainState {
@@ -35,7 +35,7 @@ struct AppState: Equatable {
 enum AppAction: Equatable {
   case launch
   case changeTab(Int)
-  case explore(ExploreAction)
+  case explore(PostsAction)
   case profile(ProfileAction)
   case keychain(KeychainAction)
 }
@@ -57,11 +57,11 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
       )
     }
   ),
-  Explore.reducer.pullback(
+  Posts.reducer.pullback(
     state: \.explore,
     action: /AppAction.explore,
     environment: {
-      ExploreEnvironment(
+      PostsEnvironment(
         apiClient: $0.apiClient,
         imagePreheater: .live(),
         mainQueue: $0.mainQueue

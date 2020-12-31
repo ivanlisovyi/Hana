@@ -12,7 +12,7 @@ import ComposableArchitecture
 
 import UI
 
-import Explore
+import Posts
 import Profile
 import Keychain
 
@@ -71,7 +71,7 @@ struct AppView: View {
 
   private var explore: some View {
     StackNavigationView {
-      ExploreView(
+      PostsView(
         store: store.scope(state: { $0.explore }, action: AppAction.explore)
       )
       .navigationBarHidden(true)

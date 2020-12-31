@@ -13,7 +13,7 @@ import Kaori
 
 struct ScaleThrottlingID: Hashable {}
 
-private let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment> { state, action, environment in
+private let postsReducer = Reducer<PostsState, PostsAction, PostsEnvironment> { state, action, environment in
   switch action {
   case let .itemSizeChanged(size):
     state.itemSize = size
@@ -44,10 +44,10 @@ private let exploreReducer = Reducer<ExploreState, ExploreAction, ExploreEnviron
   }
 }
 
-public let reducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment>.combine(
+public let reducer = Reducer<PostsState, PostsAction, PostsEnvironment>.combine(
   postReducer.forEach(
-    state: \ExploreState.pagination.items,
-    action: /ExploreAction.post(index:action:),
+    state: \PostsState.pagination.items,
+    action: /PostsAction.post(index:action:),
     environment: { env in
       PostEnvironment(
         favorite: { id, isFavorite in
@@ -57,10 +57,10 @@ public let reducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment>.co
       )
     }
   ),
-  exploreReducer
+  postsReducer
     .pagination(
       state: \.pagination,
-      action: /ExploreAction.pagination,
+      action: /PostsAction.pagination,
       environment: { state, env in
         return PaginationEnvironment<PostState>(
           fetch: { page, limit in
@@ -75,11 +75,11 @@ public let reducer = Reducer<ExploreState, ExploreAction, ExploreEnvironment>.co
     )
     .magnification(
       state: \.magnification,
-      action: /ExploreAction.magnification
+      action: /PostsAction.magnification
     )
 )
 
-private func favoriteEffect(id: Int, isFavorite: Bool, using environment: ExploreEnvironment) -> Effect<Bool, Error> {
+private func favoriteEffect(id: Int, isFavorite: Bool, using environment: PostsEnvironment) -> Effect<Bool, Error> {
   if isFavorite {
     return environment.apiClient.favorite(id)
       .map { _ in true }

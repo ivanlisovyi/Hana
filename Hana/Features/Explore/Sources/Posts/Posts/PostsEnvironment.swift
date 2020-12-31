@@ -1,5 +1,5 @@
 //
-//  Environment.swift
+//  PostsEnvironment.swift
 //  
 //
 //  Created by Ivan Lisovyi on 20.12.20.
@@ -11,7 +11,7 @@ import Kaori
 import Kitsu
 import Keychain
 
-public struct ExploreEnvironment {
+public struct PostsEnvironment {
   public var apiClient: Kaori
   public var imagePreheater: ImagePreheater
   public var mainQueue: AnySchedulerOf<DispatchQueue>

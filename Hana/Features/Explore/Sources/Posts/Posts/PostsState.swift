@@ -1,5 +1,5 @@
 //
-//  State.swift
+//  PostsState.swift
 //  
 //
 //  Created by Ivan Lisovyi on 20.12.20.
@@ -11,7 +11,7 @@ import CoreGraphics
 import Common
 import Kaori
 
-public struct ExploreState: Equatable {
+public struct PostsState: Equatable {
   public var itemSize: Int
   public var tags: [Tag]?
 

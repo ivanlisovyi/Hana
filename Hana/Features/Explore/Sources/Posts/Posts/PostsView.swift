@@ -1,5 +1,5 @@
 //
-//  View.swift
+//  PostsView.swift
 //  Hana
 //
 //  Created by Lisovyi, Ivan on 29.11.20.
@@ -14,13 +14,13 @@ import Kaori
 import Components
 import Common
 
-public struct ExploreView: View {
+public struct PostsView: View {
   @Environment(\.colorScheme) var colorScheme
   @Environment(\.verticalSizeClass) var sizeClass
 
-  private let store: Store<ExploreState, ExploreAction>
+  private let store: Store<PostsState, PostsAction>
 
-  public init(store: Store<ExploreState, ExploreAction>) {
+  public init(store: Store<PostsState, PostsAction>) {
     self.store = store
   }
 
@@ -60,7 +60,7 @@ public struct ExploreView: View {
             ForEachStore(
               store.scope(
                 state: \.pagination.items,
-                action: ExploreAction.post(index:action:)
+                action: PostsAction.post(index:action:)
               )
             ) { rowStore in
               WithViewStore(rowStore) { rowViewStore in
@@ -76,7 +76,7 @@ public struct ExploreView: View {
           .padding([.leading, .trailing], 10)
           .gesture(
             MagnificationGesture.magnification(
-              store: store.scope(state: \.magnification, action: ExploreAction.magnification)
+              store: store.scope(state: \.magnification, action: PostsAction.magnification)
             )
           )
         }
@@ -87,17 +87,17 @@ public struct ExploreView: View {
 }
 
 #if DEBUG
-struct ExploreView_Previews: PreviewProvider {
+struct PostsView_Previews: PreviewProvider {
   static var previews: some View {
     let posts = try! KaoriMocks.decode([Post].self, from: "posts", in: .module)
     let states = posts.map(PostState.init(post:))
 
     let store = Store(
-      initialState: ExploreState(
+      initialState: PostsState(
         pagination: PaginationState(items: states)
       ),
-      reducer: Explore.reducer,
-      environment: ExploreEnvironment(
+      reducer: Posts.reducer,
+      environment: PostsEnvironment(
         apiClient: .mock(
           posts: { _ in
             Just(posts)
@@ -110,7 +110,7 @@ struct ExploreView_Previews: PreviewProvider {
       )
     )
 
-    return ExploreView(store: store)
+    return PostsView(store: store)
       .previewLayout(.device)
       .environment(\.colorScheme, .light)
   }
