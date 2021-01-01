@@ -40,9 +40,19 @@ public struct NavigationBarModifier: ViewModifier {
   }
 }
 
-
 public extension View {
   func navigationBarColor(_ backgroundColor: Color) -> some View {
     self.modifier(NavigationBarModifier(backgroundColor: backgroundColor))
+  }
+}
+
+extension UINavigationController: UIGestureRecognizerDelegate {
+  override open func viewDidLoad() {
+    super.viewDidLoad()
+    interactivePopGestureRecognizer?.delegate = self
+  }
+
+  public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    return viewControllers.count > 1
   }
 }
