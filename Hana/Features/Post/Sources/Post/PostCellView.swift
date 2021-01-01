@@ -35,7 +35,7 @@ public struct PostCellView: View {
           .overlay(bottomView, alignment: .bottomTrailing)
           .contentShape(Rectangle())
           .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-          .animation(.easeInOut)
+          .animation(.default)
       }
     }
   }

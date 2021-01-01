@@ -9,6 +9,6 @@ import Foundation
 
 struct TagsTransformer {
   func transform(_ value: String) -> [String] {
-    value.components(separatedBy: " ")
+    value.components(separatedBy: " ").map { "#" + $0 }
   }
 }

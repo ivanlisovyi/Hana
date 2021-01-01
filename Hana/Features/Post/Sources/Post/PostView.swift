@@ -28,16 +28,10 @@ public struct PostView: View {
       (colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
         .ignoresSafeArea()
 
-
-      VStack(spacing: 0) {
-        NavigationBar {
-          leading
-        }
-
-        content
-      }
+      content
     }
-    .navigationBarHidden(true)
+    .navigationBarBackButtonHidden(true)
+    .navigationBarItems(leading: leading)
   }
 
   private var leading: some View {
@@ -76,7 +70,7 @@ public struct PostView: View {
     WithViewStore(store) { viewStore in
       HStack {
         Group {
-          Text(dateFormatter.string(from: viewStore.createdAt))
+          Text(viewStore.state.createdAt)
             .foregroundColor(.secondary)
 
           Label("\(viewStore.score.total)", systemImage: "arrow.up.arrow.down.circle.fill")
@@ -87,28 +81,18 @@ public struct PostView: View {
 
           Spacer()
 
-          Text("\(viewStore.image.width) x \(viewStore.image.height)")
+          Text(viewStore.state.dimension)
             .foregroundColor(.secondary)
         }
         .font(.footnote)
       }
       
-      Text(viewStore.tags.all.map { "#" + $0 }.joined(separator: " "))
+      Text(viewStore.tags.all.joined(separator: " "))
         .font(.caption)
         .foregroundColor(.darkPink)
     }
   }
 }
-
-var dateFormatter: DateFormatter = {
-  let formatter = DateFormatter()
-  formatter.dateStyle = .medium
-  formatter.timeStyle = .short
-  formatter.doesRelativeDateFormatting = true
-
-  return formatter
-}()
-
 
 #if DEBUG
 struct PostView_Previews: PreviewProvider {

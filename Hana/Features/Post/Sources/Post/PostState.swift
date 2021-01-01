@@ -19,17 +19,21 @@ public struct PostState: Identifiable, Hashable, Comparable {
     set { isFavorite = newValue.isFavorite }
   }
 
-  public var aspectRatio: CGFloat {
-    CGFloat(post.image.width) / CGFloat(post.image.height)
-  }
+  public let aspectRatio: CGFloat
+  public let createdAt: String
+  public let dimension: String
 
   private(set) var isFavorite: Bool
-
-  var post: Post
+  private(set) var post: Post
 
   public init(post: Post) {
     self.id = post.id
     self.isFavorite = post.isFavorited
+
+    self.aspectRatio = CGFloat(post.image.width) / CGFloat(post.image.height)
+    self.createdAt = Formatters.dateFormatter.string(from: post.createdAt)
+    self.dimension = "\(post.image.width) x \(post.image.height)"
+
     self.post = post
   }
 
@@ -42,22 +46,15 @@ public struct PostState: Identifiable, Hashable, Comparable {
   }
 }
 
-public extension Post {
-  func favorite(isFavorite: Bool) -> Self {
-    Post(
-      id: id,
-      pixivId: pixivId,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      rating: rating,
-      favoritesCount: favoritesCount,
-      isFavorited: isFavorite,
-      source: source,
-      score: score,
-      image: image,
-      file: file,
-      tags: tags,
-      flags: flags
-    )
-  }
+enum Formatters {
+  static var dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .medium
+    formatter.timeStyle = .short
+    formatter.doesRelativeDateFormatting = true
+
+    return formatter
+  }()
+
+  static let numberFormatter = NumberFormatter()
 }

@@ -74,7 +74,6 @@ struct AppView: View {
       PostsView(
         store: store.scope(state: { $0.explore }, action: AppAction.explore)
       )
-      .navigationBarHidden(true)
     }
   }
 

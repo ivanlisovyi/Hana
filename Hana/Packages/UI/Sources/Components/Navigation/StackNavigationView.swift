@@ -17,6 +17,7 @@ public struct StackNavigationView<Content: View>: View {
   public var body: some View {
     NavigationView {
       content
+        .navigationBarTitle("", displayMode: .inline)
     }
     .navigationViewStyle(StackNavigationViewStyle())
   }

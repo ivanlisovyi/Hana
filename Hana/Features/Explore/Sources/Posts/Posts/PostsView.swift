@@ -31,14 +31,10 @@ public struct PostsView: View {
       (colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
         .ignoresSafeArea()
 
-      VStack(spacing: 0) {
-        NavigationBar {
-          leading
-        }
-
-        content
-      }
+      content
     }
+    .navigationBarItems(leading: leading)
+    .navigationBarColor(colorScheme == .dark ? .primaryDark : .primaryLight)
   }
 
   private var leading: some View {
@@ -81,7 +77,7 @@ public struct PostsView: View {
               }
             }
           }
-          .padding([.leading, .trailing], 10)
+          .padding([.leading, .trailing, .top], 10)
           .highPriorityGesture(
             MagnificationGesture.magnification(
               store: store.scope(state: \.magnification, action: PostsAction.magnification)
