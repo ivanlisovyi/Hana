@@ -24,3 +24,9 @@ public struct ShapeBackgroundButtonStyle<S: Shape>: ButtonStyle {
       .foregroundColor(.white)
   }
 }
+
+public extension ShapeBackgroundButtonStyle {
+  init() where S == Circle {
+    self.init(shape: Circle())
+  }
+}

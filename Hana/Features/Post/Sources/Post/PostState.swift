@@ -23,11 +23,15 @@ public struct PostState: Identifiable, Hashable, Comparable {
   public let createdAt: String
   public let dimension: String
 
+  var favoritesCount: Int
   private(set) var isFavorite: Bool
+
   private(set) var post: Post
 
   public init(post: Post) {
     self.id = post.id
+
+    self.favoritesCount = post.favoritesCount
     self.isFavorite = post.isFavorited
 
     self.aspectRatio = CGFloat(post.image.width) / CGFloat(post.image.height)

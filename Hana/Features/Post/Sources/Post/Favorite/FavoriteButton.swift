@@ -86,7 +86,7 @@ struct FavoriteView_Previews: PreviewProvider {
 
     return Group {
       view
-        .buttonStyle(ShapeBackgroundButtonStyle(shape: Circle()))
+        .buttonStyle(ShapeBackgroundButtonStyle())
         .preferredColorScheme(.dark)
       view
         .buttonStyle(PlainFavoriteButtonStyle())
