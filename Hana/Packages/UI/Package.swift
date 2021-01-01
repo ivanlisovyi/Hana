@@ -63,7 +63,8 @@ let package = Package(
       name: "Kitsu",
       dependencies: [
         "FetchImage",
-        "DesignSystem"
+        "DesignSystem",
+        "Components"
       ]
     )
   ]

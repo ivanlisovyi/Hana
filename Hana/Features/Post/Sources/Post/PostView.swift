@@ -47,7 +47,7 @@ public struct PostView: View {
       Image(systemName: "arrow.left")
         .font(.headline)
     }
-    .buttonStyle(ShapeBackgroundFavoriteButtonStyle())
+    .buttonStyle(ShapeBackgroundButtonStyle(shape: Circle()))
   }
 
   private var content: some View {

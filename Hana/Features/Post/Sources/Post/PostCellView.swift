@@ -47,7 +47,7 @@ public struct PostCellView: View {
     .if(displayMode == .default) {
       $0.buttonStyle(PlainFavoriteButtonStyle())
     } else: {
-      $0.buttonStyle(ShapeBackgroundFavoriteButtonStyle())
+      $0.buttonStyle(ShapeBackgroundButtonStyle(shape: Circle()))
     }
     .padding(10)
   }

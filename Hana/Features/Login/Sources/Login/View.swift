@@ -44,7 +44,7 @@ public struct LoginView: View {
                 Text("Log in")
                 Spacer()
                 if viewStore.isLoggingIn {
-                  ActivityIndicator()
+                  ProgressView()
                 }
               }
               .frame(maxWidth: .infinity)

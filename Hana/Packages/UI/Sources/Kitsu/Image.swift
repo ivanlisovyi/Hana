@@ -11,6 +11,7 @@ import FetchImage
 import Nuke
 
 import DesignSystem
+import Components
 
 public struct Image: View {
   @Environment(\.colorScheme) var colorScheme
@@ -37,7 +38,14 @@ public struct Image: View {
   public var body: some View {
     ZStack {
       Rectangle().fill(colorScheme == .dark ? Color.secondaryDark : Color.secondaryLight)
+
+      if image.isLoading {
+        CircularProgressView(value: image.fractionCompleted)
+          .frame(width: 30, height: 30)
+      }
+
       image.view?
+        .renderingMode(.original)
         .resizable()
         .aspectRatio(aspectRatio, contentMode: .fill)
         .clipped()
@@ -49,6 +57,8 @@ public struct Image: View {
 
 extension Image {
   static let defaultPipeline = ImagePipeline {
+    DataLoader.sharedUrlCache.diskCapacity = 0
+
     $0.dataCache = try? DataCache(name: "com.ivanlisovyi.hana.data.cache")
   }
 }
@@ -115,6 +125,16 @@ public extension Image {
         border: border
       )
     )
+  }
+}
+
+extension FetchImage {
+  var fractionCompleted: Double {
+    if progress.total == 0 {
+      return 0.01
+    }
+
+    return Double(progress.completed) / Double(progress.total)
   }
 }
 

@@ -77,11 +77,12 @@ public struct PostsView: View {
                     .frame(height: CGFloat(viewStore.itemSize))
                     .id(rowViewStore.id)
                 }
+                .buttonStyle(UnstyledButtonStyle())
               }
             }
           }
           .padding([.leading, .trailing], 10)
-          .gesture(
+          .highPriorityGesture(
             MagnificationGesture.magnification(
               store: store.scope(state: \.magnification, action: PostsAction.magnification)
             )

@@ -22,20 +22,13 @@ public struct FavoriteButton<ID>: View where ID: Hashable {
   }
 }
 
-struct PlainFavoriteButtonStyle: ButtonStyle {
-  func makeBody(configuration: Configuration) -> some View {
-    configuration.label.foregroundColor(.darkPink)
-  }
-}
+public struct PlainFavoriteButtonStyle: ButtonStyle {
+  public init() {}
 
-struct ShapeBackgroundFavoriteButtonStyle: ButtonStyle {
-  func makeBody(configuration: Configuration) -> some View {
-    configuration.label
-      .padding(10)
-      .background(
-        Color.darkPink.clipShape(Circle())
-      )
-      .foregroundColor(.white)
+  public func makeBody(configuration: Configuration) -> some View {
+    configuration.label.foregroundColor(
+      configuration.isPressed ? Color.darkPink.opacity(0.7) : .darkPink
+    )
   }
 }
 
@@ -93,7 +86,7 @@ struct FavoriteView_Previews: PreviewProvider {
 
     return Group {
       view
-        .buttonStyle(ShapeBackgroundFavoriteButtonStyle())
+        .buttonStyle(ShapeBackgroundButtonStyle(shape: Circle()))
         .preferredColorScheme(.dark)
       view
         .buttonStyle(PlainFavoriteButtonStyle())

@@ -15,18 +15,21 @@ public struct PostState: Identifiable, Hashable, Comparable {
   public let id: Int
 
   public var favorite: FavoriteState<ID> {
-    get { .init(id: id, isFavorite: post.isFavorited) }
-    set { post = post.favorite(isFavorite: newValue.isFavorite) }
+    get { .init(id: id, isFavorite: isFavorite) }
+    set { isFavorite = newValue.isFavorite }
   }
 
   public var aspectRatio: CGFloat {
     CGFloat(post.image.width) / CGFloat(post.image.height)
   }
 
+  private(set) var isFavorite: Bool
+
   var post: Post
 
   public init(post: Post) {
     self.id = post.id
+    self.isFavorite = post.isFavorited
     self.post = post
   }
 
@@ -47,7 +50,7 @@ public extension Post {
       createdAt: createdAt,
       updatedAt: updatedAt,
       rating: rating,
-      favoritesCount: favoritesCount.advanced(by: isFavorite ? 1 : -1),
+      favoritesCount: favoritesCount,
       isFavorited: isFavorite,
       source: source,
       score: score,
