@@ -17,17 +17,21 @@ public struct PostsState: Equatable {
   public var itemSize: Int
   public var tags: [Tag]?
 
+  public var isRefreshing: Bool
+
   public var magnification: MagnificationState
   public var pagination: PaginationState<PostState>
 
   public init(
     itemSize: Int = 300,
     tags: [Tag]? = nil,
+    isRefreshing: Bool = false,
     magnification: MagnificationState = .init(),
     pagination: PaginationState<PostState> = .init()
   ) {
     self.itemSize = itemSize
     self.tags = tags
+    self.isRefreshing = isRefreshing
     self.magnification = magnification
     self.pagination = pagination
   }

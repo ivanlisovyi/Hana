@@ -35,13 +35,20 @@ private let postsReducer = Reducer<PostsState, PostsAction, PostsEnvironment> { 
   case .magnification:
     return .none
 
+  case .pagination(.first):
+    state.isRefreshing = true
+    return .none
+
   case let .pagination(.response(.success(items))):
+    state.isRefreshing = false
+
     return Effect.fireAndForget {
       let urls = items.map(\.image.url)
       environment.imagePreheater.start(urls)
     }
 
   case .pagination:
+    state.isRefreshing = false
     return .none
   }
 }

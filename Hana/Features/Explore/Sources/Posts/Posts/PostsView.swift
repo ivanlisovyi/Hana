@@ -40,8 +40,7 @@ public struct PostsView: View {
   private var leading: some View {
     WithViewStore(self.store) { viewStore in
       Button(action: { viewStore.send(.pagination(.first)) }) {
-        FlowerView()
-          .frame(width: 30, height: 30, alignment: .center)
+        FlowerView().frame(width: 30, height: 30)
       }
     }
   }
@@ -49,33 +48,13 @@ public struct PostsView: View {
   private var content: some View {
     GeometryReader { geometry in
       WithViewStore(store) { viewStore in
-        ScrollView {
+        ScrollView(isRefreshing: viewStore.isRefreshing) {
           LazyVGrid(
             columns: [GridItem(.adaptive(minimum: CGFloat(viewStore.itemSize)))],
             alignment: .leading,
             spacing: 10
           ) {
-            ForEachStore(
-              store.scope(
-                state: \.pagination.items,
-                action: PostsAction.post(index:action:)
-              )
-            ) { rowStore in
-              WithViewStore(rowStore) { rowViewStore in
-                NavigationLink(
-                  destination: PostView(store: rowStore)
-                ) {
-                  PostCellView(store: rowStore)
-                    .displayMode(for: viewStore.itemSize)
-                    .onAppear {
-                      viewStore.send(.pagination(.next(after: rowViewStore.id)))
-                    }
-                    .frame(height: CGFloat(viewStore.itemSize))
-                    .id(rowViewStore.id)
-                }
-                .buttonStyle(UnstyledButtonStyle())
-              }
-            }
+            items(viewStore)
           }
           .padding([.leading, .trailing, .top], 10)
           .highPriorityGesture(
@@ -84,9 +63,45 @@ public struct PostsView: View {
             )
           )
         }
+        .onScrollOffsetChange {
+          let offset = $0
+          let index = Int(offset / CGFloat(viewStore.itemSize + 10))
+
+          print(index)
+        }
         .background(colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
       }
     }
+  }
+
+  func items(_ viewStore: ViewStore<PostsState, PostsAction>) -> some View {
+    ForEachStore(
+      store.scope(
+        state: \.pagination.items,
+        action: PostsAction.post(index:action:)
+      )
+    ) { rowStore in
+      WithViewStore(rowStore) { rowViewStore in
+        NavigationLink(
+          destination: PostView(store: rowStore)
+        ) {
+          PostCellView(store: rowStore)
+            .displayMode(for: viewStore.itemSize)
+            .onAppear {
+              viewStore.send(.pagination(.next(after: rowViewStore.id)))
+            }
+            .frame(height: CGFloat(viewStore.itemSize))
+            .id(rowViewStore.id)
+        }
+        .buttonStyle(UnstyledButtonStyle())
+      }
+    }
+  }
+}
+
+extension ViewStore where State == PostsState, Action == PostsAction {
+  var isRefreshing: Binding<Bool> {
+    self.binding(get: \.isRefreshing, send: PostsAction.pagination(.first))
   }
 }
 

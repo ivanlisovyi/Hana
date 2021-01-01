@@ -14,7 +14,7 @@ public let postReducer = Reducer<PostState, PostAction, PostEnvironment> {
   case let .favorite(.favoriteResponse(.success(isFavorite))):
     state.favoritesCount += isFavorite ? 1 : -1
     return .none
-    
+
   case .favorite:
     return .none
   }
