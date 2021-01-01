@@ -1,5 +1,5 @@
 //
-//  PostItemReducer.swift
+//  PostReducer.swift
 //  
 //
 //  Created by Ivan Lisovyi on 23.12.20.
@@ -8,8 +8,8 @@
 import Foundation
 import ComposableArchitecture
 
-public let postItemReducer = Reducer<PostItemState, PostItemAction, PostItemEnvironment>.empty.favorite(
+public let postReducer = Reducer<PostState, PostAction, PostEnvironment>.empty.favorite(
   state: \.favorite,
-  action: /PostItemAction.favorite,
+  action: /PostAction.favorite,
   environment: { FavoriteEnvironment(request: $0.favorite, mainQueue: $0.mainQueue) }
 )

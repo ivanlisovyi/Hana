@@ -33,6 +33,7 @@
 /* Begin PBXFileReference section */
 		CC9FA890258FD77400E796DA /* Explore */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Explore; sourceTree = "<group>"; };
 		CC9FA89925911F3000E796DA /* Profile */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Profile; sourceTree = "<group>"; };
+		CCA8F4C3259E3B9F00CD907F /* Post */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Post; sourceTree = "<group>"; };
 		CCC36DF82595FD7300237273 /* AppIcon-DarkMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-DarkMode@2x.png"; sourceTree = "<group>"; };
 		CCC36DF92595FD7300237273 /* AppIcon-DarkMode@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-DarkMode@3x.png"; sourceTree = "<group>"; };
 		CCC36E0A259670B700237273 /* Kaori */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Kaori; sourceTree = "<group>"; };
@@ -77,6 +78,7 @@
 		CC9FA880258E964C00E796DA /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				CCA8F4C3259E3B9F00CD907F /* Post */,
 				CC9FA89925911F3000E796DA /* Profile */,
 				CC9FA890258FD77400E796DA /* Explore */,
 				CCCEF2E1258DE21100683068 /* Login */,

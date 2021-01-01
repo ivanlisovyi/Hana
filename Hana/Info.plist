@@ -46,29 +46,29 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-  <key>CFBundleIcons</key>
-  <dict>
-      <key>CFBundlePrimaryIcon</key>
-      <dict>
-          <key>CFBundleIconFiles</key>
-          <array>
-              <string>AppIcon</string>
-          </array>
-          <key>UIPrerenderedIcon</key>
-          <false/>
-      </dict>
-      <key>CFBundleAlternateIcons</key>
-      <dict>
-      <key>AppIcon-DarkMode</key>
-      <dict>
-         <key>CFBundleIconFiles</key>
-         <array>
-            <string>AppIcon-DarkMode</string>
-         </array>
-         <key>UIPrerenderedIcon</key>
-         <false/>
-       </dict>
-      </dict>
-  </dict>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon</string>
+			</array>
+			<key>UIPrerenderedIcon</key>
+			<false/>
+		</dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>AppIcon-DarkMode</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>AppIcon-DarkMode</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+		</dict>
+	</dict>
 </dict>
 </plist>

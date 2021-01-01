@@ -1,5 +1,5 @@
 //
-//  PostItemAction.swift
+//  PostAction.swift
 //  
 //
 //  Created by Ivan Lisovyi on 23.12.20.
@@ -7,6 +7,6 @@
 
 import Foundation
 
-public enum PostItemAction: Equatable {
+public enum PostAction: Equatable {
   case favorite(FavoriteAction)
 }

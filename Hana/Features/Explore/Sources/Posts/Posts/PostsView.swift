@@ -14,6 +14,8 @@ import Kaori
 import Components
 import Common
 
+import Post
+
 public struct PostsView: View {
   @Environment(\.colorScheme) var colorScheme
   @Environment(\.verticalSizeClass) var sizeClass
@@ -64,12 +66,17 @@ public struct PostsView: View {
               )
             ) { rowStore in
               WithViewStore(rowStore) { rowViewStore in
-                PostItemView(store: rowStore)
-                  .displayMode(for: viewStore.itemSize)
-                  .onAppear {
-                    viewStore.send(.pagination(.next(after: rowViewStore.id)))
-                  }
-                  .frame(height: CGFloat(viewStore.itemSize) / geometry.aspectRatio)
+                NavigationLink(
+                  destination: PostView(store: rowStore)
+                ) {
+                  PostCellView(store: rowStore)
+                    .displayMode(for: viewStore.itemSize)
+                    .onAppear {
+                      viewStore.send(.pagination(.next(after: rowViewStore.id)))
+                    }
+                    .frame(height: CGFloat(viewStore.itemSize))
+                    .id(rowViewStore.id)
+                }
               }
             }
           }
@@ -90,7 +97,7 @@ public struct PostsView: View {
 struct PostsView_Previews: PreviewProvider {
   static var previews: some View {
     let posts = try! KaoriMocks.decode([Post].self, from: "posts", in: .module)
-    let states = posts.map(PostItemState.init(post:))
+    let states = posts.map(PostState.init(post:))
 
     let store = Store(
       initialState: PostsState(

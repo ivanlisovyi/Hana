@@ -1,5 +1,5 @@
 //
-//  PostItemView.swift
+//  PostCellView.swift
 //  
 //
 //  Created by Ivan Lisovyi on 13.12.20.
@@ -11,7 +11,7 @@ import ComposableArchitecture
 import Kaori
 import UI
 
-public struct PostItemView: View {
+public struct PostCellView: View {
   public enum DisplayMode: Equatable {
     case `default`
     case large
@@ -19,16 +19,18 @@ public struct PostItemView: View {
 
   @Environment(\.postDisplayMode) var displayMode
 
-  public let store: Store<PostItemState, PostItemAction>
+  public let store: Store<PostState, PostAction>
 
-  public init(store: Store<PostItemState, PostItemAction>) {
+  public init(store: Store<PostState, PostAction>) {
     self.store = store
   }
 
   public var body: some View {
     GeometryReader { geometry in
       WithViewStore(store) { viewStore in
-        Kitsu.Image(url: displayMode == .default ? viewStore.image.previewURL : viewStore.image.url)
+        Kitsu.Image(
+          url: displayMode == .default ? viewStore.image.previewURL : viewStore.image.url
+        )
           .frame(width: geometry.size.width, height: geometry.size.height)
           .overlay(bottomView, alignment: .bottomTrailing)
           .contentShape(Rectangle())
@@ -40,7 +42,7 @@ public struct PostItemView: View {
 
   private var bottomView: some View {
     FavoriteButton(
-      store: store.scope(state: { $0.favorite }, action: PostItemAction.favorite)
+      store: store.scope(state: { $0.favorite }, action: PostAction.favorite)
     )
     .if(displayMode == .default) {
       $0.buttonStyle(PlainFavoriteButtonStyle())
@@ -51,7 +53,7 @@ public struct PostItemView: View {
   }
 }
 
-extension PostItemView {
+public extension PostCellView {
   func displayMode(_ mode: DisplayMode) -> some View {
     self.environment(\.postDisplayMode, mode)
   }
@@ -63,7 +65,7 @@ extension PostItemView {
 }
 
 extension EnvironmentValues {
-  var postDisplayMode: PostItemView.DisplayMode {
+  var postDisplayMode: PostCellView.DisplayMode {
     get {
       return self[PostItemDisplayModeKey.self]
     }
@@ -74,20 +76,20 @@ extension EnvironmentValues {
 }
 
 struct PostItemDisplayModeKey: EnvironmentKey {
-  static let defaultValue: PostItemView.DisplayMode = .default
+  static let defaultValue: PostCellView.DisplayMode = .default
 }
 
 #if DEBUG
-struct PostView_Previews: PreviewProvider {
+struct PostCellView_Previews: PreviewProvider {
   static var previews: some View {
     let post = try! KaoriMocks.decode([Post].self, from: "posts.json", in: .module).first!
     let aspectRatio = CGFloat(post.image.width) / CGFloat(post.image.height)
 
-    let item = PostItemView(
+    let item = PostCellView(
       store: Store(
-        initialState: PostItemState(post: post),
-        reducer: postItemReducer,
-        environment: PostItemEnvironment(
+        initialState: .init(post: post),
+        reducer: postReducer,
+        environment: PostEnvironment(
           favorite: { _, isFavorite in
             return Effect(value: isFavorite)
           },

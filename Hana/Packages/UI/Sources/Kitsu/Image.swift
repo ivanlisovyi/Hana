@@ -17,24 +17,29 @@ public struct Image: View {
 
   @ObservedObject var image: FetchImage
 
-  public init(url: URL) {
+  let aspectRatio: CGFloat?
+
+  public init(url: URL, aspectRatio: CGFloat? = nil) {
     self.init(request: ImageRequest(url: url))
   }
 
   init(
     request: ImageRequest,
-    pipeline: ImagePipeline = Self.defaultPipeline
+    pipeline: ImagePipeline = Self.defaultPipeline,
+    aspectRatio: CGFloat? = nil
   ) {
+    self.aspectRatio = aspectRatio
+
     image = FetchImage(request: request, pipeline: pipeline)
     image.fetch()
   }
 
   public var body: some View {
-    ZStack(alignment: .top) {
+    ZStack {
       Rectangle().fill(colorScheme == .dark ? Color.secondaryDark : Color.secondaryLight)
       image.view?
         .resizable()
-        .aspectRatio(contentMode: .fill)
+        .aspectRatio(aspectRatio, contentMode: .fill)
         .clipped()
     }
     .onAppear(perform: image.fetch)
@@ -45,8 +50,6 @@ public struct Image: View {
 extension Image {
   static let defaultPipeline = ImagePipeline {
     $0.dataCache = try? DataCache(name: "com.ivanlisovyi.hana.data.cache")
-
-    DataLoader.sharedUrlCache.diskCapacity = 0
   }
 }
 

@@ -11,6 +11,8 @@ import ComposableArchitecture
 import Common
 import Kaori
 
+import Post
+
 struct ScaleThrottlingID: Hashable {}
 
 private let postsReducer = Reducer<PostsState, PostsAction, PostsEnvironment> { state, action, environment in
@@ -45,11 +47,11 @@ private let postsReducer = Reducer<PostsState, PostsAction, PostsEnvironment> { 
 }
 
 public let reducer = Reducer<PostsState, PostsAction, PostsEnvironment>.combine(
-  postItemReducer.forEach(
+  postReducer.forEach(
     state: \PostsState.pagination.items,
     action: /PostsAction.post(index:action:),
     environment: { env in
-      PostItemEnvironment(
+      PostEnvironment(
         favorite: { id, isFavorite in
           favoriteEffect(id: id, isFavorite: isFavorite, using: env)
         },
@@ -62,10 +64,10 @@ public let reducer = Reducer<PostsState, PostsAction, PostsEnvironment>.combine(
       state: \.pagination,
       action: /PostsAction.pagination,
       environment: { state, env in
-        return PaginationEnvironment<PostItemState>(
+        return PaginationEnvironment<PostState>(
           fetch: { page, limit in
             env.apiClient.posts(.init(page: page, limit: limit, tags: state.tags))
-              .map { $0.map(PostItemState.init(post:)) }
+              .map { $0.map(PostState.init(post:)) }
               .mapError(PaginationError.init(underlayingError:))
               .eraseToAnyPublisher()
           },
