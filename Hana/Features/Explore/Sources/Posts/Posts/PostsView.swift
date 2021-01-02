@@ -49,52 +49,48 @@ public struct PostsView: View {
     WithViewStore(store) { viewStore in
       ScrollView(isRefreshing: viewStore.isRefreshing) {
         Group {
-          if viewStore.isFirstRefresh {
-            VStack {
-              ForEach(0..<5) { _ in
-                PostCellView.placeholder
-                  .displayMode(for: viewStore.layout.size)
-                  .frame(height: CGFloat(viewStore.layout.size))
-                  .redacted(reason: .placeholder)
-              }
-
-              Spacer()
-            }
-          } else {
-            LazyVGrid(
-              columns: [GridItem(.adaptive(minimum: CGFloat(viewStore.layout.size)))],
-              alignment: .leading,
-              spacing: CGFloat(viewStore.layout.spacing)
-            ) {
-              items(viewStore)
-            }
-            .highPriorityGesture(
-              MagnificationGesture.magnification(
-                store: store.scope(state: \.magnification, action: PostsAction.magnification)
-              )
-            )
+          LazyVGrid(
+            columns: [GridItem(.adaptive(minimum: CGFloat(viewStore.layout.size)))],
+            alignment: .leading,
+            spacing: CGFloat(viewStore.layout.spacing)
+          ) {
+            items(viewStore)
           }
+          .highPriorityGesture(
+            MagnificationGesture.magnification(
+              store: store.scope(state: \.magnification, action: PostsAction.magnification)
+            )
+          )
         }
         .padding([.leading, .trailing, .top], 10)
       }
     }
   }
 
-  private func items(_ viewStore: ViewStore<PostsState, PostsAction>) -> some View {
-    ForEachStore(
-      store.scope(
-        state: \.pagination.items,
-        action: PostsAction.post(index:action:)
-      )
-    ) { rowStore in
-      NavigationLink(
-        destination: PostView(store: rowStore)
-      ) {
-        PostCellView(store: rowStore)
+  @ViewBuilder private func items(_ viewStore: ViewStore<PostsState, PostsAction>) -> some View {
+    if viewStore.isFirstRefresh {
+      ForEach(0..<10) { _ in
+        PostCellView.placeholder
           .displayMode(for: viewStore.layout.size)
           .frame(height: CGFloat(viewStore.layout.size))
       }
-      .buttonStyle(UnstyledButtonStyle())
+      .redacted(reason: .placeholder)
+    } else {
+      ForEachStore(
+        store.scope(
+          state: \.pagination.items,
+          action: PostsAction.post(index:action:)
+        )
+      ) { rowStore in
+        NavigationLink(
+          destination: PostView(store: rowStore)
+        ) {
+          PostCellView(store: rowStore)
+            .displayMode(for: viewStore.layout.size)
+            .frame(height: CGFloat(viewStore.layout.size))
+        }
+        .buttonStyle(UnstyledButtonStyle())
+      }
     }
   }
 }
