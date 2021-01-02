@@ -32,7 +32,7 @@ public struct PaginationError: LocalizedError, Equatable, Identifiable {
 
 public enum PaginationAction<Item: PaginationItem>: Equatable {
   case first
-  case next(after: Item.ID)
+  case next(after: Int)
 
   case response(Result<[Item], PaginationError>)
 }
@@ -90,6 +90,10 @@ public extension Reducer {
         state, action, environment in
         switch action {
         case .first:
+          if state.isInflight {
+            return .none
+          }
+
           state.requested = 1
 
           return paginatedFetchEffect(
@@ -98,10 +102,9 @@ public extension Reducer {
             skipDeduplication: true
           )
 
-        case let .next(id):
-          guard let index = state.items.firstIndex(where: { $0.id == id }),
-             index >= state.items.count - state.threshold,
-             !state.isInflight else {
+        case let .next(index):
+          guard index >= state.items.count - state.threshold,
+                !state.isInflight else {
             return .none
           }
           

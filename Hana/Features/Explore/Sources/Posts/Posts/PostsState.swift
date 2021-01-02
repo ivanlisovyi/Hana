@@ -14,7 +14,20 @@ import Kaori
 import Post
 
 public struct PostsState: Equatable {
-  public var itemSize: Int
+  public struct Layout: Equatable, Codable {
+    public var size: Int
+    public var spacing: Int
+
+    public init(
+      size: Int = 300,
+      spacing: Int = 10
+    ) {
+      self.size = size
+      self.spacing = spacing
+    }
+  }
+
+  public var layout: Layout
   public var tags: [Tag]?
 
   public var isRefreshing: Bool
@@ -22,14 +35,18 @@ public struct PostsState: Equatable {
   public var magnification: MagnificationState
   public var pagination: PaginationState<PostState>
 
+  public var isFirstRefresh: Bool {
+    isRefreshing && pagination.items.isEmpty
+  }
+
   public init(
-    itemSize: Int = 300,
+    layout: Layout = .init(),
     tags: [Tag]? = nil,
-    isRefreshing: Bool = false,
+    isRefreshing: Bool = true,
     magnification: MagnificationState = .init(),
     pagination: PaginationState<PostState> = .init()
   ) {
-    self.itemSize = itemSize
+    self.layout = layout
     self.tags = tags
     self.isRefreshing = isRefreshing
     self.magnification = magnification

@@ -11,7 +11,7 @@ import CoreGraphics
 import Post
 
 public enum PostsAction: Equatable {
-  case itemSizeChanged(Int)
+  case sizeChanged(Int)
   case post(index: Int, action: PostAction)
   case magnification(MagnificationAction)
   case pagination(PaginationAction<PostState>)

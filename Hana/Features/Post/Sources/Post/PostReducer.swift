@@ -15,7 +15,7 @@ public let postReducer = Reducer<PostState, PostAction, PostEnvironment> {
     state.favoritesCount += isFavorite ? 1 : -1
     return .none
 
-  case .favorite:
+  case .favorite, .onAppear:
     return .none
   }
 }.favorite(

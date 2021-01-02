@@ -25,7 +25,7 @@ struct AppState: Equatable {
 
   public var savingState: SavingState {
     SavingState(
-      itemSize: explore.itemSize,
+      layout: explore.layout,
       scale: explore.magnification.currentScale,
       selectedTab: selectedTab
     )
@@ -49,7 +49,7 @@ struct AppState: Equatable {
     self = .init(
       selectedTab: state.selectedTab,
       explore: PostsState(
-        itemSize: state.itemSize,
+        layout: state.layout,
         tags: nil,
         magnification: .init(currentScale: state.scale),
         pagination: .init()
@@ -73,7 +73,7 @@ extension AppState {
   struct SavingState: Equatable, Codable {
     static let key = "com.ivanlisovyi.hana.saved.state"
 
-    var itemSize: Int
+    var layout: PostsState.Layout
     var scale: CGFloat
     var selectedTab: Int
 

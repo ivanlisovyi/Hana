@@ -31,11 +31,14 @@ public struct PostCellView: View {
         Kitsu.Image(
           url: displayMode == .default ? viewStore.image.previewURL : viewStore.image.url
         )
-          .frame(width: geometry.size.width, height: geometry.size.height)
-          .overlay(bottomView, alignment: .bottomTrailing)
-          .contentShape(Rectangle())
-          .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-          .animation(.default)
+        .frame(width: geometry.size.width, height: geometry.size.height)
+        .overlay(bottomView, alignment: .bottomTrailing)
+        .contentShape(Rectangle())
+        .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
+        .animation(.default)
+        .onAppear {
+          viewStore.send(.onAppear(id: viewStore.id))
+        }
       }
     }
   }
@@ -77,6 +80,22 @@ extension EnvironmentValues {
 
 struct PostItemDisplayModeKey: EnvironmentKey {
   static let defaultValue: PostCellView.DisplayMode = .default
+}
+
+extension PostCellView {
+  public static var placeholder: Self {
+    PostCellView(
+      store: Store(
+        initialState: PostState(post: .mock),
+        reducer: postReducer,
+        environment:
+          PostEnvironment(
+            favorite: { _, _ in fatalError() },
+            mainQueue: DispatchQueue.main.eraseToAnyScheduler()
+          )
+      )
+    )
+  }
 }
 
 #if DEBUG

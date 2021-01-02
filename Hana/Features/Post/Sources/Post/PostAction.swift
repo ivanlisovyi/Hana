@@ -8,5 +8,6 @@
 import Foundation
 
 public enum PostAction: Equatable {
+  case onAppear(id: Int)
   case favorite(FavoriteAction)
 }

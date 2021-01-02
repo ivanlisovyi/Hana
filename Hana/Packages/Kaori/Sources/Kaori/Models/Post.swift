@@ -167,3 +167,13 @@ extension Post {
     flags = try Flags(from: decoder)
   }
 }
+
+extension Post {
+  public static var mock: Self {
+    guard let post = try? KaoriMocks.decode([Post].self, from: "posts.json", in: .module).first else {
+      fatalError("Unable to create \(Self.self) mock.")
+    }
+
+    return post
+  }
+}

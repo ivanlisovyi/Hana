@@ -31,7 +31,13 @@ public struct PostsView: View {
       (colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
         .ignoresSafeArea()
 
-      content
+      WithViewStore(store) { viewStore in
+        if viewStore.isFirstRefresh {
+          placeholder
+        } else {
+          content
+        }
+      }
     }
     .navigationBarItems(leading: leading)
     .navigationBarColor(colorScheme == .dark ? .primaryDark : .primaryLight)
@@ -45,14 +51,32 @@ public struct PostsView: View {
     }
   }
 
+  private var placeholder: some View {
+    ScrollView {
+      WithViewStore(store) { viewStore in
+        VStack {
+          ForEach(0..<5) { _ in
+            PostCellView.placeholder
+              .displayMode(for: viewStore.layout.size)
+              .frame(height: CGFloat(viewStore.layout.size))
+              .redacted(reason: .placeholder)
+          }
+
+          Spacer()
+        }
+        .padding([.leading, .trailing, .top], 10)
+      }
+    }
+  }
+
   private var content: some View {
     GeometryReader { geometry in
       WithViewStore(store) { viewStore in
         ScrollView(isRefreshing: viewStore.isRefreshing) {
           LazyVGrid(
-            columns: [GridItem(.adaptive(minimum: CGFloat(viewStore.itemSize)))],
+            columns: [GridItem(.adaptive(minimum: CGFloat(viewStore.layout.size)))],
             alignment: .leading,
-            spacing: 10
+            spacing: CGFloat(viewStore.layout.spacing)
           ) {
             items(viewStore)
           }
@@ -63,38 +87,25 @@ public struct PostsView: View {
             )
           )
         }
-        .onScrollOffsetChange {
-          let offset = $0
-          let index = Int(offset / CGFloat(viewStore.itemSize + 10))
-
-          print(index)
-        }
-        .background(colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
       }
     }
   }
 
-  func items(_ viewStore: ViewStore<PostsState, PostsAction>) -> some View {
+  private func items(_ viewStore: ViewStore<PostsState, PostsAction>) -> some View {
     ForEachStore(
       store.scope(
         state: \.pagination.items,
         action: PostsAction.post(index:action:)
       )
     ) { rowStore in
-      WithViewStore(rowStore) { rowViewStore in
-        NavigationLink(
-          destination: PostView(store: rowStore)
-        ) {
-          PostCellView(store: rowStore)
-            .displayMode(for: viewStore.itemSize)
-            .onAppear {
-              viewStore.send(.pagination(.next(after: rowViewStore.id)))
-            }
-            .frame(height: CGFloat(viewStore.itemSize))
-            .id(rowViewStore.id)
-        }
-        .buttonStyle(UnstyledButtonStyle())
+      NavigationLink(
+        destination: PostView(store: rowStore)
+      ) {
+        PostCellView(store: rowStore)
+          .displayMode(for: viewStore.layout.size)
+          .frame(height: CGFloat(viewStore.layout.size))
       }
+      .buttonStyle(UnstyledButtonStyle())
     }
   }
 }

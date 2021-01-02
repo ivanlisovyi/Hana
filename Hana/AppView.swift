@@ -53,7 +53,8 @@ struct AppView: View {
           Components.TabView(selectedIndex: viewStore.binding(get: \.selectedTab, send: AppAction.changeTab)) {
             TabItem { tabItem(systemName: "square.stack", isSelected: $0) }
             TabItem { tabItem(systemName: "person", isSelected: $0) }
-          }.animation(.default)
+          }
+          .animation(.default)
         }
         .onAppear {
           viewStore.send(.launch)

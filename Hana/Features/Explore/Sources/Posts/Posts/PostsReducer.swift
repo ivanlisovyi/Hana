@@ -5,6 +5,8 @@
 //  Created by Ivan Lisovyi on 05.12.20.
 //
 
+import CoreGraphics
+
 import Combine
 import ComposableArchitecture
 
@@ -17,18 +19,18 @@ struct ScaleThrottlingID: Hashable {}
 
 private let postsReducer = Reducer<PostsState, PostsAction, PostsEnvironment> { state, action, environment in
   switch action {
-  case let .itemSizeChanged(size):
-    state.itemSize = size
-    return .none
-    
-  case .post:
+  case let .sizeChanged(size):
+    state.layout.size = size
     return .none
 
+  case let .post(index, action):
+    return Effect(value: .pagination(.next(after: index)))
+
   case let .magnification(.onChange(newValue)):
-    let max = Swift.max(100, Float(state.itemSize) * Float(newValue))
+    let max = Swift.max(100, Float(state.layout.size) * Float(newValue))
     let min = Swift.min(max, 300)
     let newValue = Int(min)
-    return Effect(value: .itemSizeChanged(newValue))
+    return Effect(value: .sizeChanged(newValue))
       .throttle(id: ScaleThrottlingID(), for: 0.1, scheduler: environment.mainQueue, latest: true)
       .eraseToEffect()
 
