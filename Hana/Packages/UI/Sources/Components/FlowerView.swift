@@ -119,14 +119,15 @@ public struct FlowerView: View {
 struct FlowerView_Previews: PreviewProvider {
   static var previews: some View {
     Group {
-      FlowerView(isVisible: .constant(false))
+      FlowerView(isVisible: .constant(true))
         .frame(width: 140, height: 140)
         .colorScheme(.dark)
 
-      FlowerView(isVisible: .constant(false))
-        .frame(width: 30, height: 30)
-        .colorScheme(.light)
+      FlowerView(isVisible: .constant(true))
+        .frame(width: 140, height: 140)
+        .colorScheme(.dark)
     }
+    .previewLayout(.sizeThatFits)
   }
 }
 #endif

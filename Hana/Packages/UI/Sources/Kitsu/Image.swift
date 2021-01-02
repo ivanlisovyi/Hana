@@ -36,22 +36,29 @@ public struct Image: View {
   }
 
   public var body: some View {
-    ZStack {
-      Rectangle().fill(colorScheme == .dark ? Color.secondaryDark : Color.secondaryLight)
+    GeometryReader { geometry in
+      let flowerSize = max(geometry.size.width, geometry.size.height) * 0.2
 
-      if image.isLoading {
-        CircularProgressView(value: image.fractionCompleted)
-          .frame(width: 30, height: 30)
+      ZStack {
+        Rectangle().fill(colorScheme == .dark ? Color.secondaryDark : Color.secondaryLight)
+          .overlay(
+            FlowerView()
+              .frame(width: flowerSize, height: flowerSize)
+              .saturation(0.2),
+            alignment: .center
+          )
+          .drawingGroup()
+
+        image.view?
+          .resizable()
+          .aspectRatio(aspectRatio, contentMode: .fill)
+          .frame(height: geometry.size.height, alignment: .top)
+          .clipped()
       }
-
-      image.view?
-        .renderingMode(.original)
-        .resizable()
-        .aspectRatio(aspectRatio, contentMode: .fill)
-        .clipped()
+      .frame(height: geometry.size.height)
+      .onAppear(perform: image.fetch)
+      .onDisappear(perform: image.reset)
     }
-    .onAppear(perform: image.fetch)
-    .onDisappear(perform: image.reset)
   }
 }
 
@@ -135,6 +142,10 @@ extension FetchImage {
     }
 
     return Double(progress.completed) / Double(progress.total)
+  }
+
+  var isCompleted: Bool {
+    progress.completed == progress.total
   }
 }
 

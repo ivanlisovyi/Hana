@@ -97,11 +97,9 @@ public struct PostView: View {
 #if DEBUG
 struct PostView_Previews: PreviewProvider {
   static var previews: some View {
-    let post = try! KaoriMocks.decode([Post].self, from: "posts.json", in: .module).first!
-
-    return PostView(
+    PostView(
       store: Store(
-        initialState: .init(post: post),
+        initialState: .init(post: .mock),
         reducer: postReducer,
         environment: PostEnvironment(
           favorite: { _, isFavorite in

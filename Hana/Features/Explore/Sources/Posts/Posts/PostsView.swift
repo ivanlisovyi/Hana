@@ -31,13 +31,7 @@ public struct PostsView: View {
       (colorScheme == .dark ? Color.primaryDark : Color.primaryLight)
         .ignoresSafeArea()
 
-      WithViewStore(store) { viewStore in
-        if viewStore.isFirstRefresh {
-          placeholder
-        } else {
-          content
-        }
-      }
+      content
     }
     .navigationBarItems(leading: leading)
     .navigationBarColor(colorScheme == .dark ? .primaryDark : .primaryLight)
@@ -51,42 +45,37 @@ public struct PostsView: View {
     }
   }
 
-  private var placeholder: some View {
-    ScrollView {
-      WithViewStore(store) { viewStore in
-        VStack {
-          ForEach(0..<5) { _ in
-            PostCellView.placeholder
-              .displayMode(for: viewStore.layout.size)
-              .frame(height: CGFloat(viewStore.layout.size))
-              .redacted(reason: .placeholder)
-          }
+  private var content: some View {
+    WithViewStore(store) { viewStore in
+      ScrollView(isRefreshing: viewStore.isRefreshing) {
+        Group {
+          if viewStore.isFirstRefresh {
+            VStack {
+              ForEach(0..<5) { _ in
+                PostCellView.placeholder
+                  .displayMode(for: viewStore.layout.size)
+                  .frame(height: CGFloat(viewStore.layout.size))
+                  .redacted(reason: .placeholder)
+              }
 
-          Spacer()
+              Spacer()
+            }
+          } else {
+            LazyVGrid(
+              columns: [GridItem(.adaptive(minimum: CGFloat(viewStore.layout.size)))],
+              alignment: .leading,
+              spacing: CGFloat(viewStore.layout.spacing)
+            ) {
+              items(viewStore)
+            }
+            .highPriorityGesture(
+              MagnificationGesture.magnification(
+                store: store.scope(state: \.magnification, action: PostsAction.magnification)
+              )
+            )
+          }
         }
         .padding([.leading, .trailing, .top], 10)
-      }
-    }
-  }
-
-  private var content: some View {
-    GeometryReader { geometry in
-      WithViewStore(store) { viewStore in
-        ScrollView(isRefreshing: viewStore.isRefreshing) {
-          LazyVGrid(
-            columns: [GridItem(.adaptive(minimum: CGFloat(viewStore.layout.size)))],
-            alignment: .leading,
-            spacing: CGFloat(viewStore.layout.spacing)
-          ) {
-            items(viewStore)
-          }
-          .padding([.leading, .trailing, .top], 10)
-          .highPriorityGesture(
-            MagnificationGesture.magnification(
-              store: store.scope(state: \.magnification, action: PostsAction.magnification)
-            )
-          )
-        }
       }
     }
   }
