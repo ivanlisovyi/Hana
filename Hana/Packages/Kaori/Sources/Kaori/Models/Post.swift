@@ -130,7 +130,7 @@ extension Post {
 
     rating = try decoder.decode("rating")
     favoritesCount = try decoder.decode("favCount")
-    isFavorited = try decoder.decode("isFavorited")
+    isFavorited = try decoder.decodeIfPresent("isFavorited") ?? false
 
     source = try decoder.decode("source")
 
