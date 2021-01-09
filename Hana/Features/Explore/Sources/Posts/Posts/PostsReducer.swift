@@ -75,10 +75,7 @@ public let reducer = Reducer<PostsState, PostsAction, PostsEnvironment>.combine(
       environment: { state, env in
         return PaginationEnvironment<PostState>(
           fetch: { page, limit in
-            env.apiClient.posts(.init(page: page, limit: limit, tags: state.tags))
-              .map { $0.map(PostState.init(post:)) }
-              .mapError(PaginationError.init(underlayingError:))
-              .eraseToAnyPublisher()
+            postsEffect(page: page, limit: limit, tags: state.tags, using: env)
           },
           mainQueue: env.mainQueue
         )
@@ -104,4 +101,48 @@ private func favoriteEffect(id: Int, isFavorite: Bool, using environment: PostsE
     .receive(on: environment.mainQueue)
     .mapError { $0 as Error }
     .eraseToEffect()
+}
+
+private func postsEffect(
+  page: Int,
+  limit: Int,
+  tags: [Tag]? = nil,
+  userId: Int? = nil,
+  using environment: PostsEnvironment
+) -> AnyPublisher<[PostState], PaginationError> {
+  let posts = environment.apiClient.posts(.init(page: page, limit: limit, tags: tags))
+  guard let userId = userId else {
+    return posts.map { $0.map(PostState.init(post:)) }
+      .mapError(PaginationError.init(underlayingError:))
+      .eraseToAnyPublisher()
+  }
+
+  return posts.flatMap { result -> AnyPublisher<[Post], KaoriError> in
+    let justPosts = Just(result)
+      .setFailureType(to: KaoriError.self)
+      .eraseToAnyPublisher()
+
+    let ids = result.map(\.id)
+    let statuses = environment.apiClient.favoriteStatus(.init(ids: ids, userId: userId))
+
+    return Publishers.Zip(
+      justPosts,
+      statuses
+    )
+    .map(enrichFavoriteStatuses)
+    .eraseToAnyPublisher()
+  }
+  .map { $0.map(PostState.init(post:)) }
+  .mapError(PaginationError.init(underlayingError:))
+  .eraseToAnyPublisher()
+}
+
+private func enrichFavoriteStatuses(for posts: [Post], statuses: [FavoriteStatus]) -> [Post] {
+  posts.map { post -> Post in
+    var newValue = post
+    if statuses.contains(where: { $0.postId == post.id }) {
+      newValue.isFavorited = true
+    }
+    return newValue
+  }
 }
