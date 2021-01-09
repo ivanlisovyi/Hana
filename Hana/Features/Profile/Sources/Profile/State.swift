@@ -13,8 +13,11 @@ import Login
 @dynamicMemberLookup
 public struct ProfileState: Equatable {
   public var profile: Profile?
-
   public var login: LoginState
+
+  public var userId: Int? {
+    profile?.id
+  }
 
   public var isLoggedIn: Bool {
     profile != nil

@@ -75,7 +75,13 @@ public let reducer = Reducer<PostsState, PostsAction, PostsEnvironment>.combine(
       environment: { state, env in
         return PaginationEnvironment<PostState>(
           fetch: { page, limit in
-            postsEffect(page: page, limit: limit, tags: state.tags, using: env)
+            postsEffect(
+              page: page,
+              limit: limit,
+              tags: state.tags,
+              userId: state.userId,
+              using: env
+            )
           },
           mainQueue: env.mainQueue
         )

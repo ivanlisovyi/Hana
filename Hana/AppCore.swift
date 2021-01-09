@@ -20,7 +20,19 @@ import Common
 struct AppState: Equatable {
   var selectedTab = 0
 
-  var explore: PostsState = PostsState()
+  private var _postsState = PostsState()
+
+  var explore: PostsState {
+    get {
+      var state = _postsState
+      state.userId = profile.userId
+      return state
+    }
+    set {
+      _postsState = newValue
+      _postsState.userId = profile.userId
+    }
+  }
   var profile: ProfileState = ProfileState()
 
   public var savingState: SavingState {

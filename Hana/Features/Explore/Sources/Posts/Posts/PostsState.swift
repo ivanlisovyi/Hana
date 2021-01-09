@@ -29,6 +29,7 @@ public struct PostsState: Equatable {
 
   public var layout: Layout
   public var tags: [Tag]?
+  public var userId: Int?
 
   public var isRefreshing: Bool
 
@@ -42,12 +43,14 @@ public struct PostsState: Equatable {
   public init(
     layout: Layout = .init(),
     tags: [Tag]? = nil,
+    userId: Int? = nil,
     isRefreshing: Bool = true,
     magnification: MagnificationState = .init(),
     pagination: PaginationState<PostState> = .init()
   ) {
     self.layout = layout
     self.tags = tags
+    self.userId = userId
     self.isRefreshing = isRefreshing
     self.magnification = magnification
     self.pagination = pagination
