@@ -118,9 +118,11 @@ private func postsEffect(
 ) -> AnyPublisher<[PostState], PaginationError> {
   let posts = environment.apiClient.posts(.init(page: page, limit: limit, tags: tags))
   guard let userId = userId else {
-    return posts.map { $0.map(PostState.init(post:)) }
-      .mapError(PaginationError.init(underlayingError:))
-      .eraseToAnyPublisher()
+    return posts.map { posts in
+      posts.map { PostState(post: $0, isFavoritingEnabled: false) }
+    }
+    .mapError(PaginationError.init(underlayingError:))
+    .eraseToAnyPublisher()
   }
 
   return posts.flatMap { result -> AnyPublisher<[Post], KaoriError> in
@@ -138,7 +140,9 @@ private func postsEffect(
     .map(enrichFavoriteStatuses)
     .eraseToAnyPublisher()
   }
-  .map { $0.map(PostState.init(post:)) }
+  .map { posts in
+    posts.map { PostState(post: $0, isFavoritingEnabled: true) }
+  }
   .mapError(PaginationError.init(underlayingError:))
   .eraseToAnyPublisher()
 }

@@ -105,7 +105,7 @@ extension ViewStore where State == PostsState, Action == PostsAction {
 struct PostsView_Previews: PreviewProvider {
   static var previews: some View {
     let posts = try! KaoriMocks.decode([Post].self, from: "posts", in: .module)
-    let states = posts.map(PostState.init(post:))
+    let states = posts.map { post in PostState(post: post, isFavoritingEnabled: true) }
 
     let store = Store(
       initialState: PostsState(

@@ -99,7 +99,7 @@ struct PostView_Previews: PreviewProvider {
   static var previews: some View {
     PostView(
       store: Store(
-        initialState: .init(post: .mock),
+        initialState: .init(post: .mock, isFavoritingEnabled: true),
         reducer: postReducer,
         environment: PostEnvironment(
           favorite: { _, isFavorite in

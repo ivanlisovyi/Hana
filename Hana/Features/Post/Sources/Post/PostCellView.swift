@@ -32,7 +32,7 @@ public struct PostCellView: View {
           url: displayMode == .default ? viewStore.image.previewURL : viewStore.image.url
         )
         .frame(width: geometry.size.width, height: geometry.size.height)
-        .overlay(bottomView, alignment: .bottomTrailing)
+        .if(viewStore.isFavoritingEnabled) { $0.overlay(bottomView, alignment: .bottomTrailing) }
         .contentShape(Rectangle())
         .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
         .onAppear {
@@ -85,7 +85,7 @@ extension PostCellView {
   public static var placeholder: Self {
     PostCellView(
       store: Store(
-        initialState: PostState(post: .mock),
+        initialState: PostState(post: .mock, isFavoritingEnabled: true),
         reducer: postReducer,
         environment:
           PostEnvironment(
@@ -105,7 +105,7 @@ struct PostCellView_Previews: PreviewProvider {
 
     let item = PostCellView(
       store: Store(
-        initialState: .init(post: post),
+        initialState: .init(post: post, isFavoritingEnabled: true),
         reducer: postReducer,
         environment: PostEnvironment(
           favorite: { _, isFavorite in

@@ -25,14 +25,16 @@ public struct PostState: Identifiable, Hashable, Comparable {
 
   var favoritesCount: Int
   private(set) var isFavorite: Bool
+  private(set) var isFavoritingEnabled: Bool
 
   private(set) var post: Post
 
-  public init(post: Post) {
+  public init(post: Post, isFavoritingEnabled: Bool) {
     self.id = post.id
 
     self.favoritesCount = post.favoritesCount
     self.isFavorite = post.isFavorited
+    self.isFavoritingEnabled = isFavoritingEnabled
 
     self.aspectRatio = CGFloat(post.image.width) / CGFloat(post.image.height)
     self.createdAt = Formatters.dateFormatter.string(from: post.createdAt)

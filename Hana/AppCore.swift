@@ -161,7 +161,10 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
       return Effect(value: .keychain(.save))
 
     case .profile(.logout):
-      return Effect(value: .keychain(.clear))
+      return Effect.merge(
+        Effect(value: .keychain(.clear)),
+        Effect(value: .explore(.pagination(.first)))
+      )
 
     case .profile:
       return .none
