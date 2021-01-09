@@ -63,7 +63,7 @@ public struct Post: Decodable, Identifiable, Hashable, Comparable {
 
   public let rating: Rating
   public let favoritesCount: Int
-  public let isFavorited: Bool
+  public var isFavorited: Bool = false
 
   public let source: String
 
@@ -130,7 +130,6 @@ extension Post {
 
     rating = try decoder.decode("rating")
     favoritesCount = try decoder.decode("favCount")
-    isFavorited = try decoder.decodeIfPresent("isFavorited") ?? false
 
     source = try decoder.decode("source")
 

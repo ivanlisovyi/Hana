@@ -40,6 +40,18 @@ public extension Endpoint {
 // MARK: - Favorites
 
 public extension Endpoint {
+  static func favoriteStatus(request: FavoriteStatusRequest) -> Self {
+    Endpoint(
+      path: "favorites.json",
+      httpMethod: .get,
+      parameters: [
+        "search[post_id]": request.ids,
+        "search[user_id]": request.userId
+      ]
+    )
+  }
+
+
   static func favorite(id: Int) -> Self {
     Endpoint(
       path: "favorites.json",

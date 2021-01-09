@@ -41,9 +41,14 @@ public extension Kaori {
           .mapError(KaoriError.init(underlayingError:))
           .eraseToAnyPublisher()
       },
-      posts: {
-        session.request(.posts(request: $0), decoder: decoder, of: CompactDecodableArray<Post>.self)
+      posts: { request in
+        session.request(.posts(request: request), decoder: decoder, of: CompactDecodableArray<Post>.self)
           .map(\.elements)
+          .mapError(KaoriError.init(underlayingError:))
+          .eraseToAnyPublisher()
+      },
+      favoriteStatus: {
+        session.request(.favoriteStatus(request: $0), decoder: decoder)
           .mapError(KaoriError.init(underlayingError:))
           .eraseToAnyPublisher()
       },

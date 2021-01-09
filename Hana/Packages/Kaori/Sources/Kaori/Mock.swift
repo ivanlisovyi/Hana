@@ -22,6 +22,9 @@ public extension Kaori {
     posts: @escaping (PostsRequest) -> AnyPublisher<[Post], KaoriError> = { _ in
       _unimplemented("posts")
     },
+    favoriteStatus: @escaping (FavoriteStatusRequest) -> AnyPublisher<[FavoriteStatus], KaoriError> = { _ in
+      _unimplemented("favoriteStatus")
+    },
     favorite: @escaping (Int) -> AnyPublisher<Post, KaoriError> = { _ in
       _unimplemented("favorite")
     },
@@ -34,6 +37,7 @@ public extension Kaori {
       logout: logout,
       profile: profile,
       posts: posts,
+      favoriteStatus: favoriteStatus,
       favorite: favorite,
       unfavorite: unfavorite
     )

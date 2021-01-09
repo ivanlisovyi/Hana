@@ -13,6 +13,7 @@ public struct Kaori {
   public let logout: () -> Void
   public let profile: () -> AnyPublisher<Profile, KaoriError>
   public let posts: (PostsRequest) -> AnyPublisher<[Post], KaoriError>
+  public let favoriteStatus: (FavoriteStatusRequest) -> AnyPublisher<[FavoriteStatus], KaoriError>
   public let favorite: (Int) -> AnyPublisher<Post, KaoriError>
   public let unfavorite: (Int) -> AnyPublisher<Void, KaoriError>
 
@@ -21,6 +22,7 @@ public struct Kaori {
     logout: @escaping () -> Void,
     profile:  @escaping () -> AnyPublisher<Profile, KaoriError>,
     posts:  @escaping (PostsRequest) -> AnyPublisher<[Post], KaoriError>,
+    favoriteStatus: @escaping (FavoriteStatusRequest) -> AnyPublisher<[FavoriteStatus], KaoriError>,
     favorite: @escaping (Int) -> AnyPublisher<Post, KaoriError>,
     unfavorite: @escaping (Int) -> AnyPublisher<Void, KaoriError>
   ) {
@@ -28,6 +30,7 @@ public struct Kaori {
     self.logout = logout
     self.profile = profile
     self.posts = posts
+    self.favoriteStatus = favoriteStatus
     self.favorite = favorite
     self.unfavorite = unfavorite
   }
