@@ -30,15 +30,19 @@ public struct PostsRequest: Codable, Equatable {
   public let tags: String?
   public let only: String?
 
+  public let userId: Int?
+
   public init(
     page: Int,
     limit: Int,
     tags: [Tag]? = nil,
-    only: [AssociatedAttributes]? = nil
+    only: [AssociatedAttributes]? = nil,
+    userId: Int? = nil
   ) {
     self.page = page
     self.limit = limit
     self.tags = tags?.joined(separator: "+")
     self.only = only?.map(\.rawValue).joined(separator: ",")
+    self.userId = userId
   }
 }

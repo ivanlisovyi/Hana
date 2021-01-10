@@ -116,43 +116,8 @@ private func postsEffect(
   userId: Int? = nil,
   using environment: PostsEnvironment
 ) -> AnyPublisher<[PostState], PaginationError> {
-  let posts = environment.apiClient.posts(.init(page: page, limit: limit, tags: tags))
-  guard let userId = userId else {
-    return posts.map { posts in
-      posts.map { PostState(post: $0, isFavoritingEnabled: false) }
-    }
+  environment.apiClient.posts(.init(page: page, limit: limit, tags: tags))
+    .map { $0.map { post in PostState(post: post, isFavoritingEnabled: userId != nil) } }
     .mapError(PaginationError.init(underlayingError:))
     .eraseToAnyPublisher()
-  }
-
-  return posts.flatMap { result -> AnyPublisher<[Post], KaoriError> in
-    let justPosts = Just(result)
-      .setFailureType(to: KaoriError.self)
-      .eraseToAnyPublisher()
-
-    let ids = result.map(\.id)
-    let statuses = environment.apiClient.favoriteStatus(.init(ids: ids, userId: userId))
-
-    return Publishers.Zip(
-      justPosts,
-      statuses
-    )
-    .map(enrichFavoriteStatuses)
-    .eraseToAnyPublisher()
-  }
-  .map { posts in
-    posts.map { PostState(post: $0, isFavoritingEnabled: true) }
-  }
-  .mapError(PaginationError.init(underlayingError:))
-  .eraseToAnyPublisher()
-}
-
-private func enrichFavoriteStatuses(for posts: [Post], statuses: [FavoriteStatus]) -> [Post] {
-  posts.map { post -> Post in
-    var newValue = post
-    if statuses.contains(where: { $0.postId == post.id }) {
-      newValue.isFavorited = true
-    }
-    return newValue
-  }
 }

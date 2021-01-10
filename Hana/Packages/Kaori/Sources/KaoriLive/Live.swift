@@ -42,10 +42,46 @@ public extension Kaori {
           .eraseToAnyPublisher()
       },
       posts: { request in
-        session.request(.posts(request: request), decoder: decoder, of: CompactDecodableArray<Post>.self)
-          .map(\.elements)
+        let posts = session.request(
+          .posts(request: request),
+          decoder: decoder,
+          of: CompactDecodableArray<Post>.self
+        )
+        .map(\.elements)
+        .mapError(KaoriError.init(underlayingError:))
+
+        guard let userId = request.userId else {
+          return posts.eraseToAnyPublisher()
+        }
+
+        return posts.flatMap { result -> AnyPublisher<[Post], KaoriError> in
+          let justPosts = Just(result)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+
+          let ids = result.map(\.id)
+          let statuses: AnyPublisher<[FavoriteStatus], Error> = session.request(
+            .favoriteStatus(request: .init(ids: ids, userId: userId)),
+            decoder: decoder
+          )
+
+          return Publishers.Zip(
+            justPosts,
+            statuses
+          )
+          .map { (posts, statuses) in
+            posts.map { post -> Post in
+              var newValue = post
+              if statuses.contains(where: { $0.postId == post.id }) {
+                newValue.isFavorited = true
+              }
+              return newValue
+            }
+          }
           .mapError(KaoriError.init(underlayingError:))
           .eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
       },
       favoriteStatus: {
         session.request(.favoriteStatus(request: $0), decoder: decoder)
