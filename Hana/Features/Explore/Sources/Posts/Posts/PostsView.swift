@@ -68,7 +68,7 @@ public struct PostsView: View {
   }
 
   @ViewBuilder private func items(_ viewStore: ViewStore<PostsState, PostsAction>) -> some View {
-    if viewStore.isFirstRefresh {
+    if viewStore.isEmpty {
       ForEach(0..<10) { _ in
         PostCellView.placeholder
           .displayMode(for: viewStore.layout.size)

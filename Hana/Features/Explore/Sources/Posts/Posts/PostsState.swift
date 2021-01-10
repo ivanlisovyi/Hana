@@ -36,8 +36,8 @@ public struct PostsState: Equatable {
   public var magnification: MagnificationState
   public var pagination: PaginationState<PostState>
 
-  public var isFirstRefresh: Bool {
-    isRefreshing && pagination.items.isEmpty
+  public var isEmpty: Bool {
+    pagination.items.isEmpty
   }
 
   public init(
